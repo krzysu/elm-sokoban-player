@@ -34,19 +34,73 @@ type alias Model =
     { player : Block
     , walls : List Block
     , boxes : List Block
-    , placeholders : List Block
+    , dots : List Block
     , isWin : Bool
+    , gameSize : ( Int, Int )
     }
+
+
+type alias Level =
+    { width : Int
+    , height : Int
+    , map : List (List Char)
+    }
+
+
+level : Level
+level =
+    { width = 7
+    , height = 9
+    , map =
+        [ [ ' ', ' ', ' ', '#', '#', '#', ' ' ]
+        , [ '#', '#', '#', '#', '@', '#', ' ' ]
+        , [ '#', '.', ' ', ' ', ' ', '#', '#' ]
+        , [ '#', '.', ' ', '*', ' ', ' ', '#' ]
+        , [ '#', '.', ' ', '#', '$', ' ', '#' ]
+        , [ '#', '#', '$', '#', ' ', ' ', '#' ]
+        , [ ' ', '#', ' ', '$', ' ', '#', '#' ]
+        , [ ' ', '#', ' ', ' ', ' ', '#', ' ' ]
+        , [ ' ', '#', '#', '#', '#', '#', ' ' ]
+        ]
+    }
+
+
+initLevel : Level -> Model
+initLevel level =
+    { player = Maybe.withDefault (Block 0 0) <| List.head (levelToBlocks level [ '@', '+' ])
+    , walls = levelToBlocks level [ '#' ]
+    , boxes = levelToBlocks level [ '$', '*' ]
+    , dots = levelToBlocks level [ '.', '+', '*' ]
+    , isWin = False
+    , gameSize = ( 10, 10 )
+    }
+
+
+levelToBlocks : Level -> List Char -> List Block
+levelToBlocks level entityCharList =
+    let
+        maybeBlocks =
+            List.indexedMap
+                (\y row ->
+                    List.indexedMap
+                        (\x char ->
+                            if (List.member char entityCharList) then
+                                Just (Block x y)
+                            else
+                                Nothing
+                        )
+                        row
+                )
+                level.map
+    in
+        maybeBlocks
+            |> List.concat
+            |> List.filterMap identity
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { player = Block 2 2
-      , walls = getGameArena
-      , boxes = [ Block 4 4, Block 8 8 ]
-      , placeholders = [ Block 5 5, Block 7 7 ]
-      , isWin = False
-      }
+    ( initLevel level
     , Cmd.none
     )
 
@@ -116,11 +170,11 @@ checkIfWin model =
             List.map (\{ x, y } -> ( x, y )) model.boxes
                 |> Set.fromList
 
-        placeholders =
-            List.map (\{ x, y } -> ( x, y )) model.placeholders
+        dots =
+            List.map (\{ x, y } -> ( x, y )) model.dots
                 |> Set.fromList
     in
-        if Set.isEmpty (Set.diff boxes placeholders) then
+        if Set.isEmpty (Set.diff boxes dots) then
             { model | isWin = True }
         else
             model
@@ -186,7 +240,7 @@ view model =
         ]
         (List.concat
             [ List.map (renderBlock "#333") model.walls
-            , List.map (renderBlock "#fff") model.placeholders
+            , List.map (renderBlock "#fff") model.dots
             , List.map (renderBlock "green") model.boxes
             , [ renderBlock "#fac" model.player ]
             ]
