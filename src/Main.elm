@@ -5,22 +5,25 @@ import Html.Attributes exposing (src)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Keyboard
+import Dict
 import Set exposing (Set)
+import Xml exposing (Value)
+import Xml.Encode exposing (null)
+import Xml.Decode exposing (decode)
+import Xml.Query exposing (tags, tag, collect)
 
 
 ---- MODEL ----
 
 
 type alias Config =
-    { gameArenaSize : Int
-    , blockSize : Int
+    { blockSize : Int
     }
 
 
 config : Config
 config =
-    { gameArenaSize = 11
-    , blockSize = 60
+    { blockSize = 60
     }
 
 
@@ -65,6 +68,77 @@ level =
     }
 
 
+xmlLevel : String
+xmlLevel =
+    """
+    <Level Id="soko7" Width="13" Height="9">
+      <L>  #########</L>
+      <L>  #  ###  #</L>
+      <L>###   $   ###</L>
+      <L>#   $###$   #</L>
+      <L># ##  #  ## #</L>
+      <L>#     # #   #</L>
+      <L>###@  #   ###</L>
+      <L>  ##. . .##</L>
+      <L>   #######</L>
+    </Level>
+"""
+
+
+decodedXmlLevel : Value
+decodedXmlLevel =
+    xmlLevel
+        |> decode
+        |> Result.toMaybe
+        |> Maybe.withDefault null
+
+
+xmlLevelMap : List (List Char)
+xmlLevelMap =
+    tags "L" decodedXmlLevel
+        |> collect (tag "L" Xml.Query.string)
+        |> List.map String.toList
+
+
+xmlLevelSize : ( Int, Int )
+xmlLevelSize =
+    case List.head (tags "Level" decodedXmlLevel) of
+        Just (Xml.Tag _ attrs _) ->
+            ( getIntAttr attrs "Width", getIntAttr attrs "Height" )
+
+        _ ->
+            ( 0, 0 )
+
+
+getIntAttr : Dict.Dict String Value -> String -> Int
+getIntAttr attrs attrName =
+    Dict.get attrName attrs
+        |> Maybe.map valueToString
+        |> Maybe.withDefault 0
+
+
+valueToString : Value -> Int
+valueToString value =
+    case value of
+        Xml.IntNode a ->
+            a
+
+        _ ->
+            0
+
+
+level2 : Level
+level2 =
+    { width = Tuple.first (xmlLevelSize)
+    , height = Tuple.second (xmlLevelSize)
+    , map = xmlLevelMap
+    }
+
+
+
+-- ##### #@$.# #####
+
+
 initLevel : Level -> Model
 initLevel level =
     { player = Maybe.withDefault (Block 0 0) <| List.head (levelToBlocks level [ '@', '+' ])
@@ -72,7 +146,7 @@ initLevel level =
     , boxes = levelToBlocks level [ '$', '*' ]
     , dots = levelToBlocks level [ '.', '+', '*' ]
     , isWin = False
-    , gameSize = ( 10, 10 )
+    , gameSize = ( level.width, level.height )
     }
 
 
@@ -100,41 +174,9 @@ levelToBlocks level entityCharList =
 
 init : ( Model, Cmd Msg )
 init =
-    ( initLevel level
+    ( initLevel level2
     , Cmd.none
     )
-
-
-getGameArena : List Block
-getGameArena =
-    let
-        lengthAsArray =
-            List.range 0 (config.gameArenaSize - 1)
-
-        topRow =
-            lengthAsArray
-                |> List.map (\x -> ( x, 0 ))
-
-        bottomRow =
-            lengthAsArray
-                |> List.map (\x -> ( x, config.gameArenaSize - 1 ))
-
-        columnAsArray =
-            [ 1, 2, 3, config.gameArenaSize - 4, config.gameArenaSize - 3, config.gameArenaSize - 2 ]
-
-        leftColumn =
-            columnAsArray
-                |> List.map (\y -> ( 0, y ))
-
-        rightColumn =
-            columnAsArray
-                |> List.map (\y -> ( config.gameArenaSize - 1, y ))
-
-        positions =
-            topRow ++ bottomRow ++ leftColumn ++ rightColumn
-    in
-        positions
-            |> List.map (\( x, y ) -> Block x y)
 
 
 
@@ -230,8 +272,8 @@ moveBoxes deltaX deltaY model =
 view : Model -> Html Msg
 view model =
     svg
-        [ width (toString (config.gameArenaSize * config.blockSize))
-        , height (toString (config.gameArenaSize * config.blockSize))
+        [ width (toString (Tuple.first model.gameSize * config.blockSize))
+        , height (toString (Tuple.second model.gameSize * config.blockSize))
         , Html.Attributes.style
             [ ( "margin", "10px auto" )
             , ( "display", "block" )
