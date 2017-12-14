@@ -1,0 +1,8 @@
+{
+    "mode": {
+        "symbol": {
+            "dest": "public",
+            "sprite": "sokoban.sprite.svg"
+        }
+    }
+}
