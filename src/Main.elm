@@ -18,12 +18,14 @@ import Xml.Query exposing (tags, tag, collect)
 
 type alias Config =
     { blockSize : Int
+    , svgSpritePath : String
     }
 
 
 config : Config
 config =
-    { blockSize = 60
+    { blockSize = 80
+    , svgSpritePath = "sokoban.sprite.svg"
     }
 
 
@@ -71,16 +73,16 @@ level =
 xmlLevel : String
 xmlLevel =
     """
-    <Level Id="soko7" Width="13" Height="9">
-      <L>  #########</L>
-      <L>  #  ###  #</L>
-      <L>###   $   ###</L>
-      <L>#   $###$   #</L>
-      <L># ##  #  ## #</L>
-      <L>#     # #   #</L>
-      <L>###@  #   ###</L>
-      <L>  ##. . .##</L>
-      <L>   #######</L>
+     <Level Id="soko42" Width="7" Height="9">
+      <L> ######</L>
+      <L> #    #</L>
+      <L>## $  #</L>
+      <L>#  ##$#</L>
+      <L># $.#.#</L>
+      <L># $...#</L>
+      <L># $####</L>
+      <L>#@ #</L>
+      <L>####</L>
     </Level>
 """
 
@@ -136,7 +138,7 @@ level2 =
 
 
 
--- ##### #@$.# #####
+-- url.com?level=######@$.######&width=3
 
 
 initLevel : Level -> Model
@@ -274,46 +276,72 @@ view model =
     svg
         [ width (toString (Tuple.first model.gameSize * config.blockSize))
         , height (toString (Tuple.second model.gameSize * config.blockSize))
-        , Html.Attributes.style
-            [ ( "margin", "10px auto" )
-            , ( "display", "block" )
-            , ( "background", "#eee" )
-            ]
+        , class "game-arena"
         ]
         (List.concat
-            [ List.map (renderBlock "#333") model.walls
-            , List.map (renderBlock "#fff") model.dots
-            , List.map (renderBlock "green") model.boxes
-            , [ renderBlock "#fac" model.player ]
+            [ List.map (renderBlockById "#wall") model.walls
+            , List.map (renderBlockById "#dotAlt") model.dots
+            , List.map (renderBlockById "#boxAlt") model.boxes
+            , [ renderBlockById "#player" model.player ]
             ]
         )
+
+
+getBlockPositionAndSize : Block -> { x : Int, y : Int, size : Int }
+getBlockPositionAndSize block =
+    let
+        posX =
+            block.x * config.blockSize
+
+        posY =
+            block.y * config.blockSize
+
+        renderedBlockSize =
+            config.blockSize
+    in
+        { x = posX
+        , y = posY
+        , size = renderedBlockSize
+        }
 
 
 renderBlock : String -> Block -> Svg Msg
 renderBlock color block =
     let
-        posX =
-            toString (block.x * config.blockSize)
-
-        posY =
-            toString (block.y * config.blockSize)
-
-        renderedBlockSize =
-            toString (config.blockSize - 1)
+        blockPosition =
+            getBlockPositionAndSize block
 
         blockRadius =
             toString (round (toFloat config.blockSize / 8))
     in
         rect
-            [ x posX
-            , y posY
-            , width renderedBlockSize
-            , height renderedBlockSize
+            [ x (toString blockPosition.x)
+            , y (toString blockPosition.y)
+            , width (toString blockPosition.size)
+            , height (toString blockPosition.size)
             , fill color
             , rx blockRadius
             , ry blockRadius
             ]
             []
+
+
+renderBlockById : String -> Block -> Svg Msg
+renderBlockById svgId block =
+    let
+        blockPosition =
+            getBlockPositionAndSize block
+    in
+        svg
+            [ x (toString blockPosition.x)
+            , y (toString blockPosition.y)
+            , width (toString blockPosition.size)
+            , height (toString blockPosition.size)
+            ]
+            [ node "use"
+                [ xlinkHref (config.svgSpritePath ++ svgId) ]
+                []
+            ]
 
 
 

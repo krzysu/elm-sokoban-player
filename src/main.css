@@ -1,12 +1,14 @@
 body {
   font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
-  font-size: 30px;
+  font-size: 18px;
   margin: 0;
-  text-align: center;
   color: #293c4b;
 }
 
-img {
-  margin: 20px 0;
-  max-width: 200px;
+.game-arena {
+    margin: 10px auto;
+    display: block;
+	background-color: #ddd;
+    background-image: url(icons/floor.svg);
+    background-repeat: repeat;
 }
