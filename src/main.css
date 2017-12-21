@@ -1,14 +1,48 @@
 body {
-  font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Fredoka One', sans-serif;
   font-size: 18px;
+  font-weight: 400;
   margin: 0;
   color: #293c4b;
+  background-color: #789496;
+  background-image: url(all-icons/floorGrey.svg);
+  background-repeat: repeat;
 }
 
 .game-arena {
-    margin: 10px auto;
-    display: block;
-	background-color: #ddd;
-    background-image: url(icons/floor.svg);
-    background-repeat: repeat;
+  margin: 10px auto;
+  display: block;
+}
+
+h1 {
+  font-family: 'Fredoka One', cursive;
+  font-weight: 400;
+  font-size: 2.5em;
+  line-height: 1.3em;
+}
+
+.headline {
+    text-align: center;
+    color: #FFDEB3; /* #D8443D; red */
+    text-shadow:
+      -2px -2px 0 #4A3429,
+       2px -2px 0 #4A3429,
+       -2px 2px 0 #4A3429,
+        2px 2px 0 #4A3429;
+}
+
+.ribbon {
+  background-image: url(all-icons/ribbon.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  width: 50%;
+  font-size: 2em;
+  line-height: 4em;
+  color: #4A3429;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }

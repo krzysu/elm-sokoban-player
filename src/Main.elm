@@ -279,10 +279,10 @@ view model =
         , class "game-arena"
         ]
         (List.concat
-            [ List.map (renderBlockById "#wallAlt") model.walls
-            , List.map (renderBlockById "#dotAlt") model.dots
-            , List.map (renderBlockById "#boxAlt") model.boxes
-            , [ renderBlockById "#player" model.player ]
+            [ List.map (renderBlockById "#wallRed") model.walls
+            , List.map (renderBlockById "#dotGreen") model.dots
+            , List.map (renderBlockById "#boxGreen") model.boxes
+            , [ renderBlockById "#playerFront" model.player ]
             ]
         )
 
