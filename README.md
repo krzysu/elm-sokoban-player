@@ -2,7 +2,7 @@
 
 Sokoban Player provides best experience to play any [sokoban](https://en.wikipedia.org/wiki/Sokoban) level you want!
 
-Play it [here]()
+Play it [here](https://sokoban-player.netlify.com/)
 
 ## Contributing
 
