@@ -292,7 +292,7 @@ view model =
 
 getWinRibbon : Model -> Html Msg
 getWinRibbon model =
-    if True then
+    if model.isWin then
         div [ class "ribbon" ] [ Html.text "Solved!" ]
     else
         Html.text ""
