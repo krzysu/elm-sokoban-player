@@ -24,13 +24,11 @@ Pull requests are welcome!
 
 ## TODO
 
-- restructure code into modules
-- win state
 - moves count
 - undo N moves
 - HUD
 - level picker
-- level in url
+- level in url (url.com?level=######@$.######&width=3&height=3)
 - player animation
 - touch support
 - scale to screen size
