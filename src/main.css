@@ -9,8 +9,12 @@ body {
   background-repeat: repeat;
 }
 
+.wrapper {
+  position: relative;
+}
+
 .game-arena {
-  margin: 10px auto;
+  margin: 0 auto;
   display: block;
 }
 

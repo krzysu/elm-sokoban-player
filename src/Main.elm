@@ -273,18 +273,29 @@ moveBoxes deltaX deltaY model =
 
 view : Model -> Html Msg
 view model =
-    svg
-        [ width (toString (Tuple.first model.gameSize * config.blockSize))
-        , height (toString (Tuple.second model.gameSize * config.blockSize))
-        , class "game-arena"
-        ]
-        (List.concat
-            [ List.map (renderBlockById "#wallRed") model.walls
-            , List.map (renderBlockById "#dotGreen") model.dots
-            , List.map (renderBlockById "#boxGreen") model.boxes
-            , [ renderBlockById "#playerFront" model.player ]
+    div [ class "wrapper" ]
+        [ svg
+            [ width (toString (Tuple.first model.gameSize * config.blockSize))
+            , height (toString (Tuple.second model.gameSize * config.blockSize))
+            , class "game-arena"
             ]
-        )
+            (List.concat
+                [ List.map (renderBlockById "#wallBrown") model.walls
+                , List.map (renderBlockById "#dotGreen") model.dots
+                , List.map (renderBlockById "#boxGreen") model.boxes
+                , [ renderBlockById "#playerFront" model.player ]
+                ]
+            )
+        , getWinRibbon model
+        ]
+
+
+getWinRibbon : Model -> Html Msg
+getWinRibbon model =
+    if True then
+        div [ class "ribbon" ] [ Html.text "Solved!" ]
+    else
+        Html.text ""
 
 
 getBlockPositionAndSize : Block -> { x : Int, y : Int, size : Int }
