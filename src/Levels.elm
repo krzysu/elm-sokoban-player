@@ -12,10 +12,22 @@ getLevel number =
         |> Maybe.withDefault (Level 0 0 [])
 
 
+levels : Array.Array Level
+levels =
+    Array.fromList
+        [ getXmlLevel xmlLevel
+        , getStringLevel stringLevel1
+        , getStringLevel stringLevel2
+        , getStringLevel stringLevel3
+        , getStringLevel stringLevel4
+        , getStringLevel stringLevel5
+        ]
+
+
 {-| example level, not in use
 -}
-level : Level
-level =
+exampleLevel : Level
+exampleLevel =
     { width = 5
     , height = 3
     , map =
@@ -129,15 +141,3 @@ xmlLevel =
   <L>####</L>
 </Level>
 """
-
-
-levels : Array.Array Level
-levels =
-    Array.fromList
-        [ getStringLevel stringLevel1
-        , getStringLevel stringLevel2
-        , getStringLevel stringLevel3
-        , getStringLevel stringLevel4
-        , getStringLevel stringLevel5
-        , getXmlLevel xmlLevel
-        ]

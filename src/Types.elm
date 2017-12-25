@@ -15,6 +15,7 @@ type alias Model =
 type Msg
     = NoOp
     | Move Int Int
+    | LoadLevel Int
 
 
 type alias Block =

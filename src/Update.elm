@@ -2,6 +2,7 @@ module Update exposing (update)
 
 import Set exposing (Set)
 import Types exposing (Model, Msg, Block)
+import Model exposing (initModelWithLevelNumber)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -14,6 +15,11 @@ update msg model =
                 |> checkCollisions
                 |> Maybe.map checkIfWin
                 |> Maybe.withDefault model
+            , Cmd.none
+            )
+
+        Types.LoadLevel levelNumber ->
+            ( initModelWithLevelNumber levelNumber
             , Cmd.none
             )
 

@@ -6,16 +6,16 @@ import Types exposing (Model, Msg)
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    arrowChanged
+    arrowChanged model
 
 
-arrowChanged : Sub Msg
-arrowChanged =
-    Keyboard.downs toArrowChanged
+arrowChanged : Model -> Sub Msg
+arrowChanged model =
+    Keyboard.downs (toArrowChanged model)
 
 
-toArrowChanged : Keyboard.KeyCode -> Msg
-toArrowChanged code =
+toArrowChanged : Model -> Keyboard.KeyCode -> Msg
+toArrowChanged model code =
     case code of
         37 ->
             -- LeftKey
@@ -32,6 +32,13 @@ toArrowChanged code =
         40 ->
             -- DownKey
             Types.Move 0 1
+
+        13 ->
+            -- Enter
+            if model.isWin then
+                Types.LoadLevel (model.currentLevel + 1)
+            else
+                Types.NoOp
 
         _ ->
             Types.NoOp

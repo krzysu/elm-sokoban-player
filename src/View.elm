@@ -1,6 +1,7 @@
 module View exposing (view)
 
-import Html exposing (Html, text, div, img)
+import Html exposing (Html, text, div, button)
+import Html.Events exposing (onClick)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Types exposing (Model, Msg, Block)
@@ -66,16 +67,14 @@ renderBlockById svgId block =
         blockPosition =
             getBlockPositionAndSize block
     in
-        svg
-            [ x (toString blockPosition.x)
+        node "use"
+            [ xlinkHref (config.svgSpritePath ++ svgId)
+            , x (toString blockPosition.x)
             , y (toString blockPosition.y)
             , width (toString blockPosition.size)
             , height (toString blockPosition.size)
             ]
-            [ node "use"
-                [ xlinkHref (config.svgSpritePath ++ svgId) ]
-                []
-            ]
+            []
 
 
 {-| deprecated
@@ -107,6 +106,15 @@ renderBlockByColor color block =
 getWinRibbon : Model -> Html Msg
 getWinRibbon model =
     if model.isWin then
-        div [ class "ribbon" ] [ Html.text "Solved!" ]
+        div []
+            [ div [ class "overlay-body" ]
+                [ div [ class "ribbon margin" ]
+                    [ Html.text "Solved!" ]
+                , button
+                    [ class "button", onClick (Types.LoadLevel (model.currentLevel + 1)) ]
+                    [ Html.text "Next" ]
+                ]
+            , div [ class "overlay" ] []
+            ]
     else
         Html.text ""

@@ -33,4 +33,4 @@ Pull requests are welcome!
 - touch support
 - scale to screen size
 - scores, save results to localstorage
-- level solutions with AI
+- level solver

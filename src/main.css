@@ -9,9 +9,7 @@ body {
   background-repeat: repeat;
 }
 
-.wrapper {
-  position: relative;
-}
+.wrapper {}
 
 .game-arena {
   margin: 0 auto;
@@ -35,18 +33,54 @@ h1 {
         2px 2px 0 #4A3429;
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(54, 151, 83, 0.96);
+}
+
+.overlay-body {
+  width: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+  z-index: 1;
+}
+
+
 .ribbon {
   background-image: url(all-icons/ribbon.svg);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  width: 50%;
   font-size: 2em;
   line-height: 4em;
   color: #4A3429;
   text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+}
+
+.button {
+  font-family: 'Fredoka One', sans-serif;
+  font-size: 1.2em;
+  line-height: 2em;
+  padding: 0.5em 1.5em;
+  background-color: #4A3429;
+  color: #FFDEB3;
+  border: 0;
+  cursor: pointer;
+  outline: 0;
+  border-radius: 0.3em;
+}
+
+.button:hover {
+  background-color: #563c2f;
+}
+
+.margin {
+  margin-bottom: 1em;
 }

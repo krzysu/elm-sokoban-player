@@ -1,18 +1,23 @@
-module Model exposing (initModel)
+module Model exposing (initModelWithLevelNumber)
 
 import Types exposing (Model, Block, Level)
+import Levels exposing (getLevel)
 
 
-initModel : Level -> Model
-initModel level =
-    { player = Maybe.withDefault (Block 0 0) <| List.head (levelToBlocks level [ '@', '+' ])
-    , walls = levelToBlocks level [ '#' ]
-    , boxes = levelToBlocks level [ '$', '*' ]
-    , dots = levelToBlocks level [ '.', '+', '*' ]
-    , isWin = False
-    , gameSize = ( level.width, level.height )
-    , currentLevel = 0
-    }
+initModelWithLevelNumber : Int -> Model
+initModelWithLevelNumber levelNumber =
+    let
+        level =
+            getLevel levelNumber
+    in
+        { player = Maybe.withDefault (Block 0 0) <| List.head (levelToBlocks level [ '@', '+' ])
+        , walls = levelToBlocks level [ '#' ]
+        , boxes = levelToBlocks level [ '$', '*' ]
+        , dots = levelToBlocks level [ '.', '+', '*' ]
+        , isWin = False
+        , gameSize = ( level.width, level.height )
+        , currentLevel = levelNumber
+        }
 
 
 levelToBlocks : Level -> List Char -> List Block
