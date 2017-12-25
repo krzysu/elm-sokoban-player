@@ -8,26 +8,6 @@ import Xml.Query exposing (tags, tag, collect)
 import Types exposing (Level)
 
 
-{-| example level, not in use
--}
-level : Level
-level =
-    { width = 7
-    , height = 9
-    , map =
-        [ [ ' ', ' ', ' ', '#', '#', '#', ' ' ]
-        , [ '#', '#', '#', '#', '@', '#', ' ' ]
-        , [ '#', '.', ' ', ' ', ' ', '#', '#' ]
-        , [ '#', '.', ' ', '*', ' ', ' ', '#' ]
-        , [ '#', '.', ' ', '#', '$', ' ', '#' ]
-        , [ '#', '#', '$', '#', ' ', ' ', '#' ]
-        , [ ' ', '#', ' ', '$', ' ', '#', '#' ]
-        , [ ' ', '#', ' ', ' ', ' ', '#', ' ' ]
-        , [ ' ', '#', '#', '#', '#', '#', ' ' ]
-        ]
-    }
-
-
 getXmlLevel : String -> Level
 getXmlLevel xmlString =
     let

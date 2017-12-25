@@ -8,6 +8,7 @@ type alias Model =
     , dots : List Block
     , isWin : Bool
     , gameSize : ( Int, Int )
+    , currentLevel : Int
     }
 
 

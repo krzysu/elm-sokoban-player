@@ -1,7 +1,6 @@
 module View exposing (view)
 
 import Html exposing (Html, text, div, img)
-import Html.Attributes exposing (src)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Types exposing (Model, Msg, Block)
@@ -15,7 +14,7 @@ type alias Config =
 
 config : Config
 config =
-    { blockSize = 80
+    { blockSize = 60
     , svgSpritePath = "sokoban.sprite.svg"
     }
 

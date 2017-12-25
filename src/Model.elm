@@ -11,6 +11,7 @@ initModel level =
     , dots = levelToBlocks level [ '.', '+', '*' ]
     , isWin = False
     , gameSize = ( level.width, level.height )
+    , currentLevel = 0
     }
 
 
