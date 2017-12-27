@@ -36,6 +36,7 @@ view model =
                 ]
             )
         , getWinRibbon model
+        , getMovesCounter model
         ]
 
 
@@ -111,10 +112,18 @@ getWinRibbon model =
                 [ div [ class "ribbon margin" ]
                     [ Html.text "Solved!" ]
                 , button
-                    [ class "button", onClick (Types.LoadLevel (model.currentLevel + 1)) ]
+                    [ class "button"
+                    , onClick (Types.LoadLevel (model.currentLevel + 1))
+                    ]
                     [ Html.text "Next" ]
                 ]
             , div [ class "overlay" ] []
             ]
     else
         Html.text ""
+
+
+getMovesCounter : Model -> Html Msg
+getMovesCounter model =
+    div [ class "counter" ]
+        [ Html.text ("moves: " ++ (toString model.movesCount)) ]

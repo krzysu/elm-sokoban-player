@@ -84,3 +84,14 @@ h1 {
 .margin {
   margin-bottom: 1em;
 }
+
+.counter {
+  text-align: center;
+  margin-top: 1em;
+  color: #FFDEB3;
+  text-shadow:
+    -1px -1px 0 #4A3429,
+     1px -1px 0 #4A3429,
+     -1px 1px 0 #4A3429,
+      1px 1px 0 #4A3429;
+}

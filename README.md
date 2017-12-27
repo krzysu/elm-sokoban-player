@@ -24,7 +24,6 @@ Pull requests are welcome!
 
 ## TODO
 
-- moves count
 - undo N moves
 - HUD
 - level picker

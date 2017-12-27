@@ -17,6 +17,7 @@ initModelWithLevelNumber levelNumber =
         , isWin = False
         , gameSize = ( level.width, level.height )
         , currentLevel = levelNumber
+        , movesCount = 0
         }
 
 

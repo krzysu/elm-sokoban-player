@@ -34,7 +34,10 @@ moveBlock deltaX deltaY { x, y } =
 
 movePlayer : Int -> Int -> Model -> Model
 movePlayer deltaX deltaY model =
-    { model | player = moveBlock deltaX deltaY model.player }
+    { model
+        | player = moveBlock deltaX deltaY model.player
+        , movesCount = model.movesCount + 1
+    }
 
 
 moveBoxes : Int -> Int -> Model -> Model

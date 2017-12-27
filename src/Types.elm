@@ -9,6 +9,7 @@ type alias Model =
     , isWin : Bool
     , gameSize : ( Int, Int )
     , currentLevel : Int
+    , movesCount : Int
     }
 
 
