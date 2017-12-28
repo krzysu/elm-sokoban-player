@@ -9,7 +9,11 @@ body {
   background-repeat: repeat;
 }
 
-.wrapper {}
+.wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
 
 .game-arena {
   margin: 0 auto;
@@ -81,13 +85,18 @@ h1 {
   background-color: #563c2f;
 }
 
+.button--small {
+  font-size: 1em;
+  line-height: 1.5em;
+  padding: 0.5em 1em;
+
+}
+
 .margin {
-  margin-bottom: 1em;
+  margin-top: 1em;
 }
 
 .counter {
-  text-align: center;
-  margin-top: 1em;
   color: #FFDEB3;
   text-shadow:
     -1px -1px 0 #4A3429,

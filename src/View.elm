@@ -37,6 +37,8 @@ view model =
             )
         , getWinRibbon model
         , getMovesCounter model
+        , getUndoButton model
+        , getResetInfo
         ]
 
 
@@ -109,10 +111,10 @@ getWinRibbon model =
     if model.isWin then
         div []
             [ div [ class "overlay-body" ]
-                [ div [ class "ribbon margin" ]
+                [ div [ class "ribbon" ]
                     [ Html.text "Solved!" ]
                 , button
-                    [ class "button"
+                    [ class "button margin"
                     , onClick (Types.LoadLevel (model.currentLevel + 1))
                     ]
                     [ Html.text "Next" ]
@@ -125,5 +127,20 @@ getWinRibbon model =
 
 getMovesCounter : Model -> Html Msg
 getMovesCounter model =
-    div [ class "counter" ]
+    div [ class "counter margin" ]
         [ Html.text ("moves: " ++ (toString model.movesCount)) ]
+
+
+getUndoButton : Model -> Html Msg
+getUndoButton model =
+    button
+        [ class "button button--small margin"
+        , onClick (Types.Undo)
+        ]
+        [ Html.text "Undo" ]
+
+
+getResetInfo : Html Msg
+getResetInfo =
+    div [ class "counter margin" ]
+        [ Html.text "press ESC to restart" ]

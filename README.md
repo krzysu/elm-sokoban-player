@@ -24,12 +24,15 @@ Pull requests are welcome!
 
 ## TODO
 
+- stats: remaining boxes count, best score
 - undo N moves
 - HUD
 - level picker
-- level in url (url.com?level=######@$.######&width=3&height=3)
+- level in url (url.com?level=#####|#@$.#|#####)
+- box on dot change color
 - player animation
 - touch support
 - scale to screen size
 - scores, save results to localstorage
 - level solver
+- make sure it works cross browser (safari rendering bug, IE not rendering at all)

@@ -1,7 +1,7 @@
 module Update exposing (update)
 
 import Set exposing (Set)
-import Types exposing (Model, Msg, Block)
+import Types exposing (Model, Msg, Block, GameState)
 import Model exposing (initModelWithLevelNumber)
 
 
@@ -10,6 +10,7 @@ update msg model =
     case msg of
         Types.Move deltaX deltaY ->
             ( model
+                |> addToHistory
                 |> movePlayer deltaX deltaY
                 |> moveBoxes deltaX deltaY
                 |> checkCollisions
@@ -20,6 +21,12 @@ update msg model =
 
         Types.LoadLevel levelNumber ->
             ( initModelWithLevelNumber levelNumber
+            , Cmd.none
+            )
+
+        Types.Undo ->
+            ( model
+                |> undoLastMove
             , Cmd.none
             )
 
@@ -88,3 +95,38 @@ checkIfWin model =
             { model | isWin = True }
         else
             model
+
+
+addToHistory : Model -> Model
+addToHistory model =
+    let
+        newGameState : GameState
+        newGameState =
+            { player = model.player
+            , boxes = model.boxes
+            }
+    in
+        { model | history = newGameState :: model.history }
+
+
+undoLastMove : Model -> Model
+undoLastMove model =
+    let
+        prevGameState : Maybe GameState
+        prevGameState =
+            List.head model.history
+
+        restOfHistory =
+            List.tail model.history
+    in
+        case prevGameState of
+            Nothing ->
+                model
+
+            Just prevGameState ->
+                { model
+                    | player = prevGameState.player
+                    , boxes = prevGameState.boxes
+                    , movesCount = model.movesCount - 1
+                    , history = Maybe.withDefault [] restOfHistory
+                }

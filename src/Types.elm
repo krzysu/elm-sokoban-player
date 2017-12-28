@@ -10,6 +10,13 @@ type alias Model =
     , gameSize : ( Int, Int )
     , currentLevel : Int
     , movesCount : Int
+    , history : List GameState
+    }
+
+
+type alias GameState =
+    { player : Block
+    , boxes : List Block
     }
 
 
@@ -17,6 +24,7 @@ type Msg
     = NoOp
     | Move Int Int
     | LoadLevel Int
+    | Undo
 
 
 type alias Block =

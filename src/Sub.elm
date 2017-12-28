@@ -40,5 +40,9 @@ toArrowChanged model code =
             else
                 Types.NoOp
 
+        27 ->
+            -- Esc
+            Types.LoadLevel model.currentLevel
+
         _ ->
             Types.NoOp
