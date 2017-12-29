@@ -4,11 +4,14 @@ import Html exposing (Html, text, div, button)
 import Html.Events exposing (onClick)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
-import Types exposing (Model, Msg, Block)
+import Model exposing (getViewLevelFromLevel)
+import Types exposing (Model, Msg, Block, IViewLevel, Level)
+import Levels exposing (getAllLevels)
 
 
 type alias Config =
     { blockSize : Int
+    , previewBlockSize : Int
     , svgSpritePath : String
     }
 
@@ -16,6 +19,7 @@ type alias Config =
 config : Config
 config =
     { blockSize = 60
+    , previewBlockSize = 20
     , svgSpritePath = "sokoban.sprite.svg"
     }
 
@@ -23,106 +27,54 @@ config =
 view : Model -> Html Msg
 view model =
     div [ class "wrapper" ]
-        [ svg
-            [ width (toString (Tuple.first model.gameSize * config.blockSize))
-            , height (toString (Tuple.second model.gameSize * config.blockSize))
-            , class "game-arena"
-            ]
-            (List.concat
-                [ List.map (renderBlockById "#wallBrown") model.walls
-                , List.map (renderBlockById "#dotGreen") model.dots
-                , List.map (renderBlockById "#boxGreen") model.boxes
-                , [ renderBlockById "#playerFront" model.player ]
-                ]
-            )
-        , getWinRibbon model
+        [ renderLevel config.blockSize "game-arena" model
         , getMovesCounter model
         , getUndoButton model
         , getResetInfo
+        , getSelectLevelButton
+        , getWinOverlay model
+        , getLevelSelectorOverlay getAllLevels model
         ]
 
 
-{-| helper to get position and size of Block to render
--}
-getBlockPositionAndSize : Block -> { x : Int, y : Int, size : Int }
-getBlockPositionAndSize block =
+renderLevel : Int -> String -> IViewLevel a -> Html Msg
+renderLevel blockSize className levelToRender =
     let
-        posX =
-            block.x * config.blockSize
-
-        posY =
-            block.y * config.blockSize
-
-        renderedBlockSize =
-            config.blockSize
+        renderBlockById =
+            renderBlockBySizeAndId blockSize
     in
-        { x = posX
-        , y = posY
-        , size = renderedBlockSize
-        }
+        svg
+            [ width (toString (Tuple.first levelToRender.gameSize * blockSize))
+            , height (toString (Tuple.second levelToRender.gameSize * blockSize))
+            , class className
+            ]
+            (List.concat
+                [ List.map (renderBlockById "#wallBrown") levelToRender.walls
+                , List.map (renderBlockById "#dotGreen") levelToRender.dots
+                , List.map (renderBlockById "#boxGreen") levelToRender.boxes
+                , [ renderBlockById "#playerFront" levelToRender.player ]
+                ]
+            )
 
 
 {-| render by svg sprite id
 -}
-renderBlockById : String -> Block -> Svg Msg
-renderBlockById svgId block =
+renderBlockBySizeAndId : Int -> String -> Block -> Svg Msg
+renderBlockBySizeAndId blockSize svgId block =
     let
         blockPosition =
-            getBlockPositionAndSize block
+            { x = block.x * blockSize
+            , y = block.y * blockSize
+            }
     in
         node "use"
             [ xlinkHref (config.svgSpritePath ++ svgId)
             , x (toString blockPosition.x)
             , y (toString blockPosition.y)
-            , width (toString blockPosition.size)
-            , height (toString blockPosition.size)
+            , width (toString blockSize)
+            , height (toString blockSize)
             ]
             []
-
-
-{-| deprecated
-render rectangle with color
--}
-renderBlockByColor : String -> Block -> Svg Msg
-renderBlockByColor color block =
-    let
-        blockPosition =
-            getBlockPositionAndSize block
-
-        blockRadius =
-            toString (round (toFloat config.blockSize / 8))
-    in
-        rect
-            [ x (toString blockPosition.x)
-            , y (toString blockPosition.y)
-            , width (toString blockPosition.size)
-            , height (toString blockPosition.size)
-            , fill color
-            , rx blockRadius
-            , ry blockRadius
-            ]
-            []
-
-
-{-| render ribbon with success message
--}
-getWinRibbon : Model -> Html Msg
-getWinRibbon model =
-    if model.isWin then
-        div []
-            [ div [ class "overlay-body" ]
-                [ div [ class "ribbon" ]
-                    [ Html.text "Solved!" ]
-                , button
-                    [ class "button margin"
-                    , onClick (Types.LoadLevel (model.currentLevel + 1))
-                    ]
-                    [ Html.text "Next" ]
-                ]
-            , div [ class "overlay" ] []
-            ]
-    else
-        Html.text ""
 
 
 getMovesCounter : Model -> Html Msg
@@ -144,3 +96,55 @@ getResetInfo : Html Msg
 getResetInfo =
     div [ class "counter margin" ]
         [ Html.text "press ESC to restart" ]
+
+
+{-| render overlay with success message
+-}
+getWinOverlay : Model -> Html Msg
+getWinOverlay model =
+    if model.isWin then
+        div []
+            [ div [ class "overlay-body" ]
+                [ div [ class "ribbon" ]
+                    [ Html.text "Solved!" ]
+                , button
+                    [ class "button margin"
+                    , onClick (Types.LoadLevel (model.currentLevel + 1))
+                    ]
+                    [ Html.text "Next" ]
+                ]
+            , div [ class "overlay" ] []
+            ]
+    else
+        Html.text ""
+
+
+getSelectLevelButton : Html Msg
+getSelectLevelButton =
+    button
+        [ class "button button--small margin"
+        , onClick (Types.ShowLevelSelector)
+        ]
+        [ Html.text "Select level" ]
+
+
+getLevelSelectorOverlay : List Level -> Model -> Html Msg
+getLevelSelectorOverlay levels model =
+    if model.showLevelSelector then
+        div [ class "overlay" ]
+            [ div [ class "level-preview-list" ]
+                (levels
+                    |> List.map getViewLevelFromLevel
+                    |> List.indexedMap
+                        (\index viewLevel ->
+                            div
+                                [ class "level-preview-item"
+                                , onClick (Types.LoadLevel index)
+                                ]
+                                [ renderLevel config.previewBlockSize "" viewLevel
+                                ]
+                        )
+                )
+            ]
+    else
+        Html.text ""

@@ -104,3 +104,19 @@ h1 {
      -1px 1px 0 #4A3429,
       1px 1px 0 #4A3429;
 }
+
+.level-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 80%;
+}
+
+.level-preview-item {
+  cursor: pointer;
+  background-color: #789496;
+}
+
+.level-preview-item:hover {
+  background-image: url(all-icons/floorGrey.svg);
+  background-repeat: repeat;
+}

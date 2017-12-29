@@ -30,6 +30,11 @@ update msg model =
             , Cmd.none
             )
 
+        Types.ShowLevelSelector ->
+            ( { model | showLevelSelector = True }
+            , Cmd.none
+            )
+
         Types.NoOp ->
             ( model, Cmd.none )
 

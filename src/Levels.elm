@@ -1,4 +1,4 @@
-module Levels exposing (getLevel)
+module Levels exposing (getLevel, getAllLevels)
 
 import Array
 import Types exposing (Level)
@@ -10,6 +10,11 @@ getLevel : Int -> Level
 getLevel number =
     Array.get number levels
         |> Maybe.withDefault (Level 0 0 [])
+
+
+getAllLevels : List Level
+getAllLevels =
+    Array.toList levels
 
 
 levels : Array.Array Level

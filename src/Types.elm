@@ -1,16 +1,31 @@
 module Types exposing (..)
 
 
+type Msg
+    = NoOp
+    | Move Int Int
+    | LoadLevel Int
+    | Undo
+    | ShowLevelSelector
+
+
 type alias Model =
-    { player : Block
-    , walls : List Block
-    , boxes : List Block
-    , dots : List Block
-    , isWin : Bool
-    , gameSize : ( Int, Int )
-    , currentLevel : Int
-    , movesCount : Int
-    , history : List GameState
+    IViewLevel
+        { isWin : Bool
+        , currentLevel : Int
+        , movesCount : Int
+        , history : List GameState
+        , showLevelSelector : Bool
+        }
+
+
+type alias IViewLevel a =
+    { a
+        | player : Block
+        , walls : List Block
+        , boxes : List Block
+        , dots : List Block
+        , gameSize : ( Int, Int )
     }
 
 
@@ -18,13 +33,6 @@ type alias GameState =
     { player : Block
     , boxes : List Block
     }
-
-
-type Msg
-    = NoOp
-    | Move Int Int
-    | LoadLevel Int
-    | Undo
 
 
 type alias Block =
@@ -38,3 +46,7 @@ type alias Level =
     , height : Int
     , map : List (List Char)
     }
+
+
+type alias ViewLevel =
+    IViewLevel {}

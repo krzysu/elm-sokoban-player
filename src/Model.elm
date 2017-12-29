@@ -1,11 +1,22 @@
-module Model exposing (initModelWithLevelNumber)
+module Model exposing (initModelWithLevelNumber, getViewLevelFromLevel)
 
-import Types exposing (Model, Block, Level)
+import Types exposing (Model, Block, Level, ViewLevel)
 import Levels exposing (getLevel)
+
+
+getViewLevelFromLevel : Level -> ViewLevel
+getViewLevelFromLevel level =
+    { player = Maybe.withDefault (Block 0 0) <| List.head (levelToBlocks level [ '@', '+' ])
+    , walls = levelToBlocks level [ '#' ]
+    , boxes = levelToBlocks level [ '$', '*' ]
+    , dots = levelToBlocks level [ '.', '+', '*' ]
+    , gameSize = ( level.width, level.height )
+    }
 
 
 initModelWithLevelNumber : Int -> Model
 initModelWithLevelNumber levelNumber =
+    -- TODO use getViewLevelFromLevel
     let
         level =
             getLevel levelNumber
@@ -19,6 +30,7 @@ initModelWithLevelNumber levelNumber =
         , currentLevel = levelNumber
         , movesCount = 0
         , history = []
+        , showLevelSelector = False
         }
 
 
