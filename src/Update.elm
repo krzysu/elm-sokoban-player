@@ -110,8 +110,12 @@ addToHistory model =
             { player = model.player
             , boxes = model.boxes
             }
+
+        {- limit -}
+        maxHistoryItems =
+            100
     in
-        { model | history = newGameState :: model.history }
+        { model | history = List.take maxHistoryItems (newGameState :: model.history) }
 
 
 undoLastMove : Model -> Model

@@ -2,6 +2,7 @@ module View exposing (view)
 
 import Html exposing (Html, text, div, button)
 import Html.Events exposing (onClick)
+import Html.Attributes exposing (disabled)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Model exposing (getViewLevelFromLevel)
@@ -87,7 +88,8 @@ getUndoButton : Model -> Html Msg
 getUndoButton model =
     button
         [ class "button button--small margin"
-        , onClick (Types.Undo)
+        , onClick Types.Undo
+        , disabled (List.isEmpty model.history)
         ]
         [ Html.text "Undo" ]
 

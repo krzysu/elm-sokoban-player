@@ -116,7 +116,15 @@ h1 {
   font-size: 1em;
   line-height: 1.5em;
   padding: 0.5em 1em;
+}
 
+.button[disabled] {
+  cursor: default;
+  background-color: rgba(74, 52, 41, 0.7);
+}
+
+.button[disabled]:hover {
+  cursor: default;
 }
 
 .level-preview-list {
