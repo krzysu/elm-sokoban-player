@@ -25,7 +25,6 @@ Pull requests are welcome!
 ## TODO
 
 - stats: remaining boxes count, best score
-- undo N moves
 - HUD
 - level picker
 - level in url (url.com?level=#####|#@$.#|#####)
