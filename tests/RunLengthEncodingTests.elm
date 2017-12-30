@@ -5,6 +5,21 @@ import Expect
 import RunLengthEncoding exposing (encode, decode)
 
 
+longLevelFormat =
+    """#######
+#.@ # #
+#$* $ #
+#   $ #
+# ..  #
+#  *  #
+#######
+"""
+
+
+shortLevelFormat =
+    "7#|#.@-#-#|#$*-$-#|#3-$-#|#-2.2-#|#2-*2-#|7#|"
+
+
 all : Test
 all =
     describe "RunLengthEncoding"
@@ -23,20 +38,20 @@ all =
                 \_ ->
                     let
                         shortFormat =
-                            "11$"
+                            "#.@-#-#"
 
                         longFormat =
-                            "$$$$$$$$$$$"
+                            "#.@ # #"
                     in
                         Expect.equal (decode shortFormat) longFormat
             , test "case 3" <|
                 \_ ->
                     let
                         shortFormat =
-                            "#$"
+                            "#3-$-#"
 
                         longFormat =
-                            "#$"
+                            "#   $ #"
                     in
                         Expect.equal (decode shortFormat) longFormat
             ]
@@ -63,23 +78,25 @@ all =
                         Expect.equal (encode longFormat) shortFormat
             ]
         , describe "sokoban levels"
-            [ test "case 1" <|
+            [ test "encode, case 1" <|
+                \_ ->
+                    Expect.equal (encode longLevelFormat) shortLevelFormat
+            , test "decode, case 1" <|
+                \_ ->
+                    Expect.equal (decode shortLevelFormat) longLevelFormat
+            , test "decode and encode" <|
                 \_ ->
                     let
                         longFormat =
-                            """
-                            #######
-                            #.@ # #
-                            #$* $ #
-                            #   $ #
-                            # ..  #
-                            #  *  #
-                            #######
-                            """
-
-                        shortFormat =
-                            "7#|#.@-#-#|#$*-$-#|#3-$-#|#-..--#|#--*--#|7#"
+                            decode shortLevelFormat
                     in
-                        Expect.equal (encode longFormat) shortFormat
+                        Expect.equal (encode longFormat) shortLevelFormat
+            , test "encode and decode" <|
+                \_ ->
+                    let
+                        shortFormat =
+                            encode longLevelFormat
+                    in
+                        Expect.equal (decode shortFormat) longLevelFormat
             ]
         ]

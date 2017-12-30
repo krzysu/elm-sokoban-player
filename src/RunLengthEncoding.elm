@@ -6,12 +6,14 @@ import Maybe exposing (withDefault)
 import Regex
 
 
-{- taken from <https://github.com/exercism/elm/blob/master/exercises/run-length-encoding/RunLengthEncoding.example.elm> -}
+{- based on https://github.com/exercism/elm/blob/master/exercises/run-length-encoding/RunLengthEncoding.example.elm -}
 
 
 encode : String -> String
 encode string =
-    String.toList string
+    replace "\n" "|" string
+        |> replace " " "-"
+        |> String.toList
         |> List.foldr countChars []
         |> List.map stringifyCounts
         |> String.join ""
@@ -40,11 +42,13 @@ stringifyCounts ( count, char ) =
 
 decode : String -> String
 decode string =
-    string
+    String.trim string
         |> Regex.find Regex.All (Regex.regex "(\\d+)|(\\D)")
         |> List.map .match
         |> List.foldl expandCounts ( "", Nothing )
         |> Tuple.first
+        |> replace "-" " "
+        |> replace "\\|" "\n"
 
 
 expandCounts : String -> ( String, Maybe Int ) -> ( String, Maybe Int )
@@ -60,3 +64,8 @@ expandCounts match ( result, count ) =
 
                 Err _ ->
                     ( result ++ match, Nothing )
+
+
+replace : String -> String -> String -> String
+replace charToFind newChar =
+    Regex.replace Regex.All (Regex.regex charToFind) (\_ -> newChar)

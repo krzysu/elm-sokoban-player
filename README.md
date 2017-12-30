@@ -20,6 +20,10 @@ To build SVG sprite
 
 - `npm run build-svg`
 
+Run tests (optional with `--watch`)
+
+- `npm test`
+
 Pull requests are welcome!
 
 ## TODO
