@@ -79,7 +79,7 @@ renderBlockBySizeAndId blockSize svgId block =
 
 getMovesCounter : Model -> Html Msg
 getMovesCounter model =
-    div [ class "counter margin" ]
+    div [ class "text margin" ]
         [ Html.text ("moves: " ++ (toString model.movesCount)) ]
 
 
@@ -94,7 +94,7 @@ getUndoButton model =
 
 getResetInfo : Html Msg
 getResetInfo =
-    div [ class "counter margin" ]
+    div [ class "text margin" ]
         [ Html.text "press ESC to restart" ]
 
 

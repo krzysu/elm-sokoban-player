@@ -3,10 +3,24 @@ body {
   font-size: 18px;
   font-weight: 400;
   margin: 0;
-  color: #293c4b;
+  color: #4A3429;
   background-color: #789496;
   background-image: url(all-icons/floorGrey.svg);
   background-repeat: repeat;
+}
+
+a {
+  color: #FFDEB3;
+  text-shadow:
+    -1px -1px 0 #4A3429,
+     1px -1px 0 #4A3429,
+     -1px 1px 0 #4A3429,
+      1px 1px 0 #4A3429;
+    text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .wrapper {
@@ -35,6 +49,19 @@ h1 {
        2px -2px 0 #4A3429,
        -2px 2px 0 #4A3429,
         2px 2px 0 #4A3429;
+}
+
+.margin {
+  margin-top: 1em;
+}
+
+.text {
+  color: #FFDEB3;
+  text-shadow:
+    -1px -1px 0 #4A3429,
+     1px -1px 0 #4A3429,
+     -1px 1px 0 #4A3429,
+      1px 1px 0 #4A3429;
 }
 
 .overlay {
@@ -92,19 +119,6 @@ h1 {
 
 }
 
-.margin {
-  margin-top: 1em;
-}
-
-.counter {
-  color: #FFDEB3;
-  text-shadow:
-    -1px -1px 0 #4A3429,
-     1px -1px 0 #4A3429,
-     -1px 1px 0 #4A3429,
-      1px 1px 0 #4A3429;
-}
-
 .level-preview-list {
   display: flex;
   flex-wrap: wrap;
@@ -119,4 +133,9 @@ h1 {
 .level-preview-item:hover {
   background-image: url(all-icons/floorGrey.svg);
   background-repeat: repeat;
+}
+
+.footer {
+  text-align: center;
+  margin: 5em 0 1em;
 }
