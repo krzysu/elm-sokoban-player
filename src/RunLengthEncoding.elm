@@ -12,7 +12,7 @@ import Regex
 encode : String -> String
 encode string =
     replace "\n" "|" string
-        |> replace " " "-"
+        |> replace " " "_"
         |> String.toList
         |> List.foldr countChars []
         |> List.map stringifyCounts
@@ -47,7 +47,7 @@ decode string =
         |> List.map .match
         |> List.foldl expandCounts ( "", Nothing )
         |> Tuple.first
-        |> replace "-" " "
+        |> replace "_" " "
         |> replace "\\|" "\n"
 
 

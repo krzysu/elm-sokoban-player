@@ -17,7 +17,7 @@ longLevelFormat =
 
 
 shortLevelFormat =
-    "7#|#.@-#-#|#$*-$-#|#3-$-#|#-2.2-#|#2-*2-#|7#|"
+    "7#|#.@_#_#|#$*_$_#|#3_$_#|#_2.2_#|#2_*2_#|7#|"
 
 
 all : Test
@@ -38,7 +38,7 @@ all =
                 \_ ->
                     let
                         shortFormat =
-                            "#.@-#-#"
+                            "#.@_#_#"
 
                         longFormat =
                             "#.@ # #"
@@ -48,7 +48,7 @@ all =
                 \_ ->
                     let
                         shortFormat =
-                            "#3-$-#"
+                            "#3_$_#"
 
                         longFormat =
                             "#   $ #"
