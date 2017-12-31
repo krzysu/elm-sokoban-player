@@ -1,4 +1,4 @@
-module RunLengthEncoding exposing (encode, decode)
+module RunLengthEncoding exposing (encode, decode, replace)
 
 import String exposing (fromChar)
 import List exposing (head, tail)
