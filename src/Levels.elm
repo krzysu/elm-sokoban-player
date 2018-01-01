@@ -2,8 +2,8 @@ module Levels exposing (getLevel, getAllLevels)
 
 import Array
 import Types exposing (Level)
-import XmlLevel exposing (getXmlLevel)
-import StringLevel exposing (getStringLevel)
+import XmlLevel exposing (getLevelFromXml)
+import StringLevel exposing (getLevelFromString)
 
 
 getLevel : Int -> Level
@@ -20,12 +20,12 @@ getAllLevels =
 levels : Array.Array Level
 levels =
     Array.fromList
-        [ getXmlLevel xmlLevel
-        , getStringLevel stringLevel1
-        , getStringLevel stringLevel2
-        , getStringLevel stringLevel3
-        , getStringLevel stringLevel4
-        , getStringLevel stringLevel5
+        [ getLevelFromXml xmlLevel
+        , getLevelFromString stringLevel1
+        , getLevelFromString stringLevel2
+        , getLevelFromString stringLevel3
+        , getLevelFromString stringLevel4
+        , getLevelFromString stringLevel5
         ]
 
 

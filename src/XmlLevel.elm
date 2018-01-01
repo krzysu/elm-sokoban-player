@@ -1,4 +1,4 @@
-module XmlLevel exposing (getXmlLevel)
+module XmlLevel exposing (getLevelFromXml)
 
 import Dict
 import Xml exposing (Value)
@@ -8,8 +8,8 @@ import Xml.Query exposing (tags, tag, collect)
 import Types exposing (Level)
 
 
-getXmlLevel : String -> Level
-getXmlLevel xmlString =
+getLevelFromXml : String -> Level
+getLevelFromXml xmlString =
     let
         decodedXmlString =
             decodeXmlString xmlString

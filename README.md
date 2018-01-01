@@ -49,7 +49,7 @@ Pull requests are welcome!
 
 Based on [Sokoban Level Format](http://sokobano.de/wiki/index.php?title=Level_format) level can be defined as a string in 2 formats, normal and short. This is one of possible entry formats.
 
-- `StringLevel` - normal
+- `StringLevel` - normal, row separation with pipe or just with new line
 
 ```
 #######|
@@ -61,7 +61,7 @@ Based on [Sokoban Level Format](http://sokobano.de/wiki/index.php?title=Level_fo
 #######|
 ```
 
-- `ShortStringLevel` - created from normal with Run Length Encoding
+- `ShortStringLevel` - created from normal with Run Length Encoding, row separation obligatory with pipe, underscore represents an empty field
 
 ```
 7#|#.@_#_#|#$*_$_#|#3_$_#|#_2.2_#|#2_*2_#|7#|
