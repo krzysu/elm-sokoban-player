@@ -20,14 +20,19 @@ getLevelFromString levelString =
                 |> replace "\n" "|"
                 |> String.split "|"
                 |> List.filter (\row -> not (String.isEmpty row))
-
-        firstRow =
-            Maybe.withDefault "" (List.head rows)
     in
-        { width = String.length firstRow
+        { width = getLengthOfLongestRow rows
         , height = List.length rows
         , map = List.map String.toList rows
         }
+
+
+getLengthOfLongestRow : List String -> Int
+getLengthOfLongestRow rows =
+    rows
+        |> List.map String.length
+        |> List.maximum
+        |> Maybe.withDefault 0
 
 
 {-| string format always with pipes to separate rows
@@ -46,11 +51,15 @@ joinChars chars =
         |> String.concat
 
 
+{-| get long format from short
+-}
 decodeStringLevel : String -> String
 decodeStringLevel shortStringLevel =
     decode shortStringLevel
 
 
+{-| get short format from long
+-}
 encodeStringLevel : String -> String
 encodeStringLevel stringLevel =
     encode stringLevel

@@ -1,6 +1,31 @@
-module ViewLevel exposing (getViewLevelFromLevel)
+module ViewLevel exposing (getViewLevelFromLevel, getLevelFromViewLevel)
 
 import Types exposing (Block, Level, ViewLevel)
+
+
+getLevelFromViewLevel : ViewLevel -> Level
+getLevelFromViewLevel viewLevel =
+    let
+        width =
+            Tuple.first viewLevel.gameSize
+
+        height =
+            Tuple.second viewLevel.gameSize
+    in
+        Level width height (getLevelMap viewLevel)
+
+
+getLevelMap : ViewLevel -> List (List Char)
+getLevelMap viewLevel =
+    -- create array of length equal to width of level
+    -- multiply them by height
+    -- Array.set
+    -- or
+    -- merge all blocks but add type
+    -- sort by coordinates
+    -- then go through them and generate array
+    -- for duplicated Block coordinates, decide on priority
+    [ [] ]
 
 
 getViewLevelFromLevel : Level -> ViewLevel

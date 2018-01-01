@@ -9,7 +9,7 @@ import StringLevel exposing (getLevelFromString, getStringFromLevel)
 stringLevel : String
 stringLevel =
     """
-#####
+####
 #@$.#
 #####
 """
@@ -18,7 +18,7 @@ stringLevel =
 stringLevelWithPipes : String
 stringLevelWithPipes =
     """
-#####|
+####|
 #@$.#|
 #####
 """
@@ -29,7 +29,7 @@ level =
     { width = 5
     , height = 3
     , map =
-        [ [ '#', '#', '#', '#', '#' ]
+        [ [ '#', '#', '#', '#' ]
         , [ '#', '@', '$', '.', '#' ]
         , [ '#', '#', '#', '#', '#' ]
         ]
