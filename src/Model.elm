@@ -1,56 +1,27 @@
-module Model exposing (initModelWithLevelNumber, getViewLevelFromLevel)
+module Model exposing (initModelWithLevelNumber)
 
 import Types exposing (Model, Block, Level, ViewLevel)
 import Levels exposing (getLevel)
-
-
-getViewLevelFromLevel : Level -> ViewLevel
-getViewLevelFromLevel level =
-    { player = Maybe.withDefault (Block 0 0) <| List.head (levelToBlocks level [ '@', '+' ])
-    , walls = levelToBlocks level [ '#' ]
-    , boxes = levelToBlocks level [ '$', '*' ]
-    , dots = levelToBlocks level [ '.', '+', '*' ]
-    , gameSize = ( level.width, level.height )
-    }
+import ViewLevel exposing (getViewLevelFromLevel)
 
 
 initModelWithLevelNumber : Int -> Model
 initModelWithLevelNumber levelNumber =
-    -- TODO use getViewLevelFromLevel
     let
         level =
             getLevel levelNumber
+
+        viewLevel =
+            getViewLevelFromLevel level
     in
-        { player = Maybe.withDefault (Block 0 0) <| List.head (levelToBlocks level [ '@', '+' ])
-        , walls = levelToBlocks level [ '#' ]
-        , boxes = levelToBlocks level [ '$', '*' ]
-        , dots = levelToBlocks level [ '.', '+', '*' ]
+        { player = viewLevel.player
+        , walls = viewLevel.walls
+        , boxes = viewLevel.boxes
+        , dots = viewLevel.dots
+        , gameSize = viewLevel.gameSize
         , isWin = False
-        , gameSize = ( level.width, level.height )
         , currentLevel = levelNumber
         , movesCount = 0
         , history = []
         , showLevelSelector = False
         }
-
-
-levelToBlocks : Level -> List Char -> List Block
-levelToBlocks level entityCharList =
-    let
-        maybeBlocks =
-            List.indexedMap
-                (\y row ->
-                    List.indexedMap
-                        (\x char ->
-                            if (List.member char entityCharList) then
-                                Just (Block x y)
-                            else
-                                Nothing
-                        )
-                        row
-                )
-                level.map
-    in
-        maybeBlocks
-            |> List.concat
-            |> List.filterMap identity

@@ -5,7 +5,7 @@ import Html.Events exposing (onClick)
 import Html.Attributes exposing (disabled)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
-import Model exposing (getViewLevelFromLevel)
+import ViewLevel exposing (getViewLevelFromLevel)
 import Types exposing (Model, Msg, Block, IViewLevel, Level)
 import Levels exposing (getAllLevels)
 
