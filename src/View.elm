@@ -6,7 +6,7 @@ import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
 import Svg.Attributes
 import ViewLevel exposing (getViewLevelFromLevel)
-import Types exposing (Model, Msg(..), Block, IViewLevel, Level)
+import Types exposing (Model, Msg(..), Block, IViewLevel, Level, Page(..))
 
 
 type alias Config =
@@ -26,14 +26,24 @@ config =
 
 view : Model -> Html Msg
 view model =
+    case model.currentPage of
+        GamePage ->
+            renderGamePage model
+
+        LevelSelectPage ->
+            renderLevelSelectPage model
+
+
+renderGamePage : Model -> Html Msg
+renderGamePage model =
     div [ class "wrapper" ]
-        [ renderLevel config.blockSize "game-arena" model
+        [ h1 [ class "headline" ] [ Html.text "Sokoban Player" ]
+        , renderLevel config.blockSize "game-arena" model
         , getMovesCounter model
         , getUndoButton model
         , getResetInfo
         , getSelectLevelButton
         , getWinOverlay model
-        , getLevelSelectorOverlay model
         ]
 
 
@@ -124,49 +134,46 @@ getSelectLevelButton : Html Msg
 getSelectLevelButton =
     button
         [ class "button button--small margin"
-        , onClick (ShowLevelSelector)
+        , onClick (ShowLevelSelectPage)
         ]
         [ Html.text "Select level" ]
 
 
-getLevelSelectorOverlay : Model -> Html Msg
-getLevelSelectorOverlay model =
-    if model.showLevelSelector then
-        div [ class "overlay" ]
-            [ h1 [ class "headline" ] [ Html.text "Select level to play" ]
-            , div [ class "level-preview-list" ]
-                (model.levels
-                    |> List.map getViewLevelFromLevel
-                    |> List.indexedMap
-                        (\index viewLevel ->
-                            div
-                                [ class "level-preview-item"
-                                , onClick (LoadLevel index)
-                                ]
-                                [ renderLevel config.previewBlockSize "" viewLevel
-                                ]
-                        )
-                )
-            , div [ class "centered margin" ]
-                [ textarea
-                    [ class "input level-input"
-                    , onInput ChangeLevelFromUserInput
-                    , Html.Attributes.placeholder "insert your sokoban level"
-                    ]
-                    []
+renderLevelSelectPage : Model -> Html Msg
+renderLevelSelectPage model =
+    div []
+        [ h1 [ class "headline" ] [ Html.text "Select level to play" ]
+        , div [ class "level-preview-list" ]
+            (model.levels
+                |> List.map getViewLevelFromLevel
+                |> List.indexedMap
+                    (\index viewLevel ->
+                        div
+                            [ class "level-preview-item"
+                            , onClick (LoadLevel index)
+                            ]
+                            [ renderLevel config.previewBlockSize "" viewLevel
+                            ]
+                    )
+            )
+        , div [ class "centered margin" ]
+            [ textarea
+                [ class "input level-input"
+                , onInput ChangeLevelFromUserInput
+                , Html.Attributes.placeholder "insert your sokoban level"
                 ]
-            , div [ class "centered button-group margin" ]
-                [ button
-                    [ class "button button--small"
-                    , onClick LoadLevelFromUserInput
-                    ]
-                    [ Html.text "Load" ]
-                , button
-                    [ class "button button--small"
-                    , onClick HideOverlay
-                    ]
-                    [ Html.text "Cancel" ]
-                ]
+                []
             ]
-    else
-        Html.text ""
+        , div [ class "centered button-group margin" ]
+            [ button
+                [ class "button button--small"
+                , onClick LoadLevelFromUserInput
+                ]
+                [ Html.text "Load" ]
+            , button
+                [ class "button button--small"
+                , onClick ShowGamePage
+                ]
+                [ Html.text "Cancel" ]
+            ]
+        ]

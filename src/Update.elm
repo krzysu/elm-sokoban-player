@@ -1,7 +1,7 @@
 module Update exposing (update)
 
 import Set exposing (Set)
-import Types exposing (Model, Msg(..), Block, GameState)
+import Types exposing (Model, Msg(..), Block, GameState, Page(..))
 import Model exposing (updateModelWithLevelNumber, updateModelWithNewLevel)
 import StringLevel exposing (getLevelFromString)
 
@@ -31,13 +31,13 @@ update msg model =
             , Cmd.none
             )
 
-        ShowLevelSelector ->
-            ( { model | showLevelSelector = True }
+        ShowLevelSelectPage ->
+            ( { model | currentPage = LevelSelectPage }
             , Cmd.none
             )
 
-        HideOverlay ->
-            ( { model | showLevelSelector = False }
+        ShowGamePage ->
+            ( { model | currentPage = GamePage }
             , Cmd.none
             )
 

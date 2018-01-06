@@ -1,6 +1,6 @@
 module Model exposing (initModel, updateModelWithLevelNumber, updateModelWithNewLevel)
 
-import Types exposing (Model, Block, Level, ViewLevel)
+import Types exposing (Model, Block, Level, ViewLevel, Page(..))
 import Levels exposing (getInitialLevels, getLevel, addLevel)
 import ViewLevel exposing (getViewLevelFromLevel)
 
@@ -25,7 +25,7 @@ updateModelWithLevelNumber levelNumber model =
         , currentLevel = levelNumber
         , movesCount = 0
         , history = []
-        , showLevelSelector = False
+        , currentPage = GamePage
         , stringLevelFromUserInput = ""
         }
 
@@ -46,7 +46,7 @@ updateModelWithNewLevel model level =
         , currentLevel = 0
         , movesCount = 0
         , history = []
-        , showLevelSelector = False
+        , currentPage = GamePage
         , stringLevelFromUserInput = ""
         }
 
@@ -76,6 +76,6 @@ initModel =
         , currentLevel = currentLevel
         , movesCount = 0
         , history = []
-        , showLevelSelector = False
+        , currentPage = GamePage
         , stringLevelFromUserInput = ""
         }

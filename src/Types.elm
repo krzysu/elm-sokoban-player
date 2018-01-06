@@ -6,8 +6,8 @@ type Msg
     | Move Int Int
     | LoadLevel Int
     | Undo
-    | ShowLevelSelector
-    | HideOverlay
+    | ShowLevelSelectPage
+    | ShowGamePage
     | ChangeLevelFromUserInput String
     | LoadLevelFromUserInput
 
@@ -19,7 +19,7 @@ type alias Model =
         , currentLevel : Int
         , movesCount : Int
         , history : List GameState
-        , showLevelSelector : Bool
+        , currentPage : Page
         , stringLevelFromUserInput : String
         }
 
@@ -55,3 +55,8 @@ type alias Level =
 
 type alias ViewLevel =
     IViewLevel {}
+
+
+type Page
+    = GamePage
+    | LevelSelectPage
