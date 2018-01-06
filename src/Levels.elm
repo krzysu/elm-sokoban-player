@@ -1,32 +1,31 @@
-module Levels exposing (getLevel, getAllLevels)
+module Levels exposing (getInitialLevels, getLevel, addLevel)
 
-import Array
+import Array exposing (Array)
 import Types exposing (Level)
 import XmlLevel exposing (getLevelFromXml)
 import StringLevel exposing (getLevelFromString)
 
 
-getLevel : Int -> Level
-getLevel number =
-    Array.get number levels
+getLevel : Int -> List Level -> Level
+getLevel number levels =
+    Array.get number (Array.fromList levels)
         |> Maybe.withDefault (Level 0 0 [])
 
 
-getAllLevels : List Level
-getAllLevels =
-    Array.toList levels
+addLevel : List Level -> Level -> List Level
+addLevel levels newLevel =
+    newLevel :: levels
 
 
-levels : Array.Array Level
-levels =
-    Array.fromList
-        [ getLevelFromXml xmlLevel
-        , getLevelFromString stringLevel1
-        , getLevelFromString stringLevel2
-        , getLevelFromString stringLevel3
-        , getLevelFromString stringLevel4
-        , getLevelFromString stringLevel5
-        ]
+getInitialLevels : List Level
+getInitialLevels =
+    [ getLevelFromXml xmlLevel
+    , getLevelFromString stringLevel1
+    , getLevelFromString stringLevel2
+    , getLevelFromString stringLevel3
+    , getLevelFromString stringLevel4
+    , getLevelFromString stringLevel5
+    ]
 
 
 {-| example level, not in use

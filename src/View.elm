@@ -1,13 +1,12 @@
 module View exposing (view)
 
-import Html exposing (Html, text, div, button)
-import Html.Events exposing (onClick)
-import Html.Attributes exposing (disabled)
-import Svg exposing (..)
-import Svg.Attributes exposing (..)
+import Html exposing (Html, text, div, button, h1, textarea)
+import Html.Events exposing (onClick, onInput)
+import Html.Attributes exposing (class)
+import Svg exposing (Svg, svg, node)
+import Svg.Attributes
 import ViewLevel exposing (getViewLevelFromLevel)
-import Types exposing (Model, Msg, Block, IViewLevel, Level)
-import Levels exposing (getAllLevels)
+import Types exposing (Model, Msg(..), Block, IViewLevel, Level)
 
 
 type alias Config =
@@ -34,7 +33,7 @@ view model =
         , getResetInfo
         , getSelectLevelButton
         , getWinOverlay model
-        , getLevelSelectorOverlay getAllLevels model
+        , getLevelSelectorOverlay model
         ]
 
 
@@ -45,9 +44,9 @@ renderLevel blockSize className levelToRender =
             renderBlockBySizeAndId blockSize
     in
         svg
-            [ width (toString (Tuple.first levelToRender.gameSize * blockSize))
-            , height (toString (Tuple.second levelToRender.gameSize * blockSize))
-            , class className
+            [ Svg.Attributes.width (toString (Tuple.first levelToRender.gameSize * blockSize))
+            , Svg.Attributes.height (toString (Tuple.second levelToRender.gameSize * blockSize))
+            , Svg.Attributes.class className
             ]
             (List.concat
                 [ List.map (renderBlockById "#wallBrown") levelToRender.walls
@@ -69,11 +68,11 @@ renderBlockBySizeAndId blockSize svgId block =
             }
     in
         node "use"
-            [ xlinkHref (config.svgSpritePath ++ svgId)
-            , x (toString blockPosition.x)
-            , y (toString blockPosition.y)
-            , width (toString blockSize)
-            , height (toString blockSize)
+            [ Svg.Attributes.xlinkHref (config.svgSpritePath ++ svgId)
+            , Svg.Attributes.x (toString blockPosition.x)
+            , Svg.Attributes.y (toString blockPosition.y)
+            , Svg.Attributes.width (toString blockSize)
+            , Svg.Attributes.height (toString blockSize)
             ]
             []
 
@@ -88,8 +87,8 @@ getUndoButton : Model -> Html Msg
 getUndoButton model =
     button
         [ class "button button--small margin"
-        , onClick Types.Undo
-        , disabled (List.isEmpty model.history)
+        , onClick Undo
+        , Html.Attributes.disabled (List.isEmpty model.history)
         ]
         [ Html.text "Undo" ]
 
@@ -111,7 +110,7 @@ getWinOverlay model =
                     [ Html.text "Solved!" ]
                 , button
                     [ class "button margin"
-                    , onClick (Types.LoadLevel (model.currentLevel + 1))
+                    , onClick (LoadLevel (model.currentLevel + 1))
                     ]
                     [ Html.text "Next" ]
                 ]
@@ -125,28 +124,49 @@ getSelectLevelButton : Html Msg
 getSelectLevelButton =
     button
         [ class "button button--small margin"
-        , onClick (Types.ShowLevelSelector)
+        , onClick (ShowLevelSelector)
         ]
         [ Html.text "Select level" ]
 
 
-getLevelSelectorOverlay : List Level -> Model -> Html Msg
-getLevelSelectorOverlay levels model =
+getLevelSelectorOverlay : Model -> Html Msg
+getLevelSelectorOverlay model =
     if model.showLevelSelector then
         div [ class "overlay" ]
-            [ div [ class "level-preview-list" ]
-                (levels
+            [ h1 [ class "headline" ] [ Html.text "Select level to play" ]
+            , div [ class "level-preview-list" ]
+                (model.levels
                     |> List.map getViewLevelFromLevel
                     |> List.indexedMap
                         (\index viewLevel ->
                             div
                                 [ class "level-preview-item"
-                                , onClick (Types.LoadLevel index)
+                                , onClick (LoadLevel index)
                                 ]
                                 [ renderLevel config.previewBlockSize "" viewLevel
                                 ]
                         )
                 )
+            , div [ class "centered margin" ]
+                [ textarea
+                    [ class "input level-input"
+                    , onInput ChangeLevelFromUserInput
+                    , Html.Attributes.placeholder "insert your sokoban level"
+                    ]
+                    []
+                ]
+            , div [ class "centered button-group margin" ]
+                [ button
+                    [ class "button button--small"
+                    , onClick LoadLevelFromUserInput
+                    ]
+                    [ Html.text "Load" ]
+                , button
+                    [ class "button button--small"
+                    , onClick HideOverlay
+                    ]
+                    [ Html.text "Cancel" ]
+                ]
             ]
     else
         Html.text ""

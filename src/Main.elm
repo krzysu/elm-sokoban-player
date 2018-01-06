@@ -4,13 +4,13 @@ import Html
 import Types exposing (Model, Msg, Block, Level)
 import View exposing (view)
 import Update exposing (update)
-import Model exposing (initModelWithLevelNumber)
+import Model exposing (initModel)
 import Sub exposing (subscriptions)
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( initModelWithLevelNumber 0
+    ( initModel
     , Cmd.none
     )
 

@@ -7,15 +7,20 @@ type Msg
     | LoadLevel Int
     | Undo
     | ShowLevelSelector
+    | HideOverlay
+    | ChangeLevelFromUserInput String
+    | LoadLevelFromUserInput
 
 
 type alias Model =
     IViewLevel
         { isWin : Bool
+        , levels : List Level
         , currentLevel : Int
         , movesCount : Int
         , history : List GameState
         , showLevelSelector : Bool
+        , stringLevelFromUserInput : String
         }
 
 

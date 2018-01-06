@@ -65,12 +65,12 @@ h1 {
 }
 
 .overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
   background-color: rgba(54, 151, 83, 0.96);
+  min-height: 100vh;
 }
 
 .overlay-body {
@@ -127,23 +127,42 @@ h1 {
   cursor: default;
 }
 
+.button-group .button {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
 .level-preview-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   max-width: 80%;
+  margin: 0 auto;
 }
 
 .level-preview-item {
   cursor: pointer;
   background-color: #789496;
+  background-image: url(all-icons/floorGrey.svg);
+  background-repeat: repeat;
+  margin: 1em;
+  opacity: 0.8;
 }
 
 .level-preview-item:hover {
-  background-image: url(all-icons/floorGrey.svg);
-  background-repeat: repeat;
+  opacity: 1;
 }
 
 .footer {
   text-align: center;
   margin: 5em 0 1em;
+}
+
+.centered {
+  text-align: center;
+}
+
+.level-input {
+  width: 50%;
+  height: 12em;
 }

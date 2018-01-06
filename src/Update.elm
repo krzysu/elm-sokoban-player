@@ -1,14 +1,15 @@
 module Update exposing (update)
 
 import Set exposing (Set)
-import Types exposing (Model, Msg, Block, GameState)
-import Model exposing (initModelWithLevelNumber)
+import Types exposing (Model, Msg(..), Block, GameState)
+import Model exposing (updateModelWithLevelNumber, updateModelWithNewLevel)
+import StringLevel exposing (getLevelFromString)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Types.Move deltaX deltaY ->
+        Move deltaX deltaY ->
             ( model
                 |> addToHistory
                 |> movePlayer deltaX deltaY
@@ -19,23 +20,40 @@ update msg model =
             , Cmd.none
             )
 
-        Types.LoadLevel levelNumber ->
-            ( initModelWithLevelNumber levelNumber
+        LoadLevel levelNumber ->
+            ( updateModelWithLevelNumber levelNumber model
             , Cmd.none
             )
 
-        Types.Undo ->
+        Undo ->
             ( model
                 |> undoLastMove
             , Cmd.none
             )
 
-        Types.ShowLevelSelector ->
+        ShowLevelSelector ->
             ( { model | showLevelSelector = True }
             , Cmd.none
             )
 
-        Types.NoOp ->
+        HideOverlay ->
+            ( { model | showLevelSelector = False }
+            , Cmd.none
+            )
+
+        ChangeLevelFromUserInput input ->
+            ( { model | stringLevelFromUserInput = input }
+            , Cmd.none
+            )
+
+        LoadLevelFromUserInput ->
+            ( model.stringLevelFromUserInput
+                |> getLevelFromString
+                |> updateModelWithNewLevel model
+            , Cmd.none
+            )
+
+        NoOp ->
             ( model, Cmd.none )
 
 
