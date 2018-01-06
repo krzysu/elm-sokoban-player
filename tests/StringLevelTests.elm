@@ -3,7 +3,13 @@ module StringLevelTests exposing (..)
 import Test exposing (..)
 import Expect
 import Types exposing (Level)
-import StringLevel exposing (getLevelFromString, getStringFromLevel)
+import StringLevel
+    exposing
+        ( getLevelFromString
+        , getStringFromLevel
+        , urlEncodeLevel
+        , urlDecodeLevel
+        )
 
 
 stringLevel : String
@@ -73,5 +79,63 @@ all =
                             getLevelFromString stringLevel
                     in
                         Expect.equal (getStringFromLevel levelTemp) (normalize stringLevelWithPipes)
+            ]
+        , describe "urlEncodeLevel"
+            [ test "case 1" <|
+                \_ ->
+                    let
+                        shortStringLevelTestDots =
+                            "5#_|#_$+$.#|#4_*#|_5#"
+
+                        urlEncodedLevel =
+                            "5AGHAGDCDFAHA4GEAHG5A"
+                    in
+                        Expect.equal (urlEncodeLevel shortStringLevelTestDots) urlEncodedLevel
+            , test "case 2" <|
+                \_ ->
+                    let
+                        shortStringLevel =
+                            "4#|#@$.#|5#"
+
+                        urlEncodedLevel =
+                            "4AHABDFAH5A"
+                    in
+                        Expect.equal (urlEncodeLevel shortStringLevel) urlEncodedLevel
+            , test "is reversible" <|
+                \_ ->
+                    let
+                        string =
+                            "4#|#@$.#|5#"
+                    in
+                        Expect.equal (urlDecodeLevel (urlEncodeLevel string)) string
+            ]
+        , describe "urlDecodeLevel"
+            [ test "case 1" <|
+                \_ ->
+                    let
+                        shortStringLevelTestDots =
+                            "5#_|#_$+$.#|#4_*#|_5#"
+
+                        urlEncodedLevel =
+                            "5AGHAGDCDFAHA4GEAHG5A"
+                    in
+                        Expect.equal (urlDecodeLevel urlEncodedLevel) shortStringLevelTestDots
+            , test "case 2" <|
+                \_ ->
+                    let
+                        shortStringLevel =
+                            "4#|#@$.#|5#"
+
+                        urlEncodedLevel =
+                            "4AHABDFAH5A"
+                    in
+                        Expect.equal (urlDecodeLevel urlEncodedLevel) shortStringLevel
+            , test "is reversible" <|
+                \_ ->
+                    let
+                        string =
+                            "4AHABDFAH5A"
+                    in
+                        Expect.equal (urlEncodeLevel (urlDecodeLevel string)) string
             ]
         ]

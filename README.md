@@ -119,4 +119,19 @@ viewLevel =
 
 - `UrlEncodedLevel`
 
-TODO
+This is `ShortStringLevel` format mapped to more url-friendly symbols, see table below.
+
+```
+7AHAFBGAGAHADEGDGAHA3GDGAHAG2F2GAHA2GE2GAH7AH
+```
+
+| element | sokoban format | url encoded |
+| - | :-: | :-: |
+| wall | # | A |
+| player | @ | B |
+| player on dot | + | C |
+| box | $ | D |
+| box on dot | * | E |
+| dot | . | F |
+| floor | _ | G |
+| row separator | &#124; | H |

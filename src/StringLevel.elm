@@ -4,6 +4,8 @@ module StringLevel
         , getStringFromLevel
         , encodeStringLevel
         , decodeStringLevel
+        , urlEncodeLevel
+        , urlDecodeLevel
         )
 
 import Types exposing (Level)
@@ -63,3 +65,42 @@ decodeStringLevel shortStringLevel =
 encodeStringLevel : String -> String
 encodeStringLevel stringLevel =
     encode stringLevel
+
+
+{-| map short format to more url friendly symbols
+[name: sokobanFormatSymbol urlEncodedSymbol]
+wall: # A
+player: @ B
+player on dot: + C
+box: $ D
+box on dot: * E
+dot: . F
+floor: _ G
+pipe: | H
+-}
+urlEncodeLevel : String -> String
+urlEncodeLevel shortString =
+    shortString
+        |> replace "#" "A"
+        |> replace "@" "B"
+        |> replace "\\+" "C"
+        |> replace "\\$" "D"
+        |> replace "\\*" "E"
+        |> replace "\\." "F"
+        |> replace "\\_" "G"
+        |> replace "\\|" "H"
+
+
+{-| get shortStringLevel from urlEncodedLevel
+-}
+urlDecodeLevel : String -> String
+urlDecodeLevel urlString =
+    urlString
+        |> replace "A" "#"
+        |> replace "B" "@"
+        |> replace "C" "+"
+        |> replace "D" "$"
+        |> replace "E" "*"
+        |> replace "F" "."
+        |> replace "G" "_"
+        |> replace "H" "|"
