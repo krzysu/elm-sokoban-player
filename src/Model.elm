@@ -1,33 +1,28 @@
-module Model exposing (initModel, updateModelWithLevelNumber, updateModelWithNewLevel)
+module Model exposing (initModel, updateModelFromLocation)
 
+import Navigation exposing (Location)
 import Types exposing (Model, Block, Level, ViewLevel, Page(..))
 import Levels exposing (getInitialLevels, getLevel, addLevel)
 import ViewLevel exposing (getViewLevelFromLevel)
+import StringLevel exposing (getLevelFromPathName)
 
 
-updateModelWithLevelNumber : Int -> Model -> Model
-updateModelWithLevelNumber levelNumber model =
+updateModelFromLocation : Location -> Model -> Model
+updateModelFromLocation location model =
     let
-        level : Level
-        level =
-            getLevel levelNumber model.levels
-
-        viewLevel =
-            getViewLevelFromLevel level
+        maybeLevel =
+            location
+                |> .pathname
+                |> getLevelFromPathName
     in
-        { player = viewLevel.player
-        , walls = viewLevel.walls
-        , boxes = viewLevel.boxes
-        , dots = viewLevel.dots
-        , gameSize = viewLevel.gameSize
-        , isWin = False
-        , levels = model.levels
-        , currentLevel = levelNumber
-        , movesCount = 0
-        , history = []
-        , currentPage = GamePage
-        , stringLevelFromUserInput = ""
-        }
+        case maybeLevel of
+            Just maybeLevel ->
+                maybeLevel
+                    |> updateModelWithNewLevel model
+
+            Nothing ->
+                -- show level select page
+                { model | currentPage = LevelSelectPage }
 
 
 updateModelWithNewLevel : Model -> Level -> Model
@@ -35,6 +30,10 @@ updateModelWithNewLevel model level =
     let
         viewLevel =
             getViewLevelFromLevel level
+
+        -- TODO make them unique, use Set to keep levels
+        newLevels =
+            addLevel model.levels level
     in
         { player = viewLevel.player
         , walls = viewLevel.walls
@@ -42,7 +41,7 @@ updateModelWithNewLevel model level =
         , dots = viewLevel.dots
         , gameSize = viewLevel.gameSize
         , isWin = False
-        , levels = addLevel model.levels level
+        , levels = newLevels
         , currentLevel = 0
         , movesCount = 0
         , history = []

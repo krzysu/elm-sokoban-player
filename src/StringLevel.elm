@@ -6,6 +6,8 @@ module StringLevel
         , decodeStringLevel
         , urlEncodeLevel
         , urlDecodeLevel
+        , getLevelFromPathName
+        , getPathNameFromLevel
         )
 
 import Types exposing (Level)
@@ -43,7 +45,7 @@ getStringFromLevel : Level -> String
 getStringFromLevel level =
     level.map
         |> List.map joinChars
-        |> String.join "|\n"
+        |> String.join "\n"
 
 
 joinChars : List Char -> String
@@ -104,3 +106,33 @@ urlDecodeLevel urlString =
         |> replace "F" "."
         |> replace "G" "_"
         |> replace "H" "|"
+
+
+{-| get Level from Location.pathname
+-}
+getLevelFromPathName : String -> Maybe Level
+getLevelFromPathName pathname =
+    let
+        urlEncodedLevel =
+            pathname
+                |> String.dropLeft 1
+    in
+        if String.isEmpty urlEncodedLevel then
+            Nothing
+        else
+            urlEncodedLevel
+                |> urlDecodeLevel
+                |> decodeStringLevel
+                |> getLevelFromString
+                |> Just
+
+
+{-| get Location.pathname string from Level
+-}
+getPathNameFromLevel : Level -> String
+getPathNameFromLevel level =
+    level
+        |> getStringFromLevel
+        |> encodeStringLevel
+        |> urlEncodeLevel
+        |> (++) "/"

@@ -9,6 +9,8 @@ import StringLevel
         , getStringFromLevel
         , urlEncodeLevel
         , urlDecodeLevel
+        , getLevelFromPathName
+        , getPathNameFromLevel
         )
 
 
@@ -71,14 +73,14 @@ all =
         , describe "getStringFromLevel"
             [ test "case 1" <|
                 \_ ->
-                    Expect.equal (getStringFromLevel level) (normalize stringLevelWithPipes)
+                    Expect.equal (getStringFromLevel level) (normalize stringLevel)
             , test "is reversable" <|
                 \_ ->
                     let
                         levelTemp =
                             getLevelFromString stringLevel
                     in
-                        Expect.equal (getStringFromLevel levelTemp) (normalize stringLevelWithPipes)
+                        Expect.equal (getStringFromLevel levelTemp) (normalize stringLevel)
             ]
         , describe "urlEncodeLevel"
             [ test "case 1" <|
@@ -137,5 +139,30 @@ all =
                             "4AHABDFAH5A"
                     in
                         Expect.equal (urlEncodeLevel (urlDecodeLevel string)) string
+            ]
+        , describe "getLevelFromPathName"
+            [ test "case 1" <|
+                \_ ->
+                    let
+                        pathname =
+                            "/4AHABDFAH5A"
+                    in
+                        Expect.equal (getLevelFromPathName pathname) (Just level)
+            , test "empty pathname" <|
+                \_ ->
+                    let
+                        pathname =
+                            "/"
+                    in
+                        Expect.equal (getLevelFromPathName pathname) Nothing
+            ]
+        , describe "getPathNameFromLevel"
+            [ test "case 1" <|
+                \_ ->
+                    let
+                        pathname =
+                            "/4AHABDFAH5A"
+                    in
+                        Expect.equal (getPathNameFromLevel level) pathname
             ]
         ]

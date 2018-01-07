@@ -1,5 +1,7 @@
 module Types exposing (..)
 
+import Navigation exposing (Location)
+
 
 type Msg
     = NoOp
@@ -7,9 +9,9 @@ type Msg
     | LoadLevel Int
     | Undo
     | ShowLevelSelectPage
-    | ShowGamePage
     | ChangeLevelFromUserInput String
     | LoadLevelFromUserInput
+    | UrlChange Location
 
 
 type alias Model =

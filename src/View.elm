@@ -170,10 +170,5 @@ renderLevelSelectPage model =
                 , onClick LoadLevelFromUserInput
                 ]
                 [ Html.text "Load" ]
-            , button
-                [ class "button button--small"
-                , onClick ShowGamePage
-                ]
-                [ Html.text "Cancel" ]
             ]
         ]

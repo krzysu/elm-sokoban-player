@@ -1,9 +1,11 @@
 module Update exposing (update)
 
 import Set exposing (Set)
+import Navigation
 import Types exposing (Model, Msg(..), Block, GameState, Page(..))
-import Model exposing (updateModelWithLevelNumber, updateModelWithNewLevel)
-import StringLevel exposing (getLevelFromString)
+import Model exposing (updateModelFromLocation)
+import StringLevel exposing (getLevelFromString, getLevelFromPathName, getPathNameFromLevel)
+import Levels exposing (getLevel)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -20,11 +22,6 @@ update msg model =
             , Cmd.none
             )
 
-        LoadLevel levelNumber ->
-            ( updateModelWithLevelNumber levelNumber model
-            , Cmd.none
-            )
-
         Undo ->
             ( model
                 |> undoLastMove
@@ -32,14 +29,18 @@ update msg model =
             )
 
         ShowLevelSelectPage ->
-            ( { model | currentPage = LevelSelectPage }
-            , Cmd.none
-            )
+            ( model, Navigation.newUrl "/" )
 
-        ShowGamePage ->
-            ( { model | currentPage = GamePage }
-            , Cmd.none
-            )
+        LoadLevel levelNumber ->
+            let
+                level =
+                    getLevel levelNumber model.levels
+
+                pathNameLevel =
+                    level
+                        |> getPathNameFromLevel
+            in
+                ( model, Navigation.newUrl pathNameLevel )
 
         ChangeLevelFromUserInput input ->
             ( { model | stringLevelFromUserInput = input }
@@ -47,11 +48,16 @@ update msg model =
             )
 
         LoadLevelFromUserInput ->
-            ( model.stringLevelFromUserInput
-                |> getLevelFromString
-                |> updateModelWithNewLevel model
-            , Cmd.none
-            )
+            let
+                pathNameLevel =
+                    model.stringLevelFromUserInput
+                        |> getLevelFromString
+                        |> getPathNameFromLevel
+            in
+                ( model, Navigation.newUrl pathNameLevel )
+
+        UrlChange newLocation ->
+            ( updateModelFromLocation newLocation model, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
