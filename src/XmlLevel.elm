@@ -44,10 +44,9 @@ decodeXmlString xmlString =
 
 getLevelString : Value -> String
 getLevelString decodedXmlString =
-    -- TODO fix it, write tests
     tags "L" decodedXmlString
         |> collect (tag "L" Xml.Query.string)
-        |> String.concat
+        |> String.join "|"
 
 
 getLevelMap : Value -> List (List Char)
