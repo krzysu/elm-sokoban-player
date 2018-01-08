@@ -6,6 +6,7 @@ import Xml.Encode exposing (null)
 import Xml.Decode exposing (decode)
 import Xml.Query exposing (tags, tag, collect)
 import Types exposing (Level)
+import StringLevel exposing (encodeStringLevel, urlEncodeLevel)
 
 
 getLevelFromXml : String -> Level
@@ -19,10 +20,17 @@ getLevelFromXml xmlString =
 
         levelSize =
             getLevelSize decodedXmlString
+
+        levelString =
+            getLevelString decodedXmlString
     in
         { width = Tuple.first (levelSize)
         , height = Tuple.second (levelSize)
         , map = levelMap
+        , id =
+            levelString
+                |> encodeStringLevel
+                |> urlEncodeLevel
         }
 
 
@@ -32,6 +40,14 @@ decodeXmlString xmlString =
         |> decode
         |> Result.toMaybe
         |> Maybe.withDefault null
+
+
+getLevelString : Value -> String
+getLevelString decodedXmlString =
+    -- TODO fix it, write tests
+    tags "L" decodedXmlString
+        |> collect (tag "L" Xml.Query.string)
+        |> String.concat
 
 
 getLevelMap : Value -> List (List Char)

@@ -12,7 +12,7 @@ getLevelFromViewLevel viewLevel =
         height =
             Tuple.second viewLevel.gameSize
     in
-        Level width height (getLevelMap viewLevel)
+        Level width height (getLevelMap viewLevel) ""
 
 
 getLevelMap : ViewLevel -> List (List Char)

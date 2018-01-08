@@ -31,9 +31,8 @@ updateModelWithNewLevel model level =
         viewLevel =
             getViewLevelFromLevel level
 
-        -- TODO make them unique, use Set to keep levels
         newLevels =
-            addLevel model.levels level
+            addLevel level model.levels
     in
         { player = viewLevel.player
         , walls = viewLevel.walls
@@ -42,7 +41,7 @@ updateModelWithNewLevel model level =
         , gameSize = viewLevel.gameSize
         , isWin = False
         , levels = newLevels
-        , currentLevel = 0
+        , currentLevelId = level.id
         , movesCount = 0
         , history = []
         , currentPage = GamePage
@@ -53,17 +52,8 @@ updateModelWithNewLevel model level =
 initModel : Model
 initModel =
     let
-        currentLevel =
-            0
-
-        levels =
-            getInitialLevels
-
-        firstLevel =
-            getLevel currentLevel levels
-
         viewLevel =
-            getViewLevelFromLevel firstLevel
+            getViewLevelFromLevel (Level 0 0 [] "")
     in
         { player = viewLevel.player
         , walls = viewLevel.walls
@@ -71,8 +61,8 @@ initModel =
         , dots = viewLevel.dots
         , gameSize = viewLevel.gameSize
         , isWin = False
-        , levels = levels
-        , currentLevel = currentLevel
+        , levels = getInitialLevels -- important here
+        , currentLevelId = ""
         , movesCount = 0
         , history = []
         , currentPage = GamePage

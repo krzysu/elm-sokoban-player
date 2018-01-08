@@ -28,6 +28,10 @@ getLevelFromString levelString =
         { width = getLengthOfLongestRow rows
         , height = List.length rows
         , map = List.map String.toList rows
+        , id =
+            String.join "|" rows
+                |> encodeStringLevel
+                |> urlEncodeLevel
         }
 
 
@@ -132,7 +136,5 @@ getLevelFromPathName pathname =
 getPathNameFromLevel : Level -> String
 getPathNameFromLevel level =
     level
-        |> getStringFromLevel
-        |> encodeStringLevel
-        |> urlEncodeLevel
+        |> .id
         |> (++) "/"

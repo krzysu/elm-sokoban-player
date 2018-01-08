@@ -5,6 +5,7 @@ import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
 import Svg.Attributes
+import Dict exposing (Dict)
 import ViewLevel exposing (getViewLevelFromLevel)
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, Page(..))
 
@@ -120,7 +121,7 @@ getWinOverlay model =
                     [ Html.text "Solved!" ]
                 , button
                     [ class "button margin"
-                    , onClick (LoadLevel (model.currentLevel + 1))
+                    , onClick LoadNextLevel
                     ]
                     [ Html.text "Next" ]
                 ]
@@ -145,16 +146,9 @@ renderLevelSelectPage model =
         [ h1 [ class "headline" ] [ Html.text "Select level to play" ]
         , div [ class "level-preview-list" ]
             (model.levels
-                |> List.map getViewLevelFromLevel
-                |> List.indexedMap
-                    (\index viewLevel ->
-                        div
-                            [ class "level-preview-item"
-                            , onClick (LoadLevel index)
-                            ]
-                            [ renderLevel config.previewBlockSize "" viewLevel
-                            ]
-                    )
+                |> Dict.toList
+                |> List.map (Tuple.mapSecond getViewLevelFromLevel)
+                |> List.map renderLevelPreviewItem
             )
         , div [ class "centered margin" ]
             [ textarea
@@ -171,4 +165,20 @@ renderLevelSelectPage model =
                 ]
                 [ Html.text "Load" ]
             ]
+        ]
+
+
+renderLevelPreviewItem : ( String, IViewLevel a ) -> Html Msg
+renderLevelPreviewItem ( levelId, viewLevel ) =
+    div [ class "level-preview-item" ]
+        [ div
+            [ class "level-preview-item__level"
+            , onClick (LoadLevel levelId)
+            ]
+            [ renderLevel config.previewBlockSize "" viewLevel ]
+        , button
+            [ class "button button--small level-preview-item__delete-button"
+            , onClick (RemoveLevel levelId)
+            ]
+            [ Html.text "X" ]
         ]

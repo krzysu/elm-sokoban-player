@@ -1,31 +1,60 @@
-module Levels exposing (getInitialLevels, getLevel, addLevel)
+module Levels
+    exposing
+        ( getInitialLevels
+        , getLevel
+        , getNextLevel
+        , addLevel
+        , removeLevel
+        )
 
-import Array exposing (Array)
+import Dict exposing (Dict)
 import Types exposing (Level)
 import XmlLevel exposing (getLevelFromXml)
 import StringLevel exposing (getLevelFromString)
 
 
-getLevel : Int -> List Level -> Level
-getLevel number levels =
-    Array.get number (Array.fromList levels)
-        |> Maybe.withDefault (Level 0 0 [])
+getLevel : String -> Dict String Level -> Level
+getLevel levelId levels =
+    Dict.get levelId levels
+        |> Maybe.withDefault (Level 0 0 [] "")
 
 
-addLevel : List Level -> Level -> List Level
-addLevel levels newLevel =
-    newLevel :: levels
+getNextLevel : String -> Dict String Level -> Level
+getNextLevel currentLevelId levels =
+    -- TODO
+    Dict.get currentLevelId levels
+        |> Maybe.withDefault (Level 0 0 [] "")
 
 
-getInitialLevels : List Level
+addLevel : Level -> Dict String Level -> Dict String Level
+addLevel newLevel levels =
+    Dict.insert newLevel.id newLevel levels
+
+
+removeLevel : String -> Dict String Level -> Dict String Level
+removeLevel levelId levels =
+    Dict.remove levelId levels
+
+
+getInitialLevels : Dict String Level
 getInitialLevels =
-    [ getLevelFromXml xmlLevel
-    , getLevelFromString stringLevel1
-    , getLevelFromString stringLevel2
-    , getLevelFromString stringLevel3
-    , getLevelFromString stringLevel4
-    , getLevelFromString stringLevel5
-    ]
+    let
+        stringLevels =
+            [ stringLevel1
+            , stringLevel2
+            , stringLevel3
+            , stringLevel4
+            , stringLevel5
+            ]
+
+        levelFromXml =
+            getLevelFromXml xmlLevel
+    in
+        stringLevels
+            |> List.map getLevelFromString
+            |> List.map (\level -> ( level.id, level ))
+            |> Dict.fromList
+            |> Dict.insert levelFromXml.id levelFromXml
 
 
 {-| example level, not in use
@@ -39,6 +68,7 @@ exampleLevel =
         , [ '#', '@', '$', '.', '#' ]
         , [ '#', '#', '#', '#', '#' ]
         ]
+    , id = "5AHABDFAH5A"
     }
 
 

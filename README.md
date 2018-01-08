@@ -52,13 +52,13 @@ Based on [Sokoban Level Format](http://sokobano.de/wiki/index.php?title=Level_fo
 - `StringLevel` - normal, row separation with pipe or just with new line
 
 ```
-#######|
-#.@ # #|
-#$* $ #|
-#   $ #|
-# ..  #|
-#  *  #|
-#######|
+#######
+#.@ # #
+#$* $ #
+#   $ #
+# ..  #
+#  *  #
+#######
 ```
 
 - `ShortStringLevel` - created from normal with Run Length Encoding, row separation obligatory with pipe, underscore represents an empty field
@@ -87,7 +87,7 @@ XML Sokoban format, game elements are represented with the same characters as in
 
 - `Level`
 
-Intermediary structure to standardize all entry formats.
+Intermediary structure to standardize all entry formats. `id` is a `UrlEncodedLevel`
 
 ```
 level : Level
@@ -99,6 +99,7 @@ level =
         , [ '#', '@', '$', '.', '#' ]
         , [ '#', '#', '#', '#', '#' ]
         ]
+    , id = "5AHABDFAH5A"
     }
 ```
 

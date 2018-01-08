@@ -1,14 +1,17 @@
 module Types exposing (..)
 
+import Dict exposing (Dict)
 import Navigation exposing (Location)
 
 
 type Msg
     = NoOp
     | Move Int Int
-    | LoadLevel Int
     | Undo
     | ShowLevelSelectPage
+    | LoadNextLevel
+    | LoadLevel String
+    | RemoveLevel String
     | ChangeLevelFromUserInput String
     | LoadLevelFromUserInput
     | UrlChange Location
@@ -17,8 +20,8 @@ type Msg
 type alias Model =
     IViewLevel
         { isWin : Bool
-        , levels : List Level
-        , currentLevel : Int
+        , levels : Dict String Level
+        , currentLevelId : String
         , movesCount : Int
         , history : List GameState
         , currentPage : Page
@@ -52,6 +55,7 @@ type alias Level =
     { width : Int
     , height : Int
     , map : List (List Char)
+    , id : String
     }
 
 

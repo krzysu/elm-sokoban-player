@@ -5,7 +5,7 @@ import Navigation
 import Types exposing (Model, Msg(..), Block, GameState, Page(..))
 import Model exposing (updateModelFromLocation)
 import StringLevel exposing (getLevelFromString, getLevelFromPathName, getPathNameFromLevel)
-import Levels exposing (getLevel)
+import Levels exposing (getLevel, getNextLevel, removeLevel)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -31,16 +31,26 @@ update msg model =
         ShowLevelSelectPage ->
             ( model, Navigation.newUrl "/" )
 
-        LoadLevel levelNumber ->
+        LoadNextLevel ->
             let
-                level =
-                    getLevel levelNumber model.levels
-
                 pathNameLevel =
-                    level
+                    getNextLevel model.currentLevelId model.levels
                         |> getPathNameFromLevel
             in
                 ( model, Navigation.newUrl pathNameLevel )
+
+        LoadLevel levelId ->
+            let
+                pathNameLevel =
+                    getLevel levelId model.levels
+                        |> getPathNameFromLevel
+            in
+                ( model, Navigation.newUrl pathNameLevel )
+
+        RemoveLevel levelId ->
+            ( { model | levels = removeLevel levelId model.levels }
+            , Cmd.none
+            )
 
         ChangeLevelFromUserInput input ->
             ( { model | stringLevelFromUserInput = input }
@@ -57,7 +67,9 @@ update msg model =
                 ( model, Navigation.newUrl pathNameLevel )
 
         UrlChange newLocation ->
-            ( updateModelFromLocation newLocation model, Cmd.none )
+            ( updateModelFromLocation newLocation model
+            , Cmd.none
+            )
 
         NoOp ->
             ( model, Cmd.none )

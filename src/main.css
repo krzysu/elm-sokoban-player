@@ -141,16 +141,26 @@ h1 {
 }
 
 .level-preview-item {
+  margin: 2em;
+  position: relative;
+}
+
+.level-preview-item__level {
   cursor: pointer;
-  background-color: #789496;
-  background-image: url(all-icons/floorGrey.svg);
+  /*background-color: #789496;*/
+  /*background-image: url(all-icons/floorGrey.svg);*/
   background-repeat: repeat;
-  margin: 1em;
   opacity: 0.8;
 }
 
-.level-preview-item:hover {
+.level-preview-item__level:hover {
   opacity: 1;
+}
+
+.level-preview-item__delete-button {
+  position: absolute;
+  right: -25px;
+  top: -20px;
 }
 
 .footer {
