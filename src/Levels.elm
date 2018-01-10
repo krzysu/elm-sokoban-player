@@ -8,35 +8,35 @@ module Levels
         )
 
 import Dict exposing (Dict)
-import Types exposing (Level)
+import Types exposing (Level, Levels)
 import XmlLevel exposing (getLevelFromXml)
 import StringLevel exposing (getLevelFromString)
 
 
-getLevel : String -> Dict String Level -> Level
+getLevel : String -> Levels -> Level
 getLevel levelId levels =
     Dict.get levelId levels
         |> Maybe.withDefault (Level 0 0 [] "")
 
 
-getNextLevel : String -> Dict String Level -> Level
+getNextLevel : String -> Levels -> Level
 getNextLevel currentLevelId levels =
     -- TODO
     Dict.get currentLevelId levels
         |> Maybe.withDefault (Level 0 0 [] "")
 
 
-addLevel : Level -> Dict String Level -> Dict String Level
+addLevel : Level -> Levels -> Levels
 addLevel newLevel levels =
     Dict.insert newLevel.id newLevel levels
 
 
-removeLevel : String -> Dict String Level -> Dict String Level
+removeLevel : String -> Levels -> Levels
 removeLevel levelId levels =
     Dict.remove levelId levels
 
 
-getInitialLevels : Dict String Level
+getInitialLevels : Levels
 getInitialLevels =
     let
         stringLevels =

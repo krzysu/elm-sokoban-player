@@ -1,7 +1,7 @@
 module Model exposing (initModel, updateModelFromLocation)
 
 import Navigation exposing (Location)
-import Types exposing (Model, Block, Level, ViewLevel, Page(..))
+import Types exposing (Model, Block, Level, Levels, ViewLevel, Page(..))
 import Levels exposing (getInitialLevels, getLevel, addLevel)
 import ViewLevel exposing (getViewLevelFromLevel)
 import StringLevel exposing (getLevelFromPathName)
@@ -49,9 +49,17 @@ updateModelWithNewLevel model level =
         }
 
 
-initModel : Model
-initModel =
+initModel : Maybe Levels -> Model
+initModel maybeLevels =
     let
+        levels =
+            case maybeLevels of
+                Just maybeLevels ->
+                    maybeLevels
+
+                Nothing ->
+                    getInitialLevels
+
         viewLevel =
             getViewLevelFromLevel (Level 0 0 [] "")
     in
@@ -61,7 +69,7 @@ initModel =
         , dots = viewLevel.dots
         , gameSize = viewLevel.gameSize
         , isWin = False
-        , levels = getInitialLevels -- important here
+        , levels = levels -- important here
         , currentLevelId = ""
         , movesCount = 0
         , history = []

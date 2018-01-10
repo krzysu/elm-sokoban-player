@@ -20,7 +20,7 @@ type Msg
 type alias Model =
     IViewLevel
         { isWin : Bool
-        , levels : Dict String Level
+        , levels : Levels
         , currentLevelId : String
         , movesCount : Int
         , history : List GameState
@@ -57,6 +57,10 @@ type alias Level =
     , map : List (List Char)
     , id : String
     }
+
+
+type alias Levels =
+    Dict String Level
 
 
 type alias ViewLevel =

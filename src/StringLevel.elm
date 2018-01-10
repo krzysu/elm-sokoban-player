@@ -8,6 +8,7 @@ module StringLevel
         , urlDecodeLevel
         , getLevelFromPathName
         , getPathNameFromLevel
+        , getLevelFromUrlEncodedLevel
         )
 
 import Types exposing (Level)
@@ -125,10 +126,16 @@ getLevelFromPathName pathname =
             Nothing
         else
             urlEncodedLevel
-                |> urlDecodeLevel
-                |> decodeStringLevel
-                |> getLevelFromString
+                |> getLevelFromUrlEncodedLevel
                 |> Just
+
+
+getLevelFromUrlEncodedLevel : String -> Level
+getLevelFromUrlEncodedLevel urlEncodedLevel =
+    urlEncodedLevel
+        |> urlDecodeLevel
+        |> decodeStringLevel
+        |> getLevelFromString
 
 
 {-| get Location.pathname string from Level

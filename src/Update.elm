@@ -6,6 +6,7 @@ import Types exposing (Model, Msg(..), Block, GameState, Page(..))
 import Model exposing (updateModelFromLocation)
 import StringLevel exposing (getLevelFromString, getLevelFromPathName, getPathNameFromLevel)
 import Levels exposing (getLevel, getNextLevel, removeLevel)
+import LocalStorage exposing (storeLevels)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -67,9 +68,13 @@ update msg model =
                 ( model, Navigation.newUrl pathNameLevel )
 
         UrlChange newLocation ->
-            ( updateModelFromLocation newLocation model
-            , Cmd.none
-            )
+            let
+                newModel =
+                    updateModelFromLocation newLocation model
+            in
+                ( newModel
+                , storeLevels newModel.levels
+                )
 
         NoOp ->
             ( model, Cmd.none )
