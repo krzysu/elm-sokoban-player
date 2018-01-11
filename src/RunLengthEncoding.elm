@@ -4,6 +4,7 @@ import String exposing (fromChar)
 import List exposing (head, tail)
 import Maybe exposing (withDefault)
 import Regex
+import Result exposing (Result(..))
 
 
 {- based on https://github.com/exercism/elm/blob/master/exercises/run-length-encoding/RunLengthEncoding.example.elm -}
@@ -58,12 +59,20 @@ expandCounts match ( result, count ) =
             ( result ++ String.repeat number match, Nothing )
 
         Nothing ->
-            case String.toInt match of
-                Ok number ->
-                    ( result, Just number )
+            let
+                -- fix for String.toInt returns NaN for + and -
+                stringToIntResult =
+                    if match == "+" then
+                        Err "error"
+                    else
+                        String.toInt match
+            in
+                case stringToIntResult of
+                    Ok number ->
+                        ( result, Just number )
 
-                Err _ ->
-                    ( result ++ match, Nothing )
+                    Err _ ->
+                        ( result ++ match, Nothing )
 
 
 replace : String -> String -> String -> String

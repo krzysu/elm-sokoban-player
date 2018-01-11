@@ -25,6 +25,7 @@ getLevelFromString levelString =
                 |> replace "\n" "|"
                 |> String.split "|"
                 |> List.filter (\row -> not (String.isEmpty row))
+                |> List.filter (\row -> String.contains "#" row)
     in
         { width = getLengthOfLongestRow rows
         , height = List.length rows

@@ -54,6 +54,16 @@ all =
                             "#   $ #"
                     in
                         Expect.equal (decode shortFormat) longFormat
+            , test "+ char is also working" <|
+                \_ ->
+                    let
+                        shortFormat =
+                            "#3._*+.$_#"
+
+                        longFormat =
+                            "#... *+.$ #"
+                    in
+                        Expect.equal (decode shortFormat) longFormat
             ]
         , describe "encode"
             [ test "case 1" <|
