@@ -25,9 +25,7 @@ init flags location =
         model =
             initModel levels
     in
-        ( updateModelFromLocation location model
-        , Cmd.none
-        )
+        updateModelFromLocation location model
 
 
 main : Program Flags Model Msg

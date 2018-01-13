@@ -72,13 +72,7 @@ update msg model =
                 )
 
         UrlChange newLocation ->
-            let
-                newModel =
-                    updateModelFromLocation newLocation model
-            in
-                ( newModel
-                , storeLevels newModel.levels
-                )
+            updateModelFromLocation newLocation model
 
         NoOp ->
             ( model, Cmd.none )

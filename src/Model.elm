@@ -1,10 +1,11 @@
 module Model exposing (initModel, updateModelFromLocation, updateModelWithLevelFromUserInput)
 
 import Navigation exposing (Location)
-import Types exposing (Model, Block, Level, Levels, ViewLevel, Page(..))
+import Types exposing (Model, Msg, Block, Level, Levels, ViewLevel, Page(..))
 import Levels exposing (getInitialLevels, getLevel, addLevel)
 import ViewLevel exposing (getViewLevelFromLevel)
 import StringLevel exposing (getLevelFromPathName, getLevelFromString)
+import LocalStorage exposing (storeLevels)
 
 
 updateModelWithLevelFromUserInput : Model -> Model
@@ -27,7 +28,7 @@ updateModelWithLevelFromUserInput model =
                 }
 
 
-updateModelFromLocation : Location -> Model -> Model
+updateModelFromLocation : Location -> Model -> ( Model, Cmd Msg )
 updateModelFromLocation location model =
     let
         maybeLevel =
@@ -37,12 +38,19 @@ updateModelFromLocation location model =
     in
         case maybeLevel of
             Just maybeLevel ->
-                maybeLevel
-                    |> updateModelWithNewLevel model
+                let
+                    newModel =
+                        maybeLevel
+                            |> updateModelWithNewLevel model
+                in
+                    ( newModel
+                    , storeLevels newModel.levels
+                    )
 
             Nothing ->
-                -- show level select page
-                { model | currentPage = LevelSelectPage }
+                ( { model | currentPage = LevelSelectPage }
+                , Cmd.none
+                )
 
 
 updateModelWithNewLevel : Model -> Level -> Model
