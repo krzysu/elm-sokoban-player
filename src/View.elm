@@ -143,7 +143,7 @@ getSelectLevelButton =
 renderLevelSelectPage : Model -> Html Msg
 renderLevelSelectPage model =
     div []
-        [ h1 [ class "headline" ] [ Html.text "Select level to play" ]
+        [ h1 [ class "headline" ] [ Html.text "Create your playlist" ]
         , div [ class "level-preview-list" ]
             (model.levels
                 |> Dict.toList
@@ -155,15 +155,16 @@ renderLevelSelectPage model =
                 [ class "input level-input"
                 , onInput ChangeLevelFromUserInput
                 , Html.Attributes.placeholder "insert your sokoban level"
+                , Html.Attributes.value model.stringLevelFromUserInput
                 ]
                 []
             ]
         , div [ class "centered button-group margin" ]
             [ button
                 [ class "button button--small"
-                , onClick LoadLevelFromUserInput
+                , onClick AddLevelFromUserInput
                 ]
-                [ Html.text "Load" ]
+                [ Html.text "Add level" ]
             ]
         ]
 

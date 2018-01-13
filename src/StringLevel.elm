@@ -17,7 +17,7 @@ import RunLengthEncoding exposing (encode, decode, replace)
 
 {-| supports rows separated by pipe or new line
 -}
-getLevelFromString : String -> Level
+getLevelFromString : String -> Maybe Level
 getLevelFromString levelString =
     let
         rows =
@@ -27,14 +27,18 @@ getLevelFromString levelString =
                 |> List.filter (\row -> not (String.isEmpty row))
                 |> List.filter (\row -> String.contains "#" row)
     in
-        { width = getLengthOfLongestRow rows
-        , height = List.length rows
-        , map = List.map String.toList rows
-        , id =
-            String.join "|" rows
-                |> encodeStringLevel
-                |> urlEncodeLevel
-        }
+        if List.isEmpty rows then
+            Nothing
+        else
+            Just
+                { width = getLengthOfLongestRow rows
+                , height = List.length rows
+                , map = List.map String.toList rows
+                , id =
+                    String.join "|" rows
+                        |> encodeStringLevel
+                        |> urlEncodeLevel
+                }
 
 
 getLengthOfLongestRow : List String -> Int
@@ -128,10 +132,9 @@ getLevelFromPathName pathname =
         else
             urlEncodedLevel
                 |> getLevelFromUrlEncodedLevel
-                |> Just
 
 
-getLevelFromUrlEncodedLevel : String -> Level
+getLevelFromUrlEncodedLevel : String -> Maybe Level
 getLevelFromUrlEncodedLevel urlEncodedLevel =
     urlEncodedLevel
         |> urlDecodeLevel

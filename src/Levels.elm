@@ -51,7 +51,7 @@ getInitialLevels =
             getLevelFromXml xmlLevel
     in
         stringLevels
-            |> List.map getLevelFromString
+            |> List.filterMap getLevelFromString
             |> List.map (\level -> ( level.id, level ))
             |> Dict.fromList
             |> Dict.insert levelFromXml.id levelFromXml

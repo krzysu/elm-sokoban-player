@@ -3,9 +3,9 @@ module Update exposing (update)
 import Set exposing (Set)
 import Navigation
 import Types exposing (Model, Msg(..), Block, GameState, Page(..))
-import Model exposing (updateModelFromLocation)
+import Model exposing (updateModelFromLocation, updateModelWithLevelFromUserInput)
 import StringLevel exposing (getLevelFromString, getLevelFromPathName, getPathNameFromLevel)
-import Levels exposing (getLevel, getNextLevel, removeLevel)
+import Levels exposing (getLevel, getNextLevel, removeLevel, addLevel)
 import LocalStorage exposing (storeLevels)
 
 
@@ -49,23 +49,27 @@ update msg model =
                 ( model, Navigation.newUrl pathNameLevel )
 
         RemoveLevel levelId ->
-            ( { model | levels = removeLevel levelId model.levels }
-            , Cmd.none
-            )
+            let
+                newModel =
+                    { model | levels = removeLevel levelId model.levels }
+            in
+                ( newModel
+                , storeLevels newModel.levels
+                )
 
         ChangeLevelFromUserInput input ->
             ( { model | stringLevelFromUserInput = input }
             , Cmd.none
             )
 
-        LoadLevelFromUserInput ->
+        AddLevelFromUserInput ->
             let
-                pathNameLevel =
-                    model.stringLevelFromUserInput
-                        |> getLevelFromString
-                        |> getPathNameFromLevel
+                newModel =
+                    updateModelWithLevelFromUserInput model
             in
-                ( model, Navigation.newUrl pathNameLevel )
+                ( newModel
+                , storeLevels newModel.levels
+                )
 
         UrlChange newLocation ->
             let

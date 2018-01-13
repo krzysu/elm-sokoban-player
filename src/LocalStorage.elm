@@ -23,8 +23,9 @@ decodeLevels encodedLevels =
         case result of
             Ok result ->
                 result
-                    |> List.map (Tuple.mapFirst getLevelFromUrlEncodedLevel)
-                    |> List.map (\( level, _ ) -> ( level.id, level ))
+                    |> List.map Tuple.first
+                    |> List.filterMap getLevelFromUrlEncodedLevel
+                    |> List.map (\level -> ( level.id, level ))
                     |> Dict.fromList
                     |> Just
 

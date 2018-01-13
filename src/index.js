@@ -9,7 +9,5 @@ const app = Main.embed(document.getElementById('root'), {
 });
 
 app.ports.portStoreLevels.subscribe(objectToStore => {
-    console.log(objectToStore);
-
     localStorage.setItem(KEY_LEVELS, objectToStore);
 });

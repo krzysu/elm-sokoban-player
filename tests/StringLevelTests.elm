@@ -59,17 +59,17 @@ all =
         [ describe "getLevelFromString"
             [ test "case 1" <|
                 \_ ->
-                    Expect.equal (getLevelFromString stringLevel) level
+                    Expect.equal (getLevelFromString stringLevel) (Just level)
             , test "case 2" <|
                 \_ ->
-                    Expect.equal (getLevelFromString stringLevelWithPipes) level
+                    Expect.equal (getLevelFromString stringLevelWithPipes) (Just level)
             , test "is reversable" <|
                 \_ ->
                     let
                         stringLevelTemp =
                             getStringFromLevel level
                     in
-                        Expect.equal (getLevelFromString stringLevelTemp) level
+                        Expect.equal (getLevelFromString stringLevelTemp) (Just level)
             ]
         , describe "getStringFromLevel"
             [ test "case 1" <|
@@ -80,6 +80,7 @@ all =
                     let
                         levelTemp =
                             getLevelFromString stringLevel
+                                |> Maybe.withDefault (Level 0 0 [] "")
                     in
                         Expect.equal (getStringFromLevel levelTemp) (normalize stringLevel)
             ]

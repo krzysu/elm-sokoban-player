@@ -13,7 +13,7 @@ type Msg
     | LoadLevel String
     | RemoveLevel String
     | ChangeLevelFromUserInput String
-    | LoadLevelFromUserInput
+    | AddLevelFromUserInput
     | UrlChange Location
 
 
