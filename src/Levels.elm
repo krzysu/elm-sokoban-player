@@ -72,7 +72,7 @@ exampleLevel =
     }
 
 
-{-| example level to test dots, not in us
+{-| example level to test dots, not in use
 -}
 exampleLevelTestDots : String
 exampleLevelTestDots =
