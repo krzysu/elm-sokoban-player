@@ -17,6 +17,7 @@ getLevelFromViewLevel viewLevel =
 
 getLevelMap : ViewLevel -> List (List Char)
 getLevelMap viewLevel =
+    -- TODO
     -- create array of length equal to width of level
     -- multiply them by height
     -- Array.set

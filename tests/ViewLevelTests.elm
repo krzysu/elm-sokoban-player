@@ -107,6 +107,6 @@ all =
         --             Expect.equal (getLevelFromViewLevel viewLevel) level
         --     , test "box on a dot, player on a dot" <|
         --         \_ ->
-        --             Expect.equal (getViewLevelFromLevel levelTestDots) viewLevelTestDots
+        --             Expect.equal (getLevelFromViewLevel viewLevelTestDots) levelTestDots
         --     ]
         ]

@@ -2,7 +2,7 @@ module Model exposing (initModel, updateModelFromLocation, updateModelWithLevelF
 
 import Navigation exposing (Location)
 import Types exposing (Model, Msg, Block, Level, Levels, ViewLevel, Page(..))
-import Levels exposing (getInitialLevels, getLevel, addLevel)
+import Levels exposing (getInitialLevels, addLevel)
 import ViewLevel exposing (getViewLevelFromLevel)
 import StringLevel exposing (getLevelFromPathName, getLevelFromString)
 import LocalStorage exposing (storeLevels)
