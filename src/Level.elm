@@ -22,6 +22,7 @@ getViewLevelFromEncodedLevel : EncodedLevel -> ViewLevel
 getViewLevelFromEncodedLevel encodedLevel =
     encodedLevel
         |> getLevelFromEncodedLevel
+        -- we trust that EncodedLevel is always correct
         |> Maybe.withDefault (Level 0 0 [] "")
         |> getViewLevelFromLevel
 

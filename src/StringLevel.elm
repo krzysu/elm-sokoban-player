@@ -7,7 +7,6 @@ module StringLevel
         , urlEncodeLevel
         , urlDecodeLevel
         , getLevelFromPathName
-        , getPathNameFromLevel
         , getLevelFromEncodedLevel
         , getEncodedLevelFromLevel
         )
@@ -139,6 +138,7 @@ getLevelFromEncodedLevel : String -> Maybe Level
 getLevelFromEncodedLevel urlEncodedLevel =
     urlEncodedLevel
         |> urlDecodeLevel
+        |> filterValidLevelCharacters
         |> decodeStringLevel
         |> getLevelFromString
 
@@ -151,10 +151,11 @@ getEncodedLevelFromLevel level =
         |> urlEncodeLevel
 
 
-{-| get Location.pathname string from Level
--}
-getPathNameFromLevel : Level -> String
-getPathNameFromLevel level =
-    level
-        |> .id
-        |> (++) "/"
+filterValidLevelCharacters : String -> String
+filterValidLevelCharacters string =
+    let
+        allowedChars =
+            [ "#", "@", "+", "$", "*", ".", "_", "|" ]
+    in
+        -- TODO
+        string
