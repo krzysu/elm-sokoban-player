@@ -10,8 +10,9 @@ import StringLevel
         , urlEncodeLevel
         , urlDecodeLevel
         , getLevelFromPathName
-        , getPathNameFromLevel
+        , getEncodedLevelFromLevel
         )
+import Fixtures exposing (dotsLevel1, dotsStringLevel1, dotsEncodedLevel1)
 
 
 stringLevel : String
@@ -63,6 +64,9 @@ all =
             , test "case 2" <|
                 \_ ->
                     Expect.equal (getLevelFromString stringLevelWithPipes) (Just level)
+            , test "case 3" <|
+                \_ ->
+                    Expect.equal (getLevelFromString dotsStringLevel1) (Just dotsLevel1)
             , test "is reversable" <|
                 \_ ->
                     let
@@ -145,26 +149,17 @@ all =
         , describe "getLevelFromPathName"
             [ test "case 1" <|
                 \_ ->
-                    let
-                        pathname =
-                            "/4AHABDFAH5A"
-                    in
-                        Expect.equal (getLevelFromPathName pathname) (Just level)
+                    Expect.equal (getLevelFromPathName "/4AHABDFAH5A") (Just level)
             , test "empty pathname" <|
                 \_ ->
-                    let
-                        pathname =
-                            "/"
-                    in
-                        Expect.equal (getLevelFromPathName pathname) Nothing
+                    Expect.equal (getLevelFromPathName "/") Nothing
+            , test "wrong pathname" <|
+                \_ ->
+                    Expect.equal (getLevelFromPathName "/notALevEl") Nothing
             ]
-        , describe "getPathNameFromLevel"
+        , describe "getEncodedLevelFromLevel"
             [ test "case 1" <|
                 \_ ->
-                    let
-                        pathname =
-                            "/4AHABDFAH5A"
-                    in
-                        Expect.equal (getPathNameFromLevel level) pathname
+                    Expect.equal (getEncodedLevelFromLevel dotsLevel1) dotsEncodedLevel1
             ]
         ]

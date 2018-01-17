@@ -15,16 +15,25 @@ getLevel levelIndex levels =
 
 addLevel : EncodedLevel -> LevelCollection -> LevelCollection
 addLevel levelId levels =
-    -- TODO check for duplicates
-    Array.toList levels
-        |> (::) levelId
-        |> Array.fromList
+    let
+        alreadyExists =
+            levels
+                |> Array.filter (\level -> level == levelId)
+                |> Array.isEmpty
+                |> not
+    in
+        if alreadyExists then
+            levels
+        else
+            Array.toList levels
+                |> (::) levelId
+                |> Array.fromList
 
 
 removeLevel : String -> LevelCollection -> LevelCollection
 removeLevel levelId levels =
     levels
-        |> Array.filter (\level -> level == levelId)
+        |> Array.filter (\level -> not (level == levelId))
 
 
 getInitialLevels : LevelCollection
@@ -46,33 +55,6 @@ getInitialLevels =
             |> (::) levelFromXml
             |> List.map .id
             |> Array.fromList
-
-
-{-| example level, not in use
--}
-exampleLevel : Level
-exampleLevel =
-    { width = 5
-    , height = 3
-    , map =
-        [ [ '#', '#', '#', '#', '#' ]
-        , [ '#', '@', '$', '.', '#' ]
-        , [ '#', '#', '#', '#', '#' ]
-        ]
-    , id = "5AHABDFAH5A"
-    }
-
-
-{-| example level to test dots, not in use
--}
-exampleLevelTestDots : String
-exampleLevelTestDots =
-    """
- #####
-# $+$.#
-#    *#
- #####
-"""
 
 
 stringLevel1 : String
