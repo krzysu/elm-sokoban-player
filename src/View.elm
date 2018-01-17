@@ -5,8 +5,8 @@ import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
 import Svg.Attributes
-import Dict exposing (Dict)
-import ViewLevel exposing (getViewLevelFromLevel)
+import Array exposing (Array)
+import Level exposing (getViewLevelFromEncodedLevel)
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, Page(..))
 
 
@@ -146,9 +146,9 @@ renderLevelSelectPage model =
         [ h1 [ class "headline" ] [ Html.text "Create your playlist" ]
         , div [ class "level-preview-list" ]
             (model.levels
-                |> Dict.toList
-                |> List.map (Tuple.mapSecond getViewLevelFromLevel)
-                |> List.map renderLevelPreviewItem
+                |> Array.map (\encodedLevel -> ( encodedLevel, getViewLevelFromEncodedLevel encodedLevel ))
+                |> Array.indexedMap renderLevelPreviewItem
+                |> Array.toList
             )
         , div [ class "centered margin" ]
             [ textarea
@@ -169,12 +169,12 @@ renderLevelSelectPage model =
         ]
 
 
-renderLevelPreviewItem : ( String, IViewLevel a ) -> Html Msg
-renderLevelPreviewItem ( levelId, viewLevel ) =
+renderLevelPreviewItem : Int -> ( String, IViewLevel a ) -> Html Msg
+renderLevelPreviewItem levelIndex ( levelId, viewLevel ) =
     div [ class "level-preview-item" ]
         [ div
             [ class "level-preview-item__level"
-            , onClick (LoadLevel levelId)
+            , onClick (LoadLevel levelIndex)
             ]
             [ renderLevel config.previewBlockSize "" viewLevel ]
         , button

@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Navigation exposing (Location)
-import Types exposing (Model, Msg(..), Levels)
+import Types exposing (Model, Msg(..), LevelCollection)
 import View exposing (view)
 import Update exposing (update)
 import Model exposing (initModel, updateModelFromLocation)
@@ -18,7 +18,7 @@ init : Flags -> Location -> ( Model, Cmd Msg )
 init flags location =
     let
         -- decode flags
-        levels : Maybe Levels
+        levels : Maybe LevelCollection
         levels =
             decodeLevels flags.levels
 

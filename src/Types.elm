@@ -1,6 +1,7 @@
 module Types exposing (..)
 
 import Dict exposing (Dict)
+import Array exposing (Array)
 import Navigation exposing (Location)
 
 
@@ -10,7 +11,7 @@ type Msg
     | Undo
     | ShowLevelSelectPage
     | LoadNextLevel
-    | LoadLevel String
+    | LoadLevel Int -- load by level index
     | RemoveLevel String
     | ChangeLevelFromUserInput String
     | AddLevelFromUserInput
@@ -20,8 +21,8 @@ type Msg
 type alias Model =
     IViewLevel
         { isWin : Bool
-        , levels : Levels
-        , currentLevelId : String
+        , levels : LevelCollection
+        , currentLevelIndex : Int
         , movesCount : Int
         , history : List GameState
         , currentPage : Page
@@ -51,6 +52,8 @@ type alias Block =
     }
 
 
+{-| intermediary format, should not be used directly
+-}
 type alias Level =
     { width : Int
     , height : Int
@@ -59,12 +62,26 @@ type alias Level =
     }
 
 
-type alias Levels =
-    Dict String Level
+{-| in use also as level id
+-}
+type alias EncodedLevel =
+    String
+
+
+type alias LevelCollection =
+    Array EncodedLevel
 
 
 type alias ViewLevel =
     IViewLevel {}
+
+
+type alias LevelMeta =
+    { bestMovesCount : Int }
+
+
+type alias LevelMetaCollection =
+    Dict EncodedLevel LevelMeta
 
 
 type Page

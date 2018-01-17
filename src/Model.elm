@@ -1,31 +1,10 @@
-module Model exposing (initModel, updateModelFromLocation, updateModelWithLevelFromUserInput)
+module Model exposing (initModel, updateModelFromLocation)
 
 import Navigation exposing (Location)
-import Types exposing (Model, Msg, Block, Level, Levels, ViewLevel, Page(..))
-import Levels exposing (getInitialLevels, addLevel)
-import ViewLevel exposing (getViewLevelFromLevel)
-import StringLevel exposing (getLevelFromPathName, getLevelFromString)
-import LocalStorage exposing (storeLevels)
-
-
-updateModelWithLevelFromUserInput : Model -> Model
-updateModelWithLevelFromUserInput model =
-    let
-        level =
-            model.stringLevelFromUserInput
-                |> getLevelFromString
-    in
-        case level of
-            Just level ->
-                { model
-                    | levels = addLevel level model.levels
-                    , stringLevelFromUserInput = ""
-                }
-
-            Nothing ->
-                { model
-                    | stringLevelFromUserInput = ""
-                }
+import Types exposing (Model, Msg, Block, EncodedLevel, LevelCollection, Page(..))
+import LevelCollection
+import LocalStorage
+import Level exposing (getViewLevelFromEncodedLevel, getEncodedLevelFromPathName)
 
 
 updateModelFromLocation : Location -> Model -> ( Model, Cmd Msg )
@@ -34,7 +13,7 @@ updateModelFromLocation location model =
         maybeLevel =
             location
                 |> .pathname
-                |> getLevelFromPathName
+                |> getEncodedLevelFromPathName
     in
         case maybeLevel of
             Just maybeLevel ->
@@ -44,7 +23,7 @@ updateModelFromLocation location model =
                             |> updateModelWithNewLevel model
                 in
                     ( newModel
-                    , storeLevels newModel.levels
+                    , LocalStorage.storeLevels newModel.levels
                     )
 
             Nothing ->
@@ -53,14 +32,14 @@ updateModelFromLocation location model =
                 )
 
 
-updateModelWithNewLevel : Model -> Level -> Model
-updateModelWithNewLevel model level =
+updateModelWithNewLevel : Model -> EncodedLevel -> Model
+updateModelWithNewLevel model encodedLevel =
     let
         viewLevel =
-            getViewLevelFromLevel level
+            getViewLevelFromEncodedLevel encodedLevel
 
         newLevels =
-            addLevel level model.levels
+            LevelCollection.addLevel encodedLevel model.levels
     in
         { player = viewLevel.player
         , walls = viewLevel.walls
@@ -69,7 +48,7 @@ updateModelWithNewLevel model level =
         , gameSize = viewLevel.gameSize
         , isWin = False
         , levels = newLevels
-        , currentLevelId = level.id
+        , currentLevelIndex = 0
         , movesCount = 0
         , history = []
         , currentPage = GamePage
@@ -77,7 +56,7 @@ updateModelWithNewLevel model level =
         }
 
 
-initModel : Maybe Levels -> Model
+initModel : Maybe LevelCollection -> Model
 initModel maybeLevels =
     let
         levels =
@@ -86,19 +65,16 @@ initModel maybeLevels =
                     maybeLevels
 
                 Nothing ->
-                    getInitialLevels
-
-        viewLevel =
-            getViewLevelFromLevel (Level 0 0 [] "")
+                    LevelCollection.getInitialLevels
     in
-        { player = viewLevel.player
-        , walls = viewLevel.walls
-        , boxes = viewLevel.boxes
-        , dots = viewLevel.dots
-        , gameSize = viewLevel.gameSize
+        { player = Block 0 0
+        , walls = []
+        , boxes = []
+        , dots = []
+        , gameSize = ( 0, 0 )
         , isWin = False
         , levels = levels -- important here
-        , currentLevelId = ""
+        , currentLevelIndex = 0
         , movesCount = 0
         , history = []
         , currentPage = GamePage
