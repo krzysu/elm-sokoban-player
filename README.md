@@ -29,10 +29,9 @@ Pull requests are welcome!
 
 ## TODO
 
-- level in url (in progress)
+- rewrite rendering
 - stats: remaining boxes count, best score
 - HUD
-- level picker
 - box on dot change color
 - player animation
 - touch support

@@ -42,7 +42,7 @@ toArrowChanged model code =
 
         27 ->
             -- Esc
-            LoadLevel model.currentLevelId
+            LoadLevel model.currentLevelIndex
 
         _ ->
             NoOp

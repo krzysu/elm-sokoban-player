@@ -1,42 +1,33 @@
-module Levels
-    exposing
-        ( getInitialLevels
-        , getLevel
-        , getNextLevel
-        , addLevel
-        , removeLevel
-        )
+module LevelCollection exposing (getInitialLevels, getLevel, addLevel, removeLevel)
 
-import Dict exposing (Dict)
-import Types exposing (Level, Levels)
+import Array exposing (Array)
+import Types exposing (EncodedLevel, LevelCollection, Level)
 import XmlLevel exposing (getLevelFromXml)
 import StringLevel exposing (getLevelFromString)
 
 
-getLevel : String -> Levels -> Level
-getLevel levelId levels =
-    Dict.get levelId levels
-        |> Maybe.withDefault (Level 0 0 [] "")
+getLevel : Int -> LevelCollection -> EncodedLevel
+getLevel levelIndex levels =
+    levels
+        |> Array.get levelIndex
+        |> Maybe.withDefault ""
 
 
-getNextLevel : String -> Levels -> Level
-getNextLevel currentLevelId levels =
-    -- TODO
-    Dict.get currentLevelId levels
-        |> Maybe.withDefault (Level 0 0 [] "")
+addLevel : EncodedLevel -> LevelCollection -> LevelCollection
+addLevel levelId levels =
+    -- TODO check for duplicates
+    Array.toList levels
+        |> (::) levelId
+        |> Array.fromList
 
 
-addLevel : Level -> Levels -> Levels
-addLevel newLevel levels =
-    Dict.insert newLevel.id newLevel levels
-
-
-removeLevel : String -> Levels -> Levels
+removeLevel : String -> LevelCollection -> LevelCollection
 removeLevel levelId levels =
-    Dict.remove levelId levels
+    levels
+        |> Array.filter (\level -> level == levelId)
 
 
-getInitialLevels : Levels
+getInitialLevels : LevelCollection
 getInitialLevels =
     let
         stringLevels =
@@ -52,9 +43,9 @@ getInitialLevels =
     in
         stringLevels
             |> List.filterMap getLevelFromString
-            |> List.map (\level -> ( level.id, level ))
-            |> Dict.fromList
-            |> Dict.insert levelFromXml.id levelFromXml
+            |> (::) levelFromXml
+            |> List.map .id
+            |> Array.fromList
 
 
 {-| example level, not in use

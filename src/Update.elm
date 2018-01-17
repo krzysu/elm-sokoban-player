@@ -3,10 +3,10 @@ module Update exposing (update)
 import Set exposing (Set)
 import Navigation
 import Types exposing (Model, Msg(..), Block, GameState, Page(..))
-import Model exposing (updateModelFromLocation, updateModelWithLevelFromUserInput)
-import StringLevel exposing (getLevelFromString, getLevelFromPathName, getPathNameFromLevel)
-import Levels exposing (getLevel, getNextLevel, removeLevel, addLevel)
-import LocalStorage exposing (storeLevels)
+import LevelCollection
+import LocalStorage
+import Model exposing (updateModelFromLocation)
+import Level exposing (getEncodedLevelFromString)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -35,26 +35,26 @@ update msg model =
         LoadNextLevel ->
             let
                 pathNameLevel =
-                    getNextLevel model.currentLevelId model.levels
-                        |> getPathNameFromLevel
+                    LevelCollection.getLevel (model.currentLevelIndex + 1) model.levels
+                        |> (++) "/"
             in
                 ( model, Navigation.newUrl pathNameLevel )
 
-        LoadLevel levelId ->
+        LoadLevel levelIndex ->
             let
                 pathNameLevel =
-                    getLevel levelId model.levels
-                        |> getPathNameFromLevel
+                    LevelCollection.getLevel levelIndex model.levels
+                        |> (++) "/"
             in
                 ( model, Navigation.newUrl pathNameLevel )
 
         RemoveLevel levelId ->
             let
                 newModel =
-                    { model | levels = removeLevel levelId model.levels }
+                    { model | levels = LevelCollection.removeLevel levelId model.levels }
             in
                 ( newModel
-                , storeLevels newModel.levels
+                , LocalStorage.storeLevels newModel.levels
                 )
 
         ChangeLevelFromUserInput input ->
@@ -64,12 +64,32 @@ update msg model =
 
         AddLevelFromUserInput ->
             let
-                newModel =
-                    updateModelWithLevelFromUserInput model
+                encodedLevel =
+                    model.stringLevelFromUserInput
+                        |> getEncodedLevelFromString
+
+                newLevels =
+                    model.levels
+
+                -- TODO
+                -- newLevels =
+                --     LevelCollection.addLevel encodedLevel model.levels
             in
-                ( newModel
-                , storeLevels newModel.levels
-                )
+                case encodedLevel of
+                    Just encodedLevel ->
+                        ( { model
+                            | levels = newLevels
+                            , stringLevelFromUserInput = ""
+                          }
+                        , LocalStorage.storeLevels newLevels
+                        )
+
+                    Nothing ->
+                        ( { model
+                            | stringLevelFromUserInput = ""
+                          }
+                        , Cmd.none
+                        )
 
         UrlChange newLocation ->
             updateModelFromLocation newLocation model
