@@ -1,4 +1,11 @@
-module LevelCollection exposing (getInitialLevels, getLevel, addLevel, removeLevel)
+module LevelCollection
+    exposing
+        ( getInitialLevels
+        , getLevel
+        , appendLevel
+        , prependLevel
+        , removeLevel
+        )
 
 import Array exposing (Array)
 import Types exposing (EncodedLevel, LevelCollection, Level)
@@ -13,21 +20,30 @@ getLevel levelIndex levels =
         |> Maybe.withDefault ""
 
 
-addLevel : EncodedLevel -> LevelCollection -> LevelCollection
-addLevel levelId levels =
-    let
-        alreadyExists =
-            levels
-                |> Array.filter (\level -> level == levelId)
-                |> Array.isEmpty
-                |> not
-    in
-        if alreadyExists then
-            levels
-        else
-            Array.toList levels
-                |> (::) levelId
-                |> Array.fromList
+isDuplicate : EncodedLevel -> LevelCollection -> Bool
+isDuplicate levelId levels =
+    levels
+        |> Array.filter (\level -> level == levelId)
+        |> Array.isEmpty
+        |> not
+
+
+appendLevel : EncodedLevel -> LevelCollection -> LevelCollection
+appendLevel levelId levels =
+    if (isDuplicate levelId levels) then
+        levels
+    else
+        Array.push levelId levels
+
+
+prependLevel : EncodedLevel -> LevelCollection -> LevelCollection
+prependLevel levelId levels =
+    if (isDuplicate levelId levels) then
+        levels
+    else
+        Array.toList levels
+            |> (::) levelId
+            |> Array.fromList
 
 
 removeLevel : String -> LevelCollection -> LevelCollection

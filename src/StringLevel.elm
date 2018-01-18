@@ -11,6 +11,8 @@ module StringLevel
         , getEncodedLevelFromLevel
         )
 
+import Set
+import Char
 import Types exposing (Level, EncodedLevel, ViewLevel)
 import RunLengthEncoding exposing (encode, decode, replace)
 
@@ -153,9 +155,20 @@ getEncodedLevelFromLevel level =
 
 filterValidLevelCharacters : String -> String
 filterValidLevelCharacters string =
+    string
+        |> String.filter isShortStringLevelChar
+
+
+isShortStringLevelChar : Char -> Bool
+isShortStringLevelChar char =
     let
         allowedChars =
-            [ "#", "@", "+", "$", "*", ".", "_", "|" ]
+            [ '#', '@', '+', '$', '*', '.', '_', '|' ]
+
+        isDigit =
+            Char.isDigit char
+
+        isAllowedChar =
+            Set.member char (Set.fromList allowedChars)
     in
-        -- TODO
-        string
+        isDigit || isAllowedChar

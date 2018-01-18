@@ -73,7 +73,7 @@ update msg model =
 
                 -- TODO
                 -- newLevels =
-                --     LevelCollection.addLevel encodedLevel model.levels
+                --     LevelCollection.appendLevel encodedLevel model.levels
             in
                 case encodedLevel of
                     Just encodedLevel ->

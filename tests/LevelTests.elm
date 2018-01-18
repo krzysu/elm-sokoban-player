@@ -65,7 +65,7 @@ all =
             , test "wrong string" <|
                 \_ ->
                     Expect.equal
-                        (getEncodedLevelFromPathName "/notAlevel")
+                        (getEncodedLevelFromPathName "/notlEvEl")
                         Nothing
             , test "empty pathName" <|
                 \_ ->

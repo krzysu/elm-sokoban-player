@@ -155,7 +155,7 @@ all =
                     Expect.equal (getLevelFromPathName "/") Nothing
             , test "wrong pathname" <|
                 \_ ->
-                    Expect.equal (getLevelFromPathName "/notALevEl") Nothing
+                    Expect.equal (getLevelFromPathName "/notLevEl") Nothing
             ]
         , describe "getEncodedLevelFromLevel"
             [ test "case 1" <|
