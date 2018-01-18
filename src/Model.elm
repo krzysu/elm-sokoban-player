@@ -39,7 +39,7 @@ updateModelWithNewLevel model encodedLevel =
             getViewLevelFromEncodedLevel encodedLevel
 
         newLevels =
-            LevelCollection.addLevel encodedLevel model.levels
+            LevelCollection.prependLevel encodedLevel model.levels
     in
         { player = viewLevel.player
         , walls = viewLevel.walls
