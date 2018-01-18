@@ -31,12 +31,12 @@ Pull requests are welcome!
 
 - rewrite rendering
 - stats: remaining boxes count, best score
+- scores, save results to localstorage
 - HUD
 - box on dot change color
 - player animation
 - touch support
 - scale to screen size
-- scores, save results to localstorage
 - level solver
 - make sure it works cross browser (safari rendering bug, IE not rendering at all)
 
@@ -86,7 +86,7 @@ XML Sokoban format, game elements are represented with the same characters as in
 
 - `Level`
 
-Intermediary structure to standardize all entry formats. `id` is a `UrlEncodedLevel`
+Intermediary structure to standardize all entry formats. `id` is a `EncodedLevel`
 
 ```
 level : Level
@@ -117,7 +117,7 @@ viewLevel =
     }
 ```
 
-- `UrlEncodedLevel`
+- `EncodedLevel`
 
 This is `ShortStringLevel` format mapped to more url-friendly symbols, see table below.
 

@@ -1,29 +1,29 @@
-module Model exposing (initModel, updateModelFromLocation)
+module Model exposing (initModel, updateModelFromLocation, addLevelFromUserInput)
 
 import Navigation exposing (Location)
 import Types exposing (Model, Msg, Block, EncodedLevel, LevelCollection, Page(..))
 import LevelCollection
-import LocalStorage
+import Storage
 import Level exposing (getViewLevelFromEncodedLevel, getEncodedLevelFromPathName)
 
 
 updateModelFromLocation : Location -> Model -> ( Model, Cmd Msg )
 updateModelFromLocation location model =
     let
-        maybeLevel =
+        encodedLevel =
             location
                 |> .pathname
                 |> getEncodedLevelFromPathName
     in
-        case maybeLevel of
-            Just maybeLevel ->
+        case encodedLevel of
+            Just encodedLevel ->
                 let
                     newModel =
-                        maybeLevel
+                        encodedLevel
                             |> updateModelWithNewLevel model
                 in
                     ( newModel
-                    , LocalStorage.storeLevels newModel.levels
+                    , Storage.storeLevels newModel.levels
                     )
 
             Nothing ->
@@ -35,6 +35,7 @@ updateModelFromLocation location model =
 updateModelWithNewLevel : Model -> EncodedLevel -> Model
 updateModelWithNewLevel model encodedLevel =
     let
+        -- TODO if level exists, then currentLevelIndex is wrong
         viewLevel =
             getViewLevelFromEncodedLevel encodedLevel
 
@@ -77,6 +78,20 @@ initModel maybeLevels =
         , currentLevelIndex = 0
         , movesCount = 0
         , history = []
-        , currentPage = GamePage
+        , currentPage = LevelSelectPage
         , stringLevelFromUserInput = ""
         }
+
+
+addLevelFromUserInput : EncodedLevel -> Model -> ( Model, Cmd Msg )
+addLevelFromUserInput encodedLevel model =
+    let
+        newLevels =
+            LevelCollection.appendLevel encodedLevel model.levels
+    in
+        ( { model
+            | levels = newLevels
+            , stringLevelFromUserInput = ""
+          }
+        , Storage.storeLevels newLevels
+        )

@@ -1,4 +1,4 @@
-port module LocalStorage exposing (storeLevels, decodeLevels)
+port module Storage exposing (storeLevels, decodeLevels)
 
 import Json.Encode
 import Json.Decode
