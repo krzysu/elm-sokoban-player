@@ -6,7 +6,7 @@ import View exposing (view)
 import Update exposing (update)
 import Model exposing (initModel, updateModelFromLocation)
 import Sub exposing (subscriptions)
-import LocalStorage exposing (decodeLevels)
+import Storage exposing (decodeLevels)
 
 
 type alias Flags =

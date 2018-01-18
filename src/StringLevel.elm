@@ -25,6 +25,7 @@ getLevelFromString levelString =
         rows =
             levelString
                 |> replace "\n" "|"
+                |> String.filter isStringLevelChar
                 |> String.split "|"
                 |> List.filter (\row -> not (String.isEmpty row))
                 |> List.filter (\row -> String.contains "#" row)
@@ -140,7 +141,7 @@ getLevelFromEncodedLevel : String -> Maybe Level
 getLevelFromEncodedLevel urlEncodedLevel =
     urlEncodedLevel
         |> urlDecodeLevel
-        |> filterValidLevelCharacters
+        |> String.filter isShortStringLevelChar
         |> decodeStringLevel
         |> getLevelFromString
 
@@ -151,12 +152,6 @@ getEncodedLevelFromLevel level =
         |> getStringFromLevel
         |> encodeStringLevel
         |> urlEncodeLevel
-
-
-filterValidLevelCharacters : String -> String
-filterValidLevelCharacters string =
-    string
-        |> String.filter isShortStringLevelChar
 
 
 isShortStringLevelChar : Char -> Bool
@@ -172,3 +167,12 @@ isShortStringLevelChar char =
             Set.member char (Set.fromList allowedChars)
     in
         isDigit || isAllowedChar
+
+
+isStringLevelChar : Char -> Bool
+isStringLevelChar char =
+    let
+        allowedChars =
+            [ '#', '@', '+', '$', '*', '.', '_', '|', ' ' ]
+    in
+        Set.member char (Set.fromList allowedChars)

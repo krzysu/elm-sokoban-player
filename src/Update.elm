@@ -4,8 +4,8 @@ import Set exposing (Set)
 import Navigation
 import Types exposing (Model, Msg(..), Block, GameState, Page(..))
 import LevelCollection
-import LocalStorage
-import Model exposing (updateModelFromLocation)
+import Storage
+import Model
 import Level exposing (getEncodedLevelFromString)
 
 
@@ -54,7 +54,7 @@ update msg model =
                     { model | levels = LevelCollection.removeLevel levelId model.levels }
             in
                 ( newModel
-                , LocalStorage.storeLevels newModel.levels
+                , Storage.storeLevels newModel.levels
                 )
 
         ChangeLevelFromUserInput input ->
@@ -67,22 +67,10 @@ update msg model =
                 encodedLevel =
                     model.stringLevelFromUserInput
                         |> getEncodedLevelFromString
-
-                newLevels =
-                    model.levels
-
-                -- TODO
-                -- newLevels =
-                --     LevelCollection.appendLevel encodedLevel model.levels
             in
                 case encodedLevel of
                     Just encodedLevel ->
-                        ( { model
-                            | levels = newLevels
-                            , stringLevelFromUserInput = ""
-                          }
-                        , LocalStorage.storeLevels newLevels
-                        )
+                        Model.addLevelFromUserInput encodedLevel model
 
                     Nothing ->
                         ( { model
@@ -92,7 +80,7 @@ update msg model =
                         )
 
         UrlChange newLocation ->
-            updateModelFromLocation newLocation model
+            Model.updateModelFromLocation newLocation model
 
         NoOp ->
             ( model, Cmd.none )

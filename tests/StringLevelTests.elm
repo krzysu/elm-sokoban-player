@@ -74,6 +74,9 @@ all =
                             getStringFromLevel level
                     in
                         Expect.equal (getLevelFromString stringLevelTemp) (Just level)
+            , test "not level string" <|
+                \_ ->
+                    Expect.equal (getLevelFromString "notALevEl@$+") Nothing
             ]
         , describe "getStringFromLevel"
             [ test "case 1" <|
