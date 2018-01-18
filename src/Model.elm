@@ -1,4 +1,4 @@
-module Model exposing (initModel, updateModelFromLocation, addLevelFromUserInput)
+module Model exposing (initModel, updateModelFromLocation)
 
 import Navigation exposing (Location)
 import Types exposing (Model, Msg, Block, EncodedLevel, LevelCollection, Page(..))
@@ -17,14 +17,7 @@ updateModelFromLocation location model =
     in
         case encodedLevel of
             Just encodedLevel ->
-                let
-                    newModel =
-                        encodedLevel
-                            |> updateModelWithNewLevel model
-                in
-                    ( newModel
-                    , Storage.storeLevels newModel.levels
-                    )
+                checkAndLoadGameWithLevel encodedLevel model
 
             Nothing ->
                 ( { model | currentPage = LevelSelectPage }
@@ -32,15 +25,61 @@ updateModelFromLocation location model =
                 )
 
 
-updateModelWithNewLevel : Model -> EncodedLevel -> Model
-updateModelWithNewLevel model encodedLevel =
+{-| load level, new or existing
+set currentLevelIndex in each case
+-}
+checkAndLoadGameWithLevel : EncodedLevel -> Model -> ( Model, Cmd Msg )
+checkAndLoadGameWithLevel encodedLevel model =
     let
-        -- TODO if level exists, then currentLevelIndex is wrong
-        viewLevel =
-            getViewLevelFromEncodedLevel encodedLevel
+        isExistingLevel =
+            LevelCollection.isDuplicate encodedLevel model.levels
+    in
+        if isExistingLevel then
+            loadGameWithExistingLevel encodedLevel model
+        else
+            loadGameWithNewLevel encodedLevel model
+
+
+loadGameWithExistingLevel : EncodedLevel -> Model -> ( Model, Cmd Msg )
+loadGameWithExistingLevel level model =
+    let
+        modelWithGame =
+            loadGameWithLevel level model
+
+        levelIndex =
+            LevelCollection.getIndexOf level model.levels
+    in
+        ( { modelWithGame
+            | currentLevelIndex = levelIndex
+          }
+        , Cmd.none
+        )
+
+
+loadGameWithNewLevel : EncodedLevel -> Model -> ( Model, Cmd Msg )
+loadGameWithNewLevel level model =
+    let
+        modelWithGame =
+            loadGameWithLevel level model
 
         newLevels =
-            LevelCollection.prependLevel encodedLevel model.levels
+            LevelCollection.prependLevel level model.levels
+    in
+        ( { modelWithGame
+            | levels = newLevels
+            , currentLevelIndex = 0
+          }
+        , Storage.storeLevels newLevels
+        )
+
+
+{-| only load new level and reset all related model props
+-}
+loadGameWithLevel : EncodedLevel -> Model -> Model
+loadGameWithLevel encodedLevel model =
+    let
+        viewLevel =
+            getViewLevelFromEncodedLevel encodedLevel
     in
         { player = viewLevel.player
         , walls = viewLevel.walls
@@ -48,8 +87,8 @@ updateModelWithNewLevel model encodedLevel =
         , dots = viewLevel.dots
         , gameSize = viewLevel.gameSize
         , isWin = False
-        , levels = newLevels
-        , currentLevelIndex = 0
+        , levels = model.levels -- not updated here
+        , currentLevelIndex = model.currentLevelIndex -- not updated here
         , movesCount = 0
         , history = []
         , currentPage = GamePage
@@ -57,6 +96,8 @@ updateModelWithNewLevel model encodedLevel =
         }
 
 
+{-| only when init the app
+-}
 initModel : Maybe LevelCollection -> Model
 initModel maybeLevels =
     let
@@ -81,17 +122,3 @@ initModel maybeLevels =
         , currentPage = LevelSelectPage
         , stringLevelFromUserInput = ""
         }
-
-
-addLevelFromUserInput : EncodedLevel -> Model -> ( Model, Cmd Msg )
-addLevelFromUserInput encodedLevel model =
-    let
-        newLevels =
-            LevelCollection.appendLevel encodedLevel model.levels
-    in
-        ( { model
-            | levels = newLevels
-            , stringLevelFromUserInput = ""
-          }
-        , Storage.storeLevels newLevels
-        )

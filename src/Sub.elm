@@ -1,7 +1,7 @@
 module Sub exposing (subscriptions)
 
 import Keyboard
-import Types exposing (Model, Msg(..))
+import Types exposing (Model, Msg(..), Page(..))
 
 
 subscriptions : Model -> Sub Msg
@@ -16,33 +16,36 @@ arrowChanged model =
 
 toArrowChanged : Model -> Keyboard.KeyCode -> Msg
 toArrowChanged model code =
-    case code of
-        37 ->
-            -- LeftKey
-            Move -1 0
+    if model.currentPage == GamePage then
+        case code of
+            37 ->
+                -- LeftKey
+                Move -1 0
 
-        38 ->
-            -- UpKey
-            Move 0 -1
+            38 ->
+                -- UpKey
+                Move 0 -1
 
-        39 ->
-            -- RightKey
-            Move 1 0
+            39 ->
+                -- RightKey
+                Move 1 0
 
-        40 ->
-            -- DownKey
-            Move 0 1
+            40 ->
+                -- DownKey
+                Move 0 1
 
-        13 ->
-            -- Enter
-            if model.isWin then
-                LoadNextLevel
-            else
+            13 ->
+                -- Enter
+                if model.isWin then
+                    LoadNextLevel
+                else
+                    NoOp
+
+            27 ->
+                -- Esc
+                LoadLevel model.currentLevelIndex
+
+            _ ->
                 NoOp
-
-        27 ->
-            -- Esc
-            LoadLevel model.currentLevelIndex
-
-        _ ->
-            NoOp
+    else
+        NoOp

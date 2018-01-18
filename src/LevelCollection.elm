@@ -5,12 +5,25 @@ module LevelCollection
         , appendLevel
         , prependLevel
         , removeLevel
+        , isDuplicate
+        , getIndexOf
         )
 
 import Array exposing (Array)
+import Dict
 import Types exposing (EncodedLevel, LevelCollection, Level)
 import XmlLevel exposing (getLevelFromXml)
 import StringLevel exposing (getLevelFromString)
+
+
+getIndexOf : EncodedLevel -> LevelCollection -> Int
+getIndexOf levelId levels =
+    levels
+        |> Array.toIndexedList
+        |> List.map (\( index, levelId ) -> ( levelId, index ))
+        |> Dict.fromList
+        |> Dict.get levelId
+        |> Maybe.withDefault -1
 
 
 getLevel : Int -> LevelCollection -> EncodedLevel
@@ -46,7 +59,7 @@ prependLevel levelId levels =
             |> Array.fromList
 
 
-removeLevel : String -> LevelCollection -> LevelCollection
+removeLevel : EncodedLevel -> LevelCollection -> LevelCollection
 removeLevel levelId levels =
     levels
         |> Array.filter (\level -> not (level == levelId))

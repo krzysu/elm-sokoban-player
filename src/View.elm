@@ -38,7 +38,10 @@ view model =
 renderGamePage : Model -> Html Msg
 renderGamePage model =
     div [ class "wrapper" ]
-        [ h1 [ class "headline" ] [ Html.text "Sokoban Player" ]
+        [ div [ class "header" ]
+            [ h1 [ class "headline" ] [ Html.text "Sokoban Player" ]
+            , getLevelCounter model
+            ]
         , renderLevel config.blockSize "game-arena" model
         , getMovesCounter model
         , getUndoButton model
@@ -86,6 +89,19 @@ renderBlockBySizeAndId blockSize svgId block =
             , Svg.Attributes.height (toString blockSize)
             ]
             []
+
+
+getLevelCounter : Model -> Html Msg
+getLevelCounter model =
+    let
+        levelsCount =
+            toString (Array.length model.levels)
+
+        currentLevel =
+            toString (model.currentLevelIndex + 1)
+    in
+        div [ class "text" ]
+            [ Html.text ("level " ++ currentLevel ++ "/" ++ levelsCount) ]
 
 
 getMovesCounter : Model -> Html Msg

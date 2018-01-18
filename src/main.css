@@ -41,6 +41,11 @@ h1 {
   line-height: 1.3em;
 }
 
+.header {
+  margin-bottom: 2em;
+  text-align: center;
+}
+
 .headline {
     text-align: center;
     color: #FFDEB3; /* #D8443D; red */
@@ -49,6 +54,7 @@ h1 {
        2px -2px 0 #4A3429,
        -2px 2px 0 #4A3429,
         2px 2px 0 #4A3429;
+    margin: 0;
 }
 
 .margin {

@@ -2,7 +2,7 @@ module Update exposing (update)
 
 import Set exposing (Set)
 import Navigation
-import Types exposing (Model, Msg(..), Block, GameState, Page(..))
+import Types exposing (Model, Msg(..), Block, EncodedLevel, GameState, Page(..))
 import LevelCollection
 import Storage
 import Model
@@ -70,7 +70,7 @@ update msg model =
             in
                 case encodedLevel of
                     Just encodedLevel ->
-                        Model.addLevelFromUserInput encodedLevel model
+                        addLevelFromUserInput encodedLevel model
 
                     Nothing ->
                         ( { model
@@ -186,3 +186,17 @@ undoLastMove model =
                     , movesCount = model.movesCount - 1
                     , history = Maybe.withDefault [] restOfHistory
                 }
+
+
+addLevelFromUserInput : EncodedLevel -> Model -> ( Model, Cmd Msg )
+addLevelFromUserInput encodedLevel model =
+    let
+        newLevels =
+            LevelCollection.appendLevel encodedLevel model.levels
+    in
+        ( { model
+            | levels = newLevels
+            , stringLevelFromUserInput = ""
+          }
+        , Storage.storeLevels newLevels
+        )
