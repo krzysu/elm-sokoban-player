@@ -1,6 +1,6 @@
 module View exposing (view)
 
-import Html exposing (Html, text, div, button, h1, textarea)
+import Html exposing (Html, text, div, span, button, h1, textarea)
 import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
@@ -40,10 +40,9 @@ renderGamePage model =
     div [ class "wrapper" ]
         [ div [ class "header" ]
             [ h1 [ class "headline" ] [ Html.text "Sokoban Player" ]
-            , getLevelCounter model
+            , getStats model
             ]
         , renderLevel config.blockSize "game-arena" model
-        , getMovesCounter model
         , getUndoButton model
         , getResetInfo
         , getSelectLevelButton
@@ -91,8 +90,22 @@ renderBlockBySizeAndId blockSize svgId block =
             []
 
 
-getLevelCounter : Model -> Html Msg
-getLevelCounter model =
+getStats : Model -> Html Msg
+getStats model =
+    let
+        stats =
+            [ getLevelCount model
+            , "moves: " ++ (toString model.movesCount)
+            , "best score: " ++ (toString model.bestMovesCount)
+            ]
+    in
+        div [ class "text" ]
+            [ Html.text (String.join " | " stats)
+            ]
+
+
+getLevelCount : Model -> String
+getLevelCount model =
     let
         levelsCount =
             toString (Array.length model.levels)
@@ -100,14 +113,7 @@ getLevelCounter model =
         currentLevel =
             toString (model.currentLevelIndex + 1)
     in
-        div [ class "text" ]
-            [ Html.text ("level " ++ currentLevel ++ "/" ++ levelsCount) ]
-
-
-getMovesCounter : Model -> Html Msg
-getMovesCounter model =
-    div [ class "text margin" ]
-        [ Html.text ("moves: " ++ (toString model.movesCount)) ]
+        "level " ++ currentLevel ++ "/" ++ levelsCount
 
 
 getUndoButton : Model -> Html Msg

@@ -24,9 +24,11 @@ type alias Model =
         , levels : LevelCollection
         , currentLevelIndex : Int
         , movesCount : Int
+        , bestMovesCount : Int
         , history : List GameState
         , currentPage : Page
         , stringLevelFromUserInput : String
+        , levelsData : LevelDataCollection
         }
 
 
@@ -76,12 +78,12 @@ type alias ViewLevel =
     IViewLevel {}
 
 
-type alias LevelMeta =
+type alias LevelData =
     { bestMovesCount : Int }
 
 
-type alias LevelMetaCollection =
-    Dict EncodedLevel LevelMeta
+type alias LevelDataCollection =
+    Dict EncodedLevel LevelData
 
 
 type Page

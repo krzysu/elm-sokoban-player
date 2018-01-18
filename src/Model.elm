@@ -1,7 +1,8 @@
 module Model exposing (initModel, updateModelFromLocation)
 
+import Dict
 import Navigation exposing (Location)
-import Types exposing (Model, Msg, Block, EncodedLevel, LevelCollection, Page(..))
+import Types exposing (Model, Msg, Block, EncodedLevel, LevelCollection, LevelDataCollection, Page(..))
 import LevelCollection
 import Storage
 import Level exposing (getViewLevelFromEncodedLevel, getEncodedLevelFromPathName)
@@ -80,6 +81,12 @@ loadGameWithLevel encodedLevel model =
     let
         viewLevel =
             getViewLevelFromEncodedLevel encodedLevel
+
+        levelData =
+            Dict.get encodedLevel model.levelsData
+
+        bestMovesCount =
+            levelData |> Maybe.map .bestMovesCount
     in
         { player = viewLevel.player
         , walls = viewLevel.walls
@@ -90,16 +97,18 @@ loadGameWithLevel encodedLevel model =
         , levels = model.levels -- not updated here
         , currentLevelIndex = model.currentLevelIndex -- not updated here
         , movesCount = 0
+        , bestMovesCount = Maybe.withDefault 0 bestMovesCount
         , history = []
         , currentPage = GamePage
         , stringLevelFromUserInput = ""
+        , levelsData = model.levelsData
         }
 
 
 {-| only when init the app
 -}
-initModel : Maybe LevelCollection -> Model
-initModel maybeLevels =
+initModel : Maybe LevelCollection -> LevelDataCollection -> Model
+initModel maybeLevels levelsData =
     let
         levels =
             case maybeLevels of
@@ -118,7 +127,9 @@ initModel maybeLevels =
         , levels = levels -- important here
         , currentLevelIndex = 0
         , movesCount = 0
+        , bestMovesCount = 0
         , history = []
         , currentPage = LevelSelectPage
         , stringLevelFromUserInput = ""
+        , levelsData = levelsData
         }

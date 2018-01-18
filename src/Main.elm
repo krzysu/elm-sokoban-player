@@ -1,16 +1,17 @@
 module Main exposing (..)
 
 import Navigation exposing (Location)
-import Types exposing (Model, Msg(..), LevelCollection)
+import Types exposing (Model, Msg(..), LevelCollection, LevelDataCollection)
 import View exposing (view)
 import Update exposing (update)
 import Model exposing (initModel, updateModelFromLocation)
 import Sub exposing (subscriptions)
-import Storage exposing (decodeLevels)
+import Storage exposing (decodeLevelCollection, decodeLevelDataCollection)
 
 
 type alias Flags =
     { levels : Maybe String
+    , levelsData : Maybe String
     }
 
 
@@ -20,10 +21,14 @@ init flags location =
         -- decode flags
         levels : Maybe LevelCollection
         levels =
-            decodeLevels flags.levels
+            decodeLevelCollection flags.levels
+
+        levelsData : LevelDataCollection
+        levelsData =
+            decodeLevelDataCollection flags.levelsData
 
         model =
-            initModel levels
+            initModel levels levelsData
     in
         updateModelFromLocation location model
 
