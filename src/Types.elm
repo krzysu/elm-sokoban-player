@@ -10,6 +10,7 @@ type Msg
     | Move Int Int
     | Undo
     | ShowLevelSelectPage
+    | RestartLevel
     | LoadNextLevel
     | LoadLevel Int -- load by level index
     | RemoveLevel String

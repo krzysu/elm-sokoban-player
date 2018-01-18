@@ -6,16 +6,11 @@ import Types exposing (Model, Msg(..), Page(..))
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    arrowChanged model
+    Keyboard.downs (keyPressed model)
 
 
-arrowChanged : Model -> Sub Msg
-arrowChanged model =
-    Keyboard.downs (toArrowChanged model)
-
-
-toArrowChanged : Model -> Keyboard.KeyCode -> Msg
-toArrowChanged model code =
+keyPressed : Model -> Keyboard.KeyCode -> Msg
+keyPressed model code =
     if model.currentPage == GamePage then
         case code of
             37 ->
@@ -43,7 +38,11 @@ toArrowChanged model code =
 
             27 ->
                 -- Esc
-                LoadLevel model.currentLevelIndex
+                RestartLevel
+
+            85 ->
+                -- u
+                Undo
 
             _ ->
                 NoOp

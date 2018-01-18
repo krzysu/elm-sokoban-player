@@ -32,21 +32,14 @@ update msg model =
         ShowLevelSelectPage ->
             ( model, Navigation.newUrl "/" )
 
+        RestartLevel ->
+            loadLevel model.currentLevelIndex model
+
         LoadNextLevel ->
-            let
-                pathNameLevel =
-                    LevelCollection.getLevel (model.currentLevelIndex + 1) model.levels
-                        |> (++) "/"
-            in
-                ( model, Navigation.newUrl pathNameLevel )
+            loadLevel (model.currentLevelIndex + 1) model
 
         LoadLevel levelIndex ->
-            let
-                pathNameLevel =
-                    LevelCollection.getLevel levelIndex model.levels
-                        |> (++) "/"
-            in
-                ( model, Navigation.newUrl pathNameLevel )
+            loadLevel levelIndex model
 
         RemoveLevel levelId ->
             let
@@ -186,6 +179,16 @@ undoLastMove model =
                     , movesCount = model.movesCount - 1
                     , history = Maybe.withDefault [] restOfHistory
                 }
+
+
+loadLevel : Int -> Model -> ( Model, Cmd Msg )
+loadLevel levelIndex model =
+    let
+        pathNameLevel =
+            LevelCollection.getLevel levelIndex model.levels
+                |> (++) "/"
+    in
+        ( model, Navigation.newUrl pathNameLevel )
 
 
 addLevelFromUserInput : EncodedLevel -> Model -> ( Model, Cmd Msg )

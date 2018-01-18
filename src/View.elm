@@ -1,6 +1,6 @@
 module View exposing (view)
 
-import Html exposing (Html, text, div, span, button, h1, textarea)
+import Html exposing (Html, text, div, span, button, h1, textarea, a)
 import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
@@ -43,8 +43,10 @@ renderGamePage model =
             , getStats model
             ]
         , renderLevel config.blockSize "game-arena" model
-        , getUndoButton model
-        , getResetInfo
+        , div [ class "button-group margin" ]
+            [ getUndoButton model
+            , getResetButton
+            ]
         , getSelectLevelButton
         , getWinOverlay model
         ]
@@ -119,17 +121,20 @@ getLevelCount model =
 getUndoButton : Model -> Html Msg
 getUndoButton model =
     button
-        [ class "button button--small margin"
+        [ class "button button--small"
         , onClick Undo
         , Html.Attributes.disabled (List.isEmpty model.history)
         ]
-        [ Html.text "Undo" ]
+        [ Html.text "undo (u)" ]
 
 
-getResetInfo : Html Msg
-getResetInfo =
-    div [ class "text margin" ]
-        [ Html.text "press ESC to restart" ]
+getResetButton : Html Msg
+getResetButton =
+    button
+        [ class "button button--small"
+        , onClick RestartLevel
+        ]
+        [ Html.text "restart (esc)" ]
 
 
 {-| render overlay with success message
@@ -159,21 +164,32 @@ getSelectLevelButton =
         [ class "button button--small margin"
         , onClick (ShowLevelSelectPage)
         ]
-        [ Html.text "Select level" ]
+        [ Html.text "edit level list" ]
 
 
 renderLevelSelectPage : Model -> Html Msg
 renderLevelSelectPage model =
     div []
-        [ h1 [ class "headline" ] [ Html.text "Create your playlist" ]
+        [ div [ class "header" ]
+            [ h1 [ class "headline" ] [ Html.text "Edit your playlist" ]
+            , div [ class "text" ] [ Html.text "add and remove levels, or click one to play it" ]
+            ]
         , div [ class "level-preview-list" ]
             (model.levels
                 |> Array.map (\encodedLevel -> ( encodedLevel, getViewLevelFromEncodedLevel encodedLevel ))
                 |> Array.indexedMap renderLevelPreviewItem
                 |> Array.toList
             )
-        , div [ class "centered margin" ]
-            [ textarea
+        , div [ class "level-input-wrapper margin" ]
+            [ div [ class "label" ]
+                [ Html.text "add new level in "
+                , a
+                    [ Html.Attributes.href "http://sokobano.de/wiki/index.php?title=Level_format"
+                    , Html.Attributes.target "_blank"
+                    ]
+                    [ Html.text "Sokoban Level Format" ]
+                ]
+            , textarea
                 [ class "input level-input"
                 , onInput ChangeLevelFromUserInput
                 , Html.Attributes.placeholder "insert your sokoban level"
@@ -186,7 +202,7 @@ renderLevelSelectPage model =
                 [ class "button button--small"
                 , onClick AddLevelFromUserInput
                 ]
-                [ Html.text "Add level" ]
+                [ Html.text "add level" ]
             ]
         ]
 

@@ -23,6 +23,19 @@ a:hover {
   text-decoration: underline;
 }
 
+textarea {
+  font-size: 18px;
+  color: #4A3429;
+  background-color: #fff;
+  border: 0;
+  padding: 0.5em;
+  outline: 0;
+}
+
+textarea:focus {
+  background-color: #f4f4f4;
+}
+
 .wrapper {
   display: flex;
   flex-flow: column;
@@ -178,7 +191,17 @@ h1 {
   text-align: center;
 }
 
-.level-input {
+.level-input-wrapper {
+  margin-left: auto;
+  margin-right: auto;
   width: 50%;
-  height: 12em;
+}
+
+.level-input {
+  width: 100%;
+  height: 16em;
+}
+
+.label {
+  margin-bottom: 0.5em;
 }
