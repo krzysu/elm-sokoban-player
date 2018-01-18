@@ -10,6 +10,8 @@ import LevelCollection
         , appendLevel
         , prependLevel
         , removeLevel
+        , isDuplicate
+        , getIndexOf
         )
 
 
@@ -66,5 +68,29 @@ all =
                         (Array.fromList
                             [ "ABC", "CDE" ]
                         )
+            ]
+        , describe "isDuplicate"
+            [ test "true" <|
+                \_ ->
+                    Expect.equal
+                        (isDuplicate "BCD" initialLevels)
+                        True
+            , test "false" <|
+                \_ ->
+                    Expect.equal
+                        (isDuplicate "XYZ" initialLevels)
+                        False
+            ]
+        , describe "getIndexOf"
+            [ test "true" <|
+                \_ ->
+                    Expect.equal
+                        (getIndexOf "BCD" initialLevels)
+                        1
+            , test "false" <|
+                \_ ->
+                    Expect.equal
+                        (getIndexOf "XYZ" initialLevels)
+                        -1
             ]
         ]
