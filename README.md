@@ -30,13 +30,12 @@ Pull requests are welcome!
 ## TODO
 
 - rewrite rendering
-- stats: remaining boxes count, best score
-- scores, save results to localstorage
+- scale to screen size
 - HUD
 - box on dot change color
 - player animation
 - touch support
-- scale to screen size
+- more stats: remaining boxes count, box pushes
 - level solver
 - make sure it works cross browser (safari rendering bug, IE not rendering at all)
 
