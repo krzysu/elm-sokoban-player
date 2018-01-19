@@ -86,6 +86,17 @@ getInitialLevels =
             |> Array.fromList
 
 
+{-| for testing only
+-}
+basicStringLevel : String
+basicStringLevel =
+    """
+#####
+#@$.#
+#####
+"""
+
+
 stringLevel1 : String
 stringLevel1 =
     """

@@ -150,7 +150,7 @@ getWinOverlay model =
                     [ class "button margin"
                     , onClick LoadNextLevel
                     ]
-                    [ Html.text "Next" ]
+                    [ Html.text "next (enter)" ]
                 ]
             , div [ class "overlay" ] []
             ]

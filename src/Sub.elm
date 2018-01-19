@@ -11,40 +11,44 @@ subscriptions model =
 
 keyPressed : Model -> Keyboard.KeyCode -> Msg
 keyPressed model code =
-    if model.currentPage == GamePage then
-        case code of
-            37 ->
-                -- LeftKey
-                Move -1 0
+    case model.currentPage of
+        GamePage ->
+            if model.isWin then
+                case code of
+                    13 ->
+                        -- Enter
+                        LoadNextLevel
 
-            38 ->
-                -- UpKey
-                Move 0 -1
+                    _ ->
+                        NoOp
+            else
+                case code of
+                    37 ->
+                        -- LeftKey
+                        Move -1 0
 
-            39 ->
-                -- RightKey
-                Move 1 0
+                    38 ->
+                        -- UpKey
+                        Move 0 -1
 
-            40 ->
-                -- DownKey
-                Move 0 1
+                    39 ->
+                        -- RightKey
+                        Move 1 0
 
-            13 ->
-                -- Enter
-                if model.isWin then
-                    LoadNextLevel
-                else
-                    NoOp
+                    40 ->
+                        -- DownKey
+                        Move 0 1
 
-            27 ->
-                -- Esc
-                RestartLevel
+                    27 ->
+                        -- Esc
+                        RestartLevel
 
-            85 ->
-                -- u
-                Undo
+                    85 ->
+                        -- u
+                        Undo
 
-            _ ->
-                NoOp
-    else
-        NoOp
+                    _ ->
+                        NoOp
+
+        LevelSelectPage ->
+            NoOp

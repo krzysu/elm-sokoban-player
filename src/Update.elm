@@ -1,8 +1,9 @@
 module Update exposing (update)
 
 import Set exposing (Set)
+import Dict
 import Navigation
-import Types exposing (Model, Msg(..), Block, EncodedLevel, GameState, Page(..))
+import Types exposing (Model, Msg(..), Block, EncodedLevel, GameState, Page(..), LevelData)
 import LevelCollection
 import Storage
 import Model
@@ -13,15 +14,23 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Move deltaX deltaY ->
-            ( model
-                |> addToHistory
-                |> movePlayer deltaX deltaY
-                |> moveBoxes deltaX deltaY
-                |> checkCollisions
-                |> Maybe.map checkIfWin
-                |> Maybe.withDefault model
-            , Cmd.none
-            )
+            let
+                newModel =
+                    model
+                        |> addToHistory
+                        |> movePlayer deltaX deltaY
+                        |> moveBoxes deltaX deltaY
+                        |> checkCollisions
+                        |> Maybe.map checkIfWin
+                        |> Maybe.map storeLevelData
+                        |> Maybe.withDefault model
+            in
+                if newModel.isWin then
+                    ( newModel
+                    , Storage.storeLevelsData newModel.levelsData
+                    )
+                else
+                    ( newModel, Cmd.none )
 
         Undo ->
             ( model
@@ -140,6 +149,24 @@ checkIfWin model =
             { model | isWin = True }
         else
             model
+
+
+storeLevelData : Model -> Model
+storeLevelData model =
+    if model.isWin then
+        let
+            encodedLevel =
+                LevelCollection.getLevel model.currentLevelIndex model.levels
+
+            levelsData =
+                Dict.insert
+                    encodedLevel
+                    (LevelData model.movesCount)
+                    model.levelsData
+        in
+            { model | levelsData = levelsData }
+    else
+        model
 
 
 addToHistory : Model -> Model
