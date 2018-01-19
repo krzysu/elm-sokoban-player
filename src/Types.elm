@@ -23,9 +23,9 @@ type alias Model =
     IViewLevel
         { isWin : Bool
         , levels : LevelCollection
+        , currentEncodedLevel : EncodedLevel
         , currentLevelIndex : Int
         , movesCount : Int
-        , bestMovesCount : Int
         , history : List GameState
         , currentPage : Page
         , stringLevelFromUserInput : String

@@ -155,12 +155,9 @@ storeLevelData : Model -> Model
 storeLevelData model =
     if model.isWin then
         let
-            encodedLevel =
-                LevelCollection.getLevel model.currentLevelIndex model.levels
-
             levelsData =
                 Dict.insert
-                    encodedLevel
+                    model.currentEncodedLevel
                     (LevelData model.movesCount)
                     model.levelsData
         in

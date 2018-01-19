@@ -1,6 +1,5 @@
 module Model exposing (initModel, updateModelFromLocation)
 
-import Dict
 import Navigation exposing (Location)
 import Types exposing (Model, Msg, Block, EncodedLevel, LevelCollection, LevelDataCollection, Page(..))
 import LevelCollection
@@ -81,12 +80,6 @@ loadGameWithLevel encodedLevel model =
     let
         viewLevel =
             getViewLevelFromEncodedLevel encodedLevel
-
-        levelData =
-            Dict.get encodedLevel model.levelsData
-
-        bestMovesCount =
-            levelData |> Maybe.map .bestMovesCount
     in
         { player = viewLevel.player
         , walls = viewLevel.walls
@@ -95,9 +88,9 @@ loadGameWithLevel encodedLevel model =
         , gameSize = viewLevel.gameSize
         , isWin = False
         , levels = model.levels -- not updated here
+        , currentEncodedLevel = encodedLevel
         , currentLevelIndex = model.currentLevelIndex -- not updated here
         , movesCount = 0
-        , bestMovesCount = Maybe.withDefault 0 bestMovesCount
         , history = []
         , currentPage = GamePage
         , stringLevelFromUserInput = ""
@@ -125,9 +118,9 @@ initModel maybeLevels levelsData =
         , gameSize = ( 0, 0 )
         , isWin = False
         , levels = levels -- important here
+        , currentEncodedLevel = ""
         , currentLevelIndex = 0
         , movesCount = 0
-        , bestMovesCount = 0
         , history = []
         , currentPage = LevelSelectPage
         , stringLevelFromUserInput = ""

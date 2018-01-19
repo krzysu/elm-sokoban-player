@@ -6,8 +6,9 @@ import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
 import Svg.Attributes
 import Array exposing (Array)
+import Dict
 import Level exposing (getViewLevelFromEncodedLevel)
-import Types exposing (Model, Msg(..), Block, IViewLevel, Level, Page(..))
+import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..))
 
 
 type alias Config =
@@ -29,53 +30,53 @@ view : Model -> Html Msg
 view model =
     case model.currentPage of
         GamePage ->
-            renderGamePage model
+            gamePage model
 
         LevelSelectPage ->
-            renderLevelSelectPage model
+            levelSelectPage model
 
 
-renderGamePage : Model -> Html Msg
-renderGamePage model =
+gamePage : Model -> Html Msg
+gamePage model =
     div [ class "wrapper" ]
         [ div [ class "header" ]
             [ h1 [ class "headline" ] [ Html.text "Sokoban Player" ]
-            , getStats model
+            , stats model
             ]
         , renderLevel config.blockSize "game-arena" model
         , div [ class "button-group margin" ]
-            [ getUndoButton model
-            , getResetButton
+            [ undoButton model
+            , resetButton
             ]
-        , getSelectLevelButton
-        , getWinOverlay model
+        , selectLevelButton
+        , winOverlay model
         ]
 
 
 renderLevel : Int -> String -> IViewLevel a -> Html Msg
-renderLevel blockSize className levelToRender =
+renderLevel blockSize className viewLevel =
     let
-        renderBlockById =
-            renderBlockBySizeAndId blockSize
+        blockById =
+            blockBySizeAndId blockSize
     in
         svg
-            [ Svg.Attributes.width (toString (Tuple.first levelToRender.gameSize * blockSize))
-            , Svg.Attributes.height (toString (Tuple.second levelToRender.gameSize * blockSize))
+            [ Svg.Attributes.width (toString (Tuple.first viewLevel.gameSize * blockSize))
+            , Svg.Attributes.height (toString (Tuple.second viewLevel.gameSize * blockSize))
             , Svg.Attributes.class className
             ]
             (List.concat
-                [ List.map (renderBlockById "#wallBrown") levelToRender.walls
-                , List.map (renderBlockById "#dotGreen") levelToRender.dots
-                , List.map (renderBlockById "#boxGreen") levelToRender.boxes
-                , [ renderBlockById "#playerFront" levelToRender.player ]
+                [ List.map (blockById "#wallBrown") viewLevel.walls
+                , List.map (blockById "#dotGreen") viewLevel.dots
+                , List.map (blockById "#boxGreen") viewLevel.boxes
+                , [ blockById "#playerFront" viewLevel.player ]
                 ]
             )
 
 
 {-| render by svg sprite id
 -}
-renderBlockBySizeAndId : Int -> String -> Block -> Svg Msg
-renderBlockBySizeAndId blockSize svgId block =
+blockBySizeAndId : Int -> String -> Block -> Svg Msg
+blockBySizeAndId blockSize svgId block =
     let
         blockPosition =
             { x = block.x * blockSize
@@ -92,13 +93,13 @@ renderBlockBySizeAndId blockSize svgId block =
             []
 
 
-getStats : Model -> Html Msg
-getStats model =
+stats : Model -> Html Msg
+stats model =
     let
         stats =
-            [ getLevelCount model
+            [ levelCount model
             , "moves: " ++ (toString model.movesCount)
-            , "best score: " ++ (toString model.bestMovesCount)
+            , bestMovesCount (Dict.get model.currentEncodedLevel model.levelsData)
             ]
     in
         div [ class "text" ]
@@ -106,8 +107,8 @@ getStats model =
             ]
 
 
-getLevelCount : Model -> String
-getLevelCount model =
+levelCount : Model -> String
+levelCount model =
     let
         levelsCount =
             toString (Array.length model.levels)
@@ -118,8 +119,8 @@ getLevelCount model =
         "level " ++ currentLevel ++ "/" ++ levelsCount
 
 
-getUndoButton : Model -> Html Msg
-getUndoButton model =
+undoButton : Model -> Html Msg
+undoButton model =
     button
         [ class "button button--small"
         , onClick Undo
@@ -128,8 +129,8 @@ getUndoButton model =
         [ Html.text "undo (u)" ]
 
 
-getResetButton : Html Msg
-getResetButton =
+resetButton : Html Msg
+resetButton =
     button
         [ class "button button--small"
         , onClick RestartLevel
@@ -139,8 +140,8 @@ getResetButton =
 
 {-| render overlay with success message
 -}
-getWinOverlay : Model -> Html Msg
-getWinOverlay model =
+winOverlay : Model -> Html Msg
+winOverlay model =
     if model.isWin then
         div []
             [ div [ class "overlay-body" ]
@@ -158,8 +159,8 @@ getWinOverlay model =
         Html.text ""
 
 
-getSelectLevelButton : Html Msg
-getSelectLevelButton =
+selectLevelButton : Html Msg
+selectLevelButton =
     button
         [ class "button button--small margin"
         , onClick (ShowLevelSelectPage)
@@ -167,8 +168,8 @@ getSelectLevelButton =
         [ Html.text "edit level list" ]
 
 
-renderLevelSelectPage : Model -> Html Msg
-renderLevelSelectPage model =
+levelSelectPage : Model -> Html Msg
+levelSelectPage model =
     div []
         [ div [ class "header" ]
             [ h1 [ class "headline" ] [ Html.text "Edit your playlist" ]
@@ -176,27 +177,70 @@ renderLevelSelectPage model =
             ]
         , div [ class "level-preview-list" ]
             (model.levels
-                |> Array.map (\encodedLevel -> ( encodedLevel, getViewLevelFromEncodedLevel encodedLevel ))
-                |> Array.indexedMap renderLevelPreviewItem
+                |> Array.map
+                    (\encodedLevel ->
+                        ( encodedLevel
+                        , getViewLevelFromEncodedLevel encodedLevel
+                        , Dict.get encodedLevel model.levelsData
+                        )
+                    )
+                |> Array.indexedMap levelPreviewItem
                 |> Array.toList
             )
-        , div [ class "level-input-wrapper margin" ]
-            [ div [ class "label" ]
-                [ Html.text "add new level in "
-                , a
-                    [ Html.Attributes.href "http://sokobano.de/wiki/index.php?title=Level_format"
-                    , Html.Attributes.target "_blank"
-                    ]
-                    [ Html.text "Sokoban Level Format" ]
-                ]
-            , textarea
-                [ class "input level-input"
-                , onInput ChangeLevelFromUserInput
-                , Html.Attributes.placeholder "insert your sokoban level"
-                , Html.Attributes.value model.stringLevelFromUserInput
-                ]
-                []
+        , userLevelInput model
+        ]
+
+
+levelPreviewItem : Int -> ( String, IViewLevel a, Maybe LevelData ) -> Html Msg
+levelPreviewItem levelIndex ( levelId, viewLevel, maybeLevelData ) =
+    div [ class "level-preview-item" ]
+        [ div
+            [ class "level-preview-item__level"
+            , onClick (LoadLevel levelIndex)
             ]
+            [ renderLevel config.previewBlockSize "" viewLevel
+            , div [ class "centered" ]
+                [ Html.text (bestMovesCount maybeLevelData)
+                ]
+            ]
+        , button
+            [ class "button button--small level-preview-item__delete-button"
+            , onClick (RemoveLevel levelId)
+            ]
+            [ Html.text "X" ]
+        ]
+
+
+bestMovesCount : Maybe LevelData -> String
+bestMovesCount levelData =
+    let
+        bestMovesCount =
+            levelData
+                |> Maybe.map .bestMovesCount
+                |> Maybe.withDefault 0
+                |> toString
+    in
+        "best score: " ++ bestMovesCount
+
+
+userLevelInput : Model -> Html Msg
+userLevelInput model =
+    div [ class "level-input-wrapper margin" ]
+        [ div [ class "label" ]
+            [ Html.text "add new level in "
+            , a
+                [ Html.Attributes.href "http://sokobano.de/wiki/index.php?title=Level_format"
+                , Html.Attributes.target "_blank"
+                ]
+                [ Html.text "Sokoban Level Format" ]
+            ]
+        , textarea
+            [ class "input level-input"
+            , onInput ChangeLevelFromUserInput
+            , Html.Attributes.placeholder "insert your sokoban level"
+            , Html.Attributes.value model.stringLevelFromUserInput
+            ]
+            []
         , div [ class "centered button-group margin" ]
             [ button
                 [ class "button button--small"
@@ -204,20 +248,4 @@ renderLevelSelectPage model =
                 ]
                 [ Html.text "add level" ]
             ]
-        ]
-
-
-renderLevelPreviewItem : Int -> ( String, IViewLevel a ) -> Html Msg
-renderLevelPreviewItem levelIndex ( levelId, viewLevel ) =
-    div [ class "level-preview-item" ]
-        [ div
-            [ class "level-preview-item__level"
-            , onClick (LoadLevel levelIndex)
-            ]
-            [ renderLevel config.previewBlockSize "" viewLevel ]
-        , button
-            [ class "button button--small level-preview-item__delete-button"
-            , onClick (RemoveLevel levelId)
-            ]
-            [ Html.text "X" ]
         ]
