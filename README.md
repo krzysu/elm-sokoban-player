@@ -134,3 +134,14 @@ This is `ShortStringLevel` format mapped to more url-friendly symbols, see table
 | dot | . | F |
 | floor | _ | G |
 | row separator | &#124; | H |
+
+
+## License
+
+(c) Copyright 2015 Kris Urbas [@krzysu](http://twitter.com/krzysu), all rights reserved.
+
+This game is open sourced for learning and recruitment purposes. Do not use for profit!
+
+Original Sokoban game written by Hiroyuki Imabayashi © 1982 by THINKING RABBIT Inc. JAPAN.
+
+Game assets by <a href="http://www.kenney.nl/">Kenney.nl</a>.

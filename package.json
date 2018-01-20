@@ -13,7 +13,7 @@
     "url": "git+https://github.com/krzysu/elm-sokoban-player.git"
   },
   "author": "Kris Urbas, @krzysu",
-  "license": "MIT",
+  "license": "LicenseRef-LICENSE",
   "bugs": {
     "url": "https://github.com/krzysu/elm-sokoban-player/issues"
   },
