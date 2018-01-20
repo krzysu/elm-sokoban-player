@@ -29,6 +29,7 @@ Pull requests are welcome!
 
 ## TODO
 
+- SEO
 - rewrite rendering
 - scale to screen size
 - HUD
