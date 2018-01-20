@@ -29,13 +29,12 @@ Pull requests are welcome!
 
 ## TODO
 
-- SEO
 - rewrite rendering
+- touch support
 - scale to screen size
 - HUD
 - box on dot change color
 - player animation
-- touch support
 - more stats: remaining boxes count, box pushes
 - level solver
 - make sure it works cross browser (safari rendering bug, IE not rendering at all)
