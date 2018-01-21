@@ -27,10 +27,10 @@ init flags location =
         levelsData =
             decodeLevelDataCollection flags.levelsData
 
-        model =
+        modelWithCmd =
             initModel levels levelsData
     in
-        updateModelFromLocation location model
+        updateModelFromLocation location modelWithCmd
 
 
 main : Program Flags Model Msg

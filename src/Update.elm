@@ -82,7 +82,12 @@ update msg model =
                         )
 
         UrlChange newLocation ->
-            Model.updateModelFromLocation newLocation model
+            Model.updateModelFromLocation newLocation ( model, Cmd.none )
+
+        WindowSizeUpdated windowSize ->
+            ( { model | windowSize = windowSize }
+            , Cmd.none
+            )
 
         NoOp ->
             ( model, Cmd.none )

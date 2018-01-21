@@ -1,12 +1,16 @@
 module Sub exposing (subscriptions)
 
 import Keyboard
+import Window
 import Types exposing (Model, Msg(..), Page(..))
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Keyboard.downs (keyPressed model)
+    Sub.batch
+        [ Keyboard.downs (keyPressed model)
+        , Window.resizes WindowSizeUpdated
+        ]
 
 
 keyPressed : Model -> Keyboard.KeyCode -> Msg

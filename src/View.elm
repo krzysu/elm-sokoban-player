@@ -1,4 +1,4 @@
-module View exposing (view)
+module View exposing (view, getGameBlockSize)
 
 import Html exposing (Html, text, div, span, button, h1, textarea, a)
 import Html.Events exposing (onClick, onInput)
@@ -7,12 +7,14 @@ import Svg exposing (Svg, svg, node)
 import Svg.Attributes
 import Array exposing (Array)
 import Dict
+import Window
 import Level exposing (getViewLevelFromEncodedLevel)
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..))
 
 
 type alias Config =
-    { blockSize : Int
+    { maxBlockSize : Float
+    , minBlockSize : Float
     , previewBlockSize : Int
     , svgSpritePath : String
     }
@@ -20,7 +22,8 @@ type alias Config =
 
 config : Config
 config =
-    { blockSize = 60
+    { maxBlockSize = 60
+    , minBlockSize = 20
     , previewBlockSize = 20
     , svgSpritePath = "sokoban.sprite.svg"
     }
@@ -43,7 +46,7 @@ gamePage model =
             [ h1 [ class "headline" ] [ Html.text "Sokoban Player" ]
             , stats model
             ]
-        , renderLevel config.blockSize "game-arena" model
+        , renderLevel (getGameBlockSize model.windowSize model.gameSize) "game-arena" model
         , div [ class "button-group margin" ]
             [ undoButton model
             , resetButton
@@ -51,6 +54,29 @@ gamePage model =
         , selectLevelButton
         , winOverlay model
         ]
+
+
+getGameBlockSize : Window.Size -> ( Int, Int ) -> Int
+getGameBlockSize windowSize ( gameWidth, gameHeight ) =
+    let
+        horizontalSize =
+            0.9 * (toFloat windowSize.width) / (toFloat gameWidth)
+
+        verticalSize =
+            0.8 * (toFloat windowSize.height) / (toFloat gameHeight)
+
+        possibleSize =
+            if horizontalSize > verticalSize then
+                verticalSize
+            else
+                horizontalSize
+    in
+        if possibleSize > config.maxBlockSize then
+            round config.maxBlockSize
+        else if possibleSize < config.minBlockSize then
+            round config.minBlockSize
+        else
+            round possibleSize
 
 
 renderLevel : Int -> String -> IViewLevel a -> Html Msg

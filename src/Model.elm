@@ -1,14 +1,16 @@
 module Model exposing (initModel, updateModelFromLocation)
 
 import Navigation exposing (Location)
-import Types exposing (Model, Msg, Block, EncodedLevel, LevelCollection, LevelDataCollection, Page(..))
+import Window
+import Task
+import Types exposing (Model, Msg(..), Block, EncodedLevel, LevelCollection, LevelDataCollection, Page(..))
 import LevelCollection
 import Storage
 import Level exposing (getViewLevelFromEncodedLevel, getEncodedLevelFromPathName)
 
 
-updateModelFromLocation : Location -> Model -> ( Model, Cmd Msg )
-updateModelFromLocation location model =
+updateModelFromLocation : Location -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+updateModelFromLocation location ( model, cmd ) =
     let
         encodedLevel =
             location
@@ -17,31 +19,31 @@ updateModelFromLocation location model =
     in
         case encodedLevel of
             Just encodedLevel ->
-                checkAndLoadGameWithLevel encodedLevel model
+                checkAndLoadGameWithLevel encodedLevel ( model, cmd )
 
             Nothing ->
                 ( { model | currentPage = LevelSelectPage }
-                , Cmd.none
+                , cmd
                 )
 
 
 {-| load level, new or existing
 set currentLevelIndex in each case
 -}
-checkAndLoadGameWithLevel : EncodedLevel -> Model -> ( Model, Cmd Msg )
-checkAndLoadGameWithLevel encodedLevel model =
+checkAndLoadGameWithLevel : EncodedLevel -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+checkAndLoadGameWithLevel encodedLevel ( model, cmd ) =
     let
         isExistingLevel =
             LevelCollection.isDuplicate encodedLevel model.levels
     in
         if isExistingLevel then
-            loadGameWithExistingLevel encodedLevel model
+            loadGameWithExistingLevel encodedLevel ( model, cmd )
         else
-            loadGameWithNewLevel encodedLevel model
+            loadGameWithNewLevel encodedLevel ( model, cmd )
 
 
-loadGameWithExistingLevel : EncodedLevel -> Model -> ( Model, Cmd Msg )
-loadGameWithExistingLevel level model =
+loadGameWithExistingLevel : EncodedLevel -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+loadGameWithExistingLevel level ( model, cmd ) =
     let
         modelWithGame =
             loadGameWithLevel level model
@@ -52,12 +54,12 @@ loadGameWithExistingLevel level model =
         ( { modelWithGame
             | currentLevelIndex = levelIndex
           }
-        , Cmd.none
+        , cmd
         )
 
 
-loadGameWithNewLevel : EncodedLevel -> Model -> ( Model, Cmd Msg )
-loadGameWithNewLevel level model =
+loadGameWithNewLevel : EncodedLevel -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+loadGameWithNewLevel level ( model, cmd ) =
     let
         modelWithGame =
             loadGameWithLevel level model
@@ -69,7 +71,10 @@ loadGameWithNewLevel level model =
             | levels = newLevels
             , currentLevelIndex = 0
           }
-        , Storage.storeLevels newLevels
+        , Cmd.batch
+            [ cmd
+            , Storage.storeLevels newLevels
+            ]
         )
 
 
@@ -95,12 +100,13 @@ loadGameWithLevel encodedLevel model =
         , currentPage = GamePage
         , stringLevelFromUserInput = ""
         , levelsData = model.levelsData
+        , windowSize = model.windowSize
         }
 
 
 {-| only when init the app
 -}
-initModel : Maybe LevelCollection -> LevelDataCollection -> Model
+initModel : Maybe LevelCollection -> LevelDataCollection -> ( Model, Cmd Msg )
 initModel maybeLevels levelsData =
     let
         levels =
@@ -111,18 +117,21 @@ initModel maybeLevels levelsData =
                 Nothing ->
                     LevelCollection.getInitialLevels
     in
-        { player = Block 0 0
-        , walls = []
-        , boxes = []
-        , dots = []
-        , gameSize = ( 0, 0 )
-        , isWin = False
-        , levels = levels -- important here
-        , currentEncodedLevel = ""
-        , currentLevelIndex = 0
-        , movesCount = 0
-        , history = []
-        , currentPage = LevelSelectPage
-        , stringLevelFromUserInput = ""
-        , levelsData = levelsData
-        }
+        ( { player = Block 0 0
+          , walls = []
+          , boxes = []
+          , dots = []
+          , gameSize = ( 0, 0 )
+          , isWin = False
+          , levels = levels -- important here
+          , currentEncodedLevel = ""
+          , currentLevelIndex = 0
+          , movesCount = 0
+          , history = []
+          , currentPage = LevelSelectPage
+          , stringLevelFromUserInput = ""
+          , levelsData = levelsData
+          , windowSize = Window.Size 0 0
+          }
+        , Task.perform WindowSizeUpdated Window.size
+        )

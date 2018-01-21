@@ -3,6 +3,7 @@ module Types exposing (..)
 import Dict exposing (Dict)
 import Array exposing (Array)
 import Navigation exposing (Location)
+import Window
 
 
 type Msg
@@ -17,6 +18,7 @@ type Msg
     | ChangeLevelFromUserInput String
     | AddLevelFromUserInput
     | UrlChange Location
+    | WindowSizeUpdated Window.Size
 
 
 type alias Model =
@@ -30,6 +32,7 @@ type alias Model =
         , currentPage : Page
         , stringLevelFromUserInput : String
         , levelsData : LevelDataCollection
+        , windowSize : Window.Size
         }
 
 
