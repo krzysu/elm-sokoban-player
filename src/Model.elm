@@ -7,6 +7,7 @@ import Types exposing (Model, Msg(..), Block, EncodedLevel, LevelCollection, Lev
 import LevelCollection
 import Storage
 import Level exposing (getViewLevelFromEncodedLevel, getEncodedLevelFromPathName)
+import TouchEvents
 
 
 updateModelFromLocation : Location -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
@@ -101,6 +102,7 @@ loadGameWithLevel encodedLevel model =
         , stringLevelFromUserInput = ""
         , levelsData = model.levelsData
         , windowSize = model.windowSize
+        , lastTouch = model.lastTouch
         }
 
 
@@ -132,6 +134,7 @@ initModel maybeLevels levelsData =
           , stringLevelFromUserInput = ""
           , levelsData = levelsData
           , windowSize = Window.Size 0 0
+          , lastTouch = TouchEvents.Touch 0 0
           }
         , Task.perform WindowSizeUpdated Window.size
         )

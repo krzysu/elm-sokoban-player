@@ -8,6 +8,7 @@ import LevelCollection
 import Storage
 import Model
 import Level exposing (getEncodedLevelFromString)
+import TouchEvents
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -88,6 +89,32 @@ update msg model =
             ( { model | windowSize = windowSize }
             , Cmd.none
             )
+
+        OnTouchStart touchEvent ->
+            ( { model | lastTouch = touchEvent }
+            , Cmd.none
+            )
+
+        OnTouchEnd touchEvent ->
+            let
+                swipeDirection =
+                    TouchEvents.getDirection model.lastTouch touchEvent
+            in
+                case swipeDirection of
+                    Just TouchEvents.Left ->
+                        update (Move -1 0) model
+
+                    Just TouchEvents.Up ->
+                        update (Move 0 -1) model
+
+                    Just TouchEvents.Right ->
+                        update (Move 1 0) model
+
+                    Just TouchEvents.Down ->
+                        update (Move 0 1) model
+
+                    Nothing ->
+                        ( model, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )

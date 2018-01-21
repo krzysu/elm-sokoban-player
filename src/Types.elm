@@ -4,6 +4,7 @@ import Dict exposing (Dict)
 import Array exposing (Array)
 import Navigation exposing (Location)
 import Window
+import TouchEvents
 
 
 type Msg
@@ -19,6 +20,8 @@ type Msg
     | AddLevelFromUserInput
     | UrlChange Location
     | WindowSizeUpdated Window.Size
+    | OnTouchStart TouchEvents.Touch
+    | OnTouchEnd TouchEvents.Touch
 
 
 type alias Model =
@@ -33,6 +36,7 @@ type alias Model =
         , stringLevelFromUserInput : String
         , levelsData : LevelDataCollection
         , windowSize : Window.Size
+        , lastTouch : TouchEvents.Touch -- required for swipe event
         }
 
 

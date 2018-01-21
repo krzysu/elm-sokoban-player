@@ -10,6 +10,7 @@ import Dict
 import Window
 import Level exposing (getViewLevelFromEncodedLevel)
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..))
+import TouchEvents
 
 
 type alias Config =
@@ -46,7 +47,12 @@ gamePage model =
             [ h1 [ class "headline" ] [ Html.text "Sokoban Player" ]
             , stats model
             ]
-        , renderLevel (getGameBlockSize model.windowSize model.gameSize) "game-arena" model
+        , div
+            [ TouchEvents.onTouchEvent TouchEvents.TouchStart OnTouchStart
+            , TouchEvents.onTouchEvent TouchEvents.TouchEnd OnTouchEnd
+            ]
+            [ renderLevel (getGameBlockSize model.windowSize model.gameSize) "game-arena" model
+            ]
         , div [ class "button-group margin" ]
             [ undoButton model
             , resetButton
