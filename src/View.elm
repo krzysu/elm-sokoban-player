@@ -6,6 +6,7 @@ import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
 import Svg.Attributes
 import Array exposing (Array)
+import Set exposing (Set)
 import Dict
 import Window
 import Level exposing (getViewLevelFromEncodedLevel)
@@ -99,7 +100,7 @@ renderLevel blockSize className viewLevel =
             (List.concat
                 [ List.map (blockById "#wallBrown") viewLevel.walls
                 , List.map (blockById "#dotGreen") viewLevel.dots
-                , List.map (blockById "#boxGreen") viewLevel.boxes
+                , boxes viewLevel.dots viewLevel.boxes blockById
                 , [ blockById "#playerFront" viewLevel.player ]
                 ]
             )
@@ -123,6 +124,43 @@ blockBySizeAndId blockSize svgId block =
             , Svg.Attributes.height (toString blockSize)
             ]
             []
+
+
+boxes : List Block -> List Block -> (String -> Block -> Svg Msg) -> List (Svg Msg)
+boxes dotList boxList blockById =
+    let
+        boxSet =
+            blocksToSet boxList
+
+        dotSet =
+            blocksToSet dotList
+
+        boxesOverDots =
+            Set.intersect boxSet dotSet
+                |> setToBlocks
+
+        boxesNotOverDots =
+            Set.diff boxSet dotSet
+                |> setToBlocks
+    in
+        List.concat
+            [ List.map (blockById "#boxGreenAlt") boxesOverDots
+            , List.map (blockById "#boxGreen") boxesNotOverDots
+            ]
+
+
+blocksToSet : List Block -> Set ( Int, Int )
+blocksToSet blocks =
+    blocks
+        |> List.map (\{ x, y } -> ( x, y ))
+        |> Set.fromList
+
+
+setToBlocks : Set ( Int, Int ) -> List Block
+setToBlocks set =
+    set
+        |> Set.toList
+        |> List.map (\( x, y ) -> Block x y)
 
 
 stats : Model -> Html Msg
