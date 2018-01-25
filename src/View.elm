@@ -10,7 +10,7 @@ import Set exposing (Set)
 import Dict
 import Window
 import Level exposing (getViewLevelFromEncodedLevel)
-import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..))
+import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..))
 import TouchEvents
 
 
@@ -52,7 +52,7 @@ gamePage model =
             [ TouchEvents.onTouchEvent TouchEvents.TouchStart OnTouchStart
             , TouchEvents.onTouchEvent TouchEvents.TouchEnd OnTouchEnd
             ]
-            [ renderLevel (getGameBlockSize model.windowSize model.gameSize) "game-arena" model
+            [ renderLevelWithDirection model.lastMoveDirection (getGameBlockSize model.windowSize model.gameSize) "game-arena" model
             ]
         , div [ class "button-group margin" ]
             [ undoButton model
@@ -87,7 +87,12 @@ getGameBlockSize windowSize ( gameWidth, gameHeight ) =
 
 
 renderLevel : Int -> String -> IViewLevel a -> Html Msg
-renderLevel blockSize className viewLevel =
+renderLevel =
+    renderLevelWithDirection Down
+
+
+renderLevelWithDirection : MoveDirection -> Int -> String -> IViewLevel a -> Html Msg
+renderLevelWithDirection direction blockSize className viewLevel =
     let
         blockById =
             blockBySizeAndId blockSize
@@ -101,7 +106,7 @@ renderLevel blockSize className viewLevel =
                 [ List.map (blockById "#wallBrown") viewLevel.walls
                 , List.map (blockById "#dotGreen") viewLevel.dots
                 , boxes viewLevel.dots viewLevel.boxes blockById
-                , [ blockById "#playerFront" viewLevel.player ]
+                , [ player blockById direction viewLevel.player ]
                 ]
             )
 
@@ -161,6 +166,22 @@ setToBlocks set =
     set
         |> Set.toList
         |> List.map (\( x, y ) -> Block x y)
+
+
+player : (String -> Block -> Svg Msg) -> MoveDirection -> Block -> Svg Msg
+player blockById direction block =
+    case direction of
+        Left ->
+            blockById "#playerLeft" block
+
+        Right ->
+            blockById "#playerRight" block
+
+        Up ->
+            blockById "#playerBack" block
+
+        Down ->
+            blockById "#playerFront" block
 
 
 stats : Model -> Html Msg

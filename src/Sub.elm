@@ -2,7 +2,7 @@ module Sub exposing (subscriptions)
 
 import Keyboard
 import Window
-import Types exposing (Model, Msg(..), Page(..))
+import Types exposing (Model, Msg(..), Page(..), MoveDirection(..))
 
 
 subscriptions : Model -> Sub Msg
@@ -29,19 +29,19 @@ keyPressed model code =
                 case code of
                     37 ->
                         -- LeftKey
-                        Move -1 0
+                        Move Left
 
                     38 ->
                         -- UpKey
-                        Move 0 -1
+                        Move Up
 
                     39 ->
                         -- RightKey
-                        Move 1 0
+                        Move Right
 
                     40 ->
                         -- DownKey
-                        Move 0 1
+                        Move Down
 
                     27 ->
                         -- Esc

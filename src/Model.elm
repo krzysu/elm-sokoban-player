@@ -3,7 +3,17 @@ module Model exposing (initModel, updateModelFromLocation)
 import Navigation exposing (Location)
 import Window
 import Task
-import Types exposing (Model, Msg(..), Block, EncodedLevel, LevelCollection, LevelDataCollection, Page(..))
+import Types
+    exposing
+        ( Model
+        , Msg(..)
+        , Block
+        , EncodedLevel
+        , LevelCollection
+        , LevelDataCollection
+        , Page(..)
+        , MoveDirection(..)
+        )
 import LevelCollection
 import Storage
 import Level exposing (getViewLevelFromEncodedLevel, getEncodedLevelFromPathName)
@@ -93,6 +103,7 @@ loadGameWithLevel encodedLevel model =
         , dots = viewLevel.dots
         , gameSize = viewLevel.gameSize
         , isWin = False
+        , lastMoveDirection = Down
         , levels = model.levels -- not updated here
         , currentEncodedLevel = encodedLevel
         , currentLevelIndex = model.currentLevelIndex -- not updated here
@@ -125,6 +136,7 @@ initModel maybeLevels levelsData =
           , dots = []
           , gameSize = ( 0, 0 )
           , isWin = False
+          , lastMoveDirection = Down
           , levels = levels -- important here
           , currentEncodedLevel = ""
           , currentLevelIndex = 0

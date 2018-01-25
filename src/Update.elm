@@ -3,7 +3,17 @@ module Update exposing (update)
 import Set exposing (Set)
 import Dict
 import Navigation
-import Types exposing (Model, Msg(..), Block, EncodedLevel, GameState, Page(..), LevelData)
+import Types
+    exposing
+        ( Model
+        , Msg(..)
+        , Block
+        , EncodedLevel
+        , GameState
+        , Page(..)
+        , LevelData
+        , MoveDirection(..)
+        )
 import LevelCollection
 import Storage
 import Model
@@ -14,13 +24,13 @@ import TouchEvents
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Move deltaX deltaY ->
+        Move direction ->
             let
                 newModel =
                     model
                         |> addToHistory
-                        |> movePlayer deltaX deltaY
-                        |> moveBoxes deltaX deltaY
+                        |> movePlayer direction
+                        |> moveBoxes direction
                         |> checkCollisions
                         |> Maybe.map checkIfWin
                         |> Maybe.map storeLevelData
@@ -102,16 +112,16 @@ update msg model =
             in
                 case swipeDirection of
                     Just TouchEvents.Left ->
-                        update (Move -1 0) model
+                        update (Move Left) model
 
                     Just TouchEvents.Up ->
-                        update (Move 0 -1) model
+                        update (Move Up) model
 
                     Just TouchEvents.Right ->
-                        update (Move 1 0) model
+                        update (Move Right) model
 
                     Just TouchEvents.Down ->
-                        update (Move 0 1) model
+                        update (Move Down) model
 
                     Nothing ->
                         ( model, Cmd.none )
@@ -120,25 +130,46 @@ update msg model =
             ( model, Cmd.none )
 
 
-moveBlock : Int -> Int -> Block -> Block
-moveBlock deltaX deltaY { x, y } =
-    { x = x + deltaX, y = y + deltaY }
+directionToDelta : MoveDirection -> ( Int, Int )
+directionToDelta direction =
+    case direction of
+        Left ->
+            ( -1, 0 )
+
+        Right ->
+            ( 1, 0 )
+
+        Up ->
+            ( 0, -1 )
+
+        Down ->
+            ( 0, 1 )
 
 
-movePlayer : Int -> Int -> Model -> Model
-movePlayer deltaX deltaY model =
+moveBlock : MoveDirection -> Block -> Block
+moveBlock direction { x, y } =
+    let
+        ( deltaX, deltaY ) =
+            directionToDelta direction
+    in
+        { x = x + deltaX, y = y + deltaY }
+
+
+movePlayer : MoveDirection -> Model -> Model
+movePlayer direction model =
     { model
-        | player = moveBlock deltaX deltaY model.player
+        | player = moveBlock direction model.player
+        , lastMoveDirection = direction
         , movesCount = model.movesCount + 1
     }
 
 
-moveBoxes : Int -> Int -> Model -> Model
-moveBoxes deltaX deltaY model =
+moveBoxes : MoveDirection -> Model -> Model
+moveBoxes direction model =
     let
         moveBox box =
             if box == model.player then
-                moveBlock deltaX deltaY box
+                moveBlock direction box
             else
                 box
     in
@@ -205,6 +236,7 @@ addToHistory model =
         newGameState =
             { player = model.player
             , boxes = model.boxes
+            , lastMoveDirection = model.lastMoveDirection
             }
 
         {- limit -}
@@ -232,6 +264,7 @@ undoLastMove model =
                 { model
                     | player = prevGameState.player
                     , boxes = prevGameState.boxes
+                    , lastMoveDirection = prevGameState.lastMoveDirection
                     , movesCount = model.movesCount - 1
                     , history = Maybe.withDefault [] restOfHistory
                 }

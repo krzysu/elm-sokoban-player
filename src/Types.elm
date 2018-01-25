@@ -9,7 +9,7 @@ import TouchEvents
 
 type Msg
     = NoOp
-    | Move Int Int
+    | Move MoveDirection
     | Undo
     | ShowLevelSelectPage
     | RestartLevel
@@ -27,6 +27,7 @@ type Msg
 type alias Model =
     IViewLevel
         { isWin : Bool
+        , lastMoveDirection : MoveDirection
         , levels : LevelCollection
         , currentEncodedLevel : EncodedLevel
         , currentLevelIndex : Int
@@ -53,6 +54,7 @@ type alias IViewLevel a =
 type alias GameState =
     { player : Block
     , boxes : List Block
+    , lastMoveDirection : MoveDirection
     }
 
 
@@ -60,6 +62,13 @@ type alias Block =
     { x : Int
     , y : Int
     }
+
+
+type MoveDirection
+    = Left
+    | Right
+    | Up
+    | Down
 
 
 {-| intermediary format, should not be used directly
