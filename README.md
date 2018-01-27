@@ -33,7 +33,6 @@ Pull requests are welcome!
 - touch support
 - scale to screen size
 - HUD
-- box on dot change color
 - player animation
 - more stats: remaining boxes count, box pushes
 - level solver

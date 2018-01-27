@@ -1,34 +1,31 @@
 module View exposing (view, getGameBlockSize)
 
-import Html exposing (Html, text, div, span, button, h1, textarea, a)
+import Html exposing (Html, text, div, span, button, h1, textarea, a, br)
 import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (class)
-import Svg exposing (Svg, svg, node)
-import Svg.Attributes
 import Array exposing (Array)
-import Set exposing (Set)
 import Dict
 import Window
 import Level exposing (getViewLevelFromEncodedLevel)
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..))
 import TouchEvents
 import Json.Decode
+import LevelView
+import Markdown
 
 
 type alias Config =
     { maxBlockSize : Float
     , minBlockSize : Float
     , previewBlockSize : Int
-    , svgSpritePath : String
     }
 
 
 config : Config
 config =
     { maxBlockSize = 60
-    , minBlockSize = 20
+    , minBlockSize = 10
     , previewBlockSize = 20
-    , svgSpritePath = "sokoban.sprite.svg"
     }
 
 
@@ -44,23 +41,30 @@ view model =
 
 gamePage : Model -> Html Msg
 gamePage model =
-    div [ class "wrapper" ]
-        [ div [ class "header" ]
-            [ h1 [ class "headline" ] [ Html.text "Sokoban Player" ]
-            , stats model
-            ]
-        , div
-            [ TouchEvents.onTouchEvent TouchEvents.TouchStart OnTouchStart
+    div [ class "game" ]
+        [ div
+            [ class "game__container"
+            , TouchEvents.onTouchEvent TouchEvents.TouchStart OnTouchStart
             , TouchEvents.onTouchEvent TouchEvents.TouchEnd OnTouchEnd
             ]
-            [ renderLevelWithDirection model.lastMoveDirection (getGameBlockSize model.windowSize model.gameSize) "game-arena" model
+            [ LevelView.renderLevelWithDirection
+                model.lastMoveDirection
+                (getGameBlockSize model.windowSize model.gameSize)
+                model
             ]
-        , div [ class "button-group margin" ]
-            [ undoButton model
-            , resetButton
+        , div [ class "game-hud" ]
+            [ div [ class "game-hud__stats" ]
+                [ stats model ]
+            , div [ class "game-hud__buttons" ]
+                [ div [ class "game-hud__buttons-item" ] [ undoButton model ]
+                , div [ class "game-hud__buttons-item" ] [ resetButton ]
+                , div [ class "game-hud__buttons-item" ] [ menuButton ]
+                ]
+            , if model.isTouchDevice then
+                onScreenControls
+              else
+                Html.text ""
             ]
-        , selectLevelButton
-        , onScreenControls model.isTouchDevice
         , winOverlay model
         ]
 
@@ -72,7 +76,7 @@ getGameBlockSize windowSize ( gameWidth, gameHeight ) =
             0.9 * (toFloat windowSize.width) / (toFloat gameWidth)
 
         verticalSize =
-            0.8 * (toFloat windowSize.height) / (toFloat gameHeight)
+            0.9 * (toFloat windowSize.height) / (toFloat gameHeight)
 
         possibleSize =
             if horizontalSize > verticalSize then
@@ -86,104 +90,6 @@ getGameBlockSize windowSize ( gameWidth, gameHeight ) =
             round config.minBlockSize
         else
             round possibleSize
-
-
-renderLevel : Int -> String -> IViewLevel a -> Html Msg
-renderLevel =
-    renderLevelWithDirection Down
-
-
-renderLevelWithDirection : MoveDirection -> Int -> String -> IViewLevel a -> Html Msg
-renderLevelWithDirection direction blockSize className viewLevel =
-    let
-        blockById =
-            blockBySizeAndId blockSize
-    in
-        svg
-            [ Svg.Attributes.width (toString (Tuple.first viewLevel.gameSize * blockSize))
-            , Svg.Attributes.height (toString (Tuple.second viewLevel.gameSize * blockSize))
-            , Svg.Attributes.class className
-            ]
-            (List.concat
-                [ List.map (blockById "#wallBrown") viewLevel.walls
-                , List.map (blockById "#dotGreen") viewLevel.dots
-                , boxes viewLevel.dots viewLevel.boxes blockById
-                , [ player blockById direction viewLevel.player ]
-                ]
-            )
-
-
-{-| render by svg sprite id
--}
-blockBySizeAndId : Int -> String -> Block -> Svg Msg
-blockBySizeAndId blockSize svgId block =
-    let
-        blockPosition =
-            { x = block.x * blockSize
-            , y = block.y * blockSize
-            }
-    in
-        node "use"
-            [ Svg.Attributes.xlinkHref (config.svgSpritePath ++ svgId)
-            , Svg.Attributes.x (toString blockPosition.x)
-            , Svg.Attributes.y (toString blockPosition.y)
-            , Svg.Attributes.width (toString blockSize)
-            , Svg.Attributes.height (toString blockSize)
-            ]
-            []
-
-
-boxes : List Block -> List Block -> (String -> Block -> Svg Msg) -> List (Svg Msg)
-boxes dotList boxList blockById =
-    let
-        boxSet =
-            blocksToSet boxList
-
-        dotSet =
-            blocksToSet dotList
-
-        boxesOverDots =
-            Set.intersect boxSet dotSet
-                |> setToBlocks
-
-        boxesNotOverDots =
-            Set.diff boxSet dotSet
-                |> setToBlocks
-    in
-        List.concat
-            [ List.map (blockById "#boxGreenAlt") boxesOverDots
-            , List.map (blockById "#boxGreen") boxesNotOverDots
-            ]
-
-
-blocksToSet : List Block -> Set ( Int, Int )
-blocksToSet blocks =
-    blocks
-        |> List.map (\{ x, y } -> ( x, y ))
-        |> Set.fromList
-
-
-setToBlocks : Set ( Int, Int ) -> List Block
-setToBlocks set =
-    set
-        |> Set.toList
-        |> List.map (\( x, y ) -> Block x y)
-
-
-player : (String -> Block -> Svg Msg) -> MoveDirection -> Block -> Svg Msg
-player blockById direction block =
-    case direction of
-        Left ->
-            blockById "#playerLeft" block
-
-        Right ->
-            blockById "#playerRight" block
-
-        Up ->
-            blockById "#playerBack" block
-
-        Down ->
-            blockById "#playerFront" block
 
 
 stats : Model -> Html Msg
@@ -215,7 +121,7 @@ levelCount model =
 undoButton : Model -> Html Msg
 undoButton model =
     button
-        [ class "button button--small"
+        [ class "button"
         , onClick Undo
         , Html.Attributes.disabled (List.isEmpty model.history)
         ]
@@ -225,31 +131,28 @@ undoButton model =
 resetButton : Html Msg
 resetButton =
     button
-        [ class "button button--small"
+        [ class "button"
         , onClick RestartLevel
         ]
         [ Html.text "restart (esc)" ]
 
 
-onScreenControls : Bool -> Html Msg
-onScreenControls isTouchDevice =
-    if isTouchDevice then
-        div [ class "on-screen-controls" ]
-            [ touchButton (Move Up) "up"
-            , div [ class "on-screen-controls__buttons" ]
-                [ touchButton (Move Left) "left"
-                , touchButton (Move Right) "right"
-                ]
-            , touchButton (Move Down) "down"
+onScreenControls : Html Msg
+onScreenControls =
+    div [ class "game-hud__controls on-screen-controls" ]
+        [ touchButton (Move Up) "up"
+        , div [ class "on-screen-controls__buttons" ]
+            [ touchButton (Move Left) "left"
+            , touchButton (Move Right) "right"
             ]
-    else
-        Html.text ""
+        , touchButton (Move Down) "down"
+        ]
 
 
 touchButton : Msg -> String -> Html Msg
 touchButton msg text =
     button
-        [ class "button button--small"
+        [ class "button"
         , onTouchStart msg
         ]
         [ Html.text text ]
@@ -265,29 +168,42 @@ onTouchStart msg =
 winOverlay : Model -> Html Msg
 winOverlay model =
     if model.isWin then
-        div []
-            [ div [ class "overlay-body" ]
+        div [ class "overlay" ]
+            [ div [ class "overlay__body" ]
                 [ div [ class "ribbon" ]
                     [ Html.text "Solved!" ]
+                , winOverlayStats model
                 , button
-                    [ class "button margin"
+                    [ class "button"
                     , onClick LoadNextLevel
                     ]
                     [ Html.text "next (enter)" ]
                 ]
-            , div [ class "overlay" ] []
             ]
     else
         Html.text ""
 
 
-selectLevelButton : Html Msg
-selectLevelButton =
+winOverlayStats : Model -> Html Msg
+winOverlayStats model =
+    let
+        stats =
+            [ "moves: " ++ (toString model.movesCount)
+            , bestMovesCount (Dict.get model.currentEncodedLevel model.levelsData)
+            ]
+    in
+        div [ class "text margin" ]
+            [ Html.text (String.join " | " stats)
+            ]
+
+
+menuButton : Html Msg
+menuButton =
     button
-        [ class "button button--small margin"
+        [ class "button"
         , onClick (ShowLevelSelectPage)
         ]
-        [ Html.text "edit level list" ]
+        [ Html.text "menu" ]
 
 
 levelSelectPage : Model -> Html Msg
@@ -310,6 +226,7 @@ levelSelectPage model =
                 |> Array.toList
             )
         , userLevelInput model
+        , footer
         ]
 
 
@@ -320,13 +237,13 @@ levelPreviewItem levelIndex ( levelId, viewLevel, maybeLevelData ) =
             [ class "level-preview-item__level"
             , onClick (LoadLevel levelIndex)
             ]
-            [ renderLevel config.previewBlockSize "" viewLevel
+            [ LevelView.renderLevel config.previewBlockSize viewLevel
             , div [ class "centered" ]
                 [ Html.text (bestMovesCount maybeLevelData)
                 ]
             ]
         , button
-            [ class "button button--small level-preview-item__delete-button"
+            [ class "button level-preview-item__delete-button"
             , onClick (RemoveLevel levelId)
             ]
             [ Html.text "X" ]
@@ -365,9 +282,22 @@ userLevelInput model =
             []
         , div [ class "centered button-group margin" ]
             [ button
-                [ class "button button--small"
+                [ class "button"
                 , onClick AddLevelFromUserInput
                 ]
                 [ Html.text "add level" ]
             ]
         ]
+
+
+footer : Html Msg
+footer =
+    Markdown.toHtml [ class "footer" ] """
+designed and built by [Kris Urbas @krzysu](https://blog.myviews.pl)
+with little help from [Elm Berlin](https://www.meetup.com/Elm-Berlin/) meetup group <br>
+feedback is welcome! contact me by email or [twitter](https://twitter.com/krzysu)
+
+original Sokoban game written by Hiroyuki Imabayashi © 1982 by THINKING RABBIT Inc. JAPAN
+
+thanks to [Kenney.nl](http://www.kenney.nl/) for free game assets
+"""

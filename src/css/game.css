@@ -1,0 +1,88 @@
+.game {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.game__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.game-hud__stats {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.game-hud__buttons {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}
+
+.game-hud__buttons-item {
+  margin: 0.2em 0
+}
+
+.game-hud__controls {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.is-touch .game-hud__buttons,
+.is-touch .game-hud__controls {
+  opacity: 0.7;
+}
+
+/* on screen controls */
+.on-screen-controls {
+  text-align: center;
+  user-select: none;
+}
+
+.on-screen-controls__buttons {
+  margin: 0.2em 0;
+}
+
+.on-screen-controls__buttons .button {
+  margin: 0 0.1em;
+}
+
+/* win overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(54, 151, 83, 0.96);
+}
+
+.overlay__body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.ribbon {
+  background-image: url(../all-icons/ribbon.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  font-size: 2em;
+  padding: 1.5em 2.5em;
+  color: #4A3429;
+  text-align: center;
+}

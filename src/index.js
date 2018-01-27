@@ -1,4 +1,5 @@
-import './main.css';
+import './css/main.css';
+import './css/game.css';
 import { Main } from './Main.elm';
 import isTouchDevice from './js/isTouchDevice';
 import { getLevels, storeLevels, getLevelsData, storeLevelsData} from './js/storage';
@@ -16,3 +17,8 @@ app.ports.portStoreLevels.subscribe(data => {
 app.ports.portStoreData.subscribe(data => {
     storeLevelsData(data);
 });
+
+
+if (isTouchDevice()) {
+    document.body.classList.add('is-touch');
+}

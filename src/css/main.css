@@ -5,8 +5,17 @@ body {
   margin: 0;
   color: #4A3429;
   background-color: #789496;
-  background-image: url(all-icons/floorGrey.svg);
+  background-image: url(../all-icons/floorGrey.svg);
   background-repeat: repeat;
+}
+
+/* trick to block reload when swipe down */
+.is-game {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 a {
@@ -36,17 +45,6 @@ textarea:focus {
   background-color: #f4f4f4;
 }
 
-.wrapper {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-}
-
-.game-arena {
-  margin: 0 auto;
-  display: block;
-}
-
 h1 {
   font-family: 'Fredoka One', cursive;
   font-weight: 400;
@@ -54,6 +52,7 @@ h1 {
   line-height: 1.3em;
 }
 
+/* */
 .header {
   margin-bottom: 2em;
   text-align: center;
@@ -70,10 +69,6 @@ h1 {
     margin: 0;
 }
 
-.margin {
-  margin-top: 1em;
-}
-
 .text {
   color: #FFDEB3;
   text-shadow:
@@ -83,42 +78,12 @@ h1 {
       1px 1px 0 #4A3429;
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(54, 151, 83, 0.96);
-}
-
-.overlay-body {
-  width: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  text-align: center;
-  z-index: 1;
-}
-
-
-.ribbon {
-  background-image: url(all-icons/ribbon.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  font-size: 2em;
-  line-height: 4em;
-  color: #4A3429;
-  text-align: center;
-}
-
+/* button */
 .button {
   font-family: 'Fredoka One', sans-serif;
-  font-size: 1.2em;
-  line-height: 2em;
-  padding: 0.5em 1.5em;
+  font-size: 1em;
+  line-height: 1.5em;
+  padding: 0.5em 1em;
   background-color: #4A3429;
   color: #FFDEB3;
   border: 0;
@@ -131,15 +96,9 @@ h1 {
   background-color: #563c2f;
 }
 
-.button--small {
-  font-size: 1em;
-  line-height: 1.5em;
-  padding: 0.5em 1em;
-}
-
 .button[disabled] {
   cursor: default;
-  background-color: rgba(74, 52, 41, 0.7);
+  background-color: rgba(74, 52, 41, 0.8);
 }
 
 .button[disabled]:hover {
@@ -151,6 +110,25 @@ h1 {
   margin-right: 0.5em;
 }
 
+/* helpers */
+.margin {
+  margin-bottom: 1em;
+}
+
+.centered {
+  text-align: center;
+}
+
+.hidden {
+  position: absolute; 
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px; width: 1px;
+  margin: -1px; padding: 0; border: 0;
+}
+
+
+/* */
 .level-preview-list {
   display: flex;
   flex-wrap: wrap;
@@ -187,10 +165,7 @@ h1 {
   margin: 5em 0 1em;
 }
 
-.centered {
-  text-align: center;
-}
-
+/* */
 .level-input-wrapper {
   margin-left: auto;
   margin-right: auto;
@@ -204,21 +179,4 @@ h1 {
 
 .label {
   margin-bottom: 0.5em;
-}
-
-.on-screen-controls {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  opacity: 0.8;
-  text-align: center;
-  user-select: none;
-}
-
-.on-screen-controls__buttons {
-  margin: 0.2em 0;
-}
-
-.on-screen-controls__buttons .button {
-  margin: 0 0.1em;
 }
