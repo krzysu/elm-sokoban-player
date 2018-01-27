@@ -205,3 +205,20 @@ h1 {
 .label {
   margin-bottom: 0.5em;
 }
+
+.on-screen-controls {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  opacity: 0.8;
+  text-align: center;
+  user-select: none;
+}
+
+.on-screen-controls__buttons {
+  margin: 0.2em 0;
+}
+
+.on-screen-controls__buttons .button {
+  margin: 0 0.1em;
+}

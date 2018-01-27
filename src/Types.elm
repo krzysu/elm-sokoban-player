@@ -7,6 +7,13 @@ import Window
 import TouchEvents
 
 
+type alias Flags =
+    { levels : Maybe String
+    , levelsData : Maybe String
+    , isTouchDevice : Bool
+    }
+
+
 type Msg
     = NoOp
     | Move MoveDirection
@@ -38,6 +45,7 @@ type alias Model =
         , levelsData : LevelDataCollection
         , windowSize : Window.Size
         , lastTouch : TouchEvents.Touch -- required for swipe event
+        , isTouchDevice : Bool
         }
 
 

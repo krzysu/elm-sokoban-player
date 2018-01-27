@@ -7,6 +7,7 @@ import Types
     exposing
         ( Model
         , Msg(..)
+        , Flags
         , Block
         , EncodedLevel
         , LevelCollection
@@ -114,13 +115,14 @@ loadGameWithLevel encodedLevel model =
         , levelsData = model.levelsData
         , windowSize = model.windowSize
         , lastTouch = model.lastTouch
+        , isTouchDevice = model.isTouchDevice
         }
 
 
 {-| only when init the app
 -}
-initModel : Maybe LevelCollection -> LevelDataCollection -> ( Model, Cmd Msg )
-initModel maybeLevels levelsData =
+initModel : Flags -> Maybe LevelCollection -> LevelDataCollection -> ( Model, Cmd Msg )
+initModel flags maybeLevels levelsData =
     let
         levels =
             case maybeLevels of
@@ -147,6 +149,7 @@ initModel maybeLevels levelsData =
           , levelsData = levelsData
           , windowSize = Window.Size 0 0
           , lastTouch = TouchEvents.Touch 0 0
+          , isTouchDevice = flags.isTouchDevice
           }
         , Task.perform WindowSizeUpdated Window.size
         )

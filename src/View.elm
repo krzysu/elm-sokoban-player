@@ -12,6 +12,7 @@ import Window
 import Level exposing (getViewLevelFromEncodedLevel)
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..))
 import TouchEvents
+import Json.Decode
 
 
 type alias Config =
@@ -59,6 +60,7 @@ gamePage model =
             , resetButton
             ]
         , selectLevelButton
+        , onScreenControls model.isTouchDevice
         , winOverlay model
         ]
 
@@ -227,6 +229,35 @@ resetButton =
         , onClick RestartLevel
         ]
         [ Html.text "restart (esc)" ]
+
+
+onScreenControls : Bool -> Html Msg
+onScreenControls isTouchDevice =
+    if isTouchDevice then
+        div [ class "on-screen-controls" ]
+            [ touchButton (Move Up) "up"
+            , div [ class "on-screen-controls__buttons" ]
+                [ touchButton (Move Left) "left"
+                , touchButton (Move Right) "right"
+                ]
+            , touchButton (Move Down) "down"
+            ]
+    else
+        Html.text ""
+
+
+touchButton : Msg -> String -> Html Msg
+touchButton msg text =
+    button
+        [ class "button button--small"
+        , onTouchStart msg
+        ]
+        [ Html.text text ]
+
+
+onTouchStart : Msg -> Html.Attribute Msg
+onTouchStart msg =
+    Html.Events.on "touchstart" (Json.Decode.succeed msg)
 
 
 {-| render overlay with success message
