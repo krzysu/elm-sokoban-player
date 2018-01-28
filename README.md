@@ -27,17 +27,6 @@ Run tests (optional with watch)
 
 Pull requests are welcome!
 
-## TODO
-
-- rewrite rendering
-- touch support
-- scale to screen size
-- HUD
-- player animation
-- more stats: remaining boxes count, box pushes
-- level solver
-- make sure it works cross browser (safari rendering bug, IE not rendering at all)
-
 ## Some docs
 
 ### Level data structures and transformations
@@ -137,7 +126,7 @@ This is `ShortStringLevel` format mapped to more url-friendly symbols, see table
 
 ## License
 
-(c) Copyright 2015 Kris Urbas [@krzysu](http://twitter.com/krzysu), all rights reserved.
+(c) Copyright 2018 Kris Urbas [@krzysu](http://twitter.com/krzysu), all rights reserved.
 
 This game is open sourced for learning and recruitment purposes. Do not use for profit!
 
