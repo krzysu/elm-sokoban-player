@@ -1,17 +1,19 @@
 module View exposing (view, getGameBlockSize)
 
-import Html exposing (Html, text, div, span, button, h1, textarea, a, br)
+import Html exposing (Html, div, button, h1, textarea, a)
 import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (class)
+import Svg exposing (Svg, svg, node)
+import Svg.Attributes
 import Array exposing (Array)
 import Dict
 import Window
+import Markdown
 import Level exposing (getViewLevelFromEncodedLevel)
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..))
 import TouchEvents
 import Json.Decode
 import LevelView
-import Markdown
 
 
 type alias Config =
@@ -55,15 +57,16 @@ gamePage model =
         , div [ class "game-hud" ]
             [ div [ class "game-hud__stats" ]
                 [ stats model ]
-            , div [ class "game-hud__buttons" ]
-                [ div [ class "game-hud__buttons-item" ] [ undoButton model ]
-                , div [ class "game-hud__buttons-item" ] [ resetButton ]
-                , div [ class "game-hud__buttons-item" ] [ menuButton ]
+            , div [ class "game-hud__top-left" ]
+                [ buttonWithIcon ShowLevelSelectPage "#hudMenu" "menu"
                 ]
-            , if model.isTouchDevice then
-                onScreenControls
-              else
-                Html.text ""
+            , div [ class "game-hud__top-right" ]
+                [ buttonWithIcon RestartLevel "#hudRestart" "restart (esc)"
+                ]
+            , div [ class "game-hud__bottom-left" ]
+                [ undoButton model
+                ]
+            , onScreenControls
             ]
         , winOverlay model
         ]
@@ -118,34 +121,43 @@ levelCount model =
         "level " ++ currentLevel ++ "/" ++ levelsCount
 
 
+bestMovesCount : Maybe LevelData -> String
+bestMovesCount levelData =
+    let
+        bestMovesCount =
+            levelData
+                |> Maybe.map .bestMovesCount
+                |> Maybe.withDefault 0
+                |> toString
+    in
+        "best score: " ++ bestMovesCount
+
+
 undoButton : Model -> Html Msg
 undoButton model =
     button
         [ class "button"
         , onClick Undo
         , Html.Attributes.disabled (List.isEmpty model.history)
+        , Html.Attributes.title "undo move (u)"
         ]
-        [ Html.text "undo (u)" ]
-
-
-resetButton : Html Msg
-resetButton =
-    button
-        [ class "button"
-        , onClick RestartLevel
+        [ svg [ Svg.Attributes.class "button__icon" ]
+            [ node "use"
+                [ Svg.Attributes.xlinkHref "#hudUndo" ]
+                []
+            ]
         ]
-        [ Html.text "restart (esc)" ]
 
 
 onScreenControls : Html Msg
 onScreenControls =
-    div [ class "game-hud__controls on-screen-controls" ]
-        [ touchButton (Move Up) "up"
+    div [ class "game-hud__bottom-right on-screen-controls" ]
+        [ buttonWithIcon (Move Up) "#hudUp" ""
         , div [ class "on-screen-controls__buttons" ]
-            [ touchButton (Move Left) "left"
-            , touchButton (Move Right) "right"
+            [ buttonWithIcon (Move Left) "#hudLeft" ""
+            , buttonWithIcon (Move Down) "#hudDown" ""
+            , buttonWithIcon (Move Right) "#hudRight" ""
             ]
-        , touchButton (Move Down) "down"
         ]
 
 
@@ -161,6 +173,21 @@ touchButton msg text =
 onTouchStart : Msg -> Html.Attribute Msg
 onTouchStart msg =
     Html.Events.on "touchstart" (Json.Decode.succeed msg)
+
+
+buttonWithIcon : Msg -> String -> String -> Svg Msg
+buttonWithIcon msg svgId text =
+    button
+        [ class "button"
+        , onClick msg
+        , Html.Attributes.title text
+        ]
+        [ svg [ Svg.Attributes.class "button__icon" ]
+            [ node "use"
+                [ Svg.Attributes.xlinkHref svgId ]
+                []
+            ]
+        ]
 
 
 {-| render overlay with success message
@@ -195,15 +222,6 @@ winOverlayStats model =
         div [ class "text margin" ]
             [ Html.text (String.join " | " stats)
             ]
-
-
-menuButton : Html Msg
-menuButton =
-    button
-        [ class "button"
-        , onClick (ShowLevelSelectPage)
-        ]
-        [ Html.text "menu" ]
 
 
 levelSelectPage : Model -> Html Msg
@@ -248,18 +266,6 @@ levelPreviewItem levelIndex ( levelId, viewLevel, maybeLevelData ) =
             ]
             [ Html.text "X" ]
         ]
-
-
-bestMovesCount : Maybe LevelData -> String
-bestMovesCount levelData =
-    let
-        bestMovesCount =
-            levelData
-                |> Maybe.map .bestMovesCount
-                |> Maybe.withDefault 0
-                |> toString
-    in
-        "best score: " ++ bestMovesCount
 
 
 userLevelInput : Model -> Html Msg

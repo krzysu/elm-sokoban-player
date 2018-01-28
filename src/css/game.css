@@ -19,34 +19,41 @@
   top: 0;
   left: 0;
   right: 0;
+  padding: 0 4em;
   text-align: center;
 }
 
-.game-hud__buttons {
+.game-hud__top-left {
   position: fixed;
-  left: 0;
-  bottom: 0;
+  top: 0.2em;
+  left: 0.2em;
 }
 
-.game-hud__buttons-item {
-  margin: 0.2em 0
+.game-hud__top-right {
+  position: fixed;
+  top: 0.2em;
+  right: 0.2em;
 }
 
-.game-hud__controls {
+.game-hud__bottom-left {
+  position: fixed;
+  bottom: 0.2em;
+  left: 0.2em;
+}
+
+.game-hud__bottom-right {
   position: fixed;
   bottom: 0;
-  right: 0;
+  right: 0.1em;
 }
 
-.is-touch .game-hud__buttons,
-.is-touch .game-hud__controls {
+.is-touch .game-hud .button {
   opacity: 0.7;
 }
 
 /* on screen controls */
 .on-screen-controls {
   text-align: center;
-  user-select: none;
 }
 
 .on-screen-controls__buttons {

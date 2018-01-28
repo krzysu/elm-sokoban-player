@@ -10,7 +10,6 @@ import { getLevels, storeLevels, getLevelsData, storeLevelsData} from './js/stor
 const app = Main.embed(document.getElementById('root'), {
     levels: getLevels(),
     levelsData: getLevelsData(),
-    isTouchDevice: isTouchDevice(),
 });
 
 // subscribe to ports

@@ -48,9 +48,16 @@ textarea:focus {
 h1 {
   font-family: 'Fredoka One', cursive;
   font-weight: 400;
-  font-size: 2.5em;
+  font-size: 1.5em;
   line-height: 1.3em;
 }
+
+@media only screen and (min-width: 767px) {
+  h1 {
+    font-size: 2.5em;
+  }
+}
+
 
 /* */
 .header {
@@ -78,19 +85,27 @@ h1 {
       1px 1px 0 #4A3429;
 }
 
+@media only screen and (min-width: 767px) {
+  .text {
+    font-size: 1.3em
+  }
+}
+
+
 /* button */
 .button {
   font-family: 'Fredoka One', sans-serif;
   font-size: 1em;
-  line-height: 1.5em;
-  padding: 0.5em 1em;
+  line-height: 1.1em;
+  padding: 0.8em 1em;
   background-color: #4A3429;
   color: #FFDEB3;
   border: 0;
   cursor: pointer;
   outline: 0;
   border-radius: 0.3em;
-  touch-action: manipulation;
+  touch-action: none;
+  user-select: none;
 }
 
 .button:hover {
@@ -104,6 +119,19 @@ h1 {
 
 .button[disabled]:hover {
   cursor: default;
+}
+
+.button__icon {
+  width: 1em;
+  height: 1em;
+  fill:  #FFDEB3;
+}
+
+@media only screen and (min-width: 767px) {
+  .button__icon {
+    width: 1.5em;
+    height: 1.5em;
+  }
 }
 
 .button-group .button {

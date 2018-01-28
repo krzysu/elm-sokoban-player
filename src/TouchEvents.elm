@@ -46,7 +46,7 @@ getDirection : Touch -> Touch -> Maybe Direction
 getDirection startTouch endTouch =
     let
         treshold =
-            50
+            30
 
         diffX =
             endTouch.clientX - startTouch.clientX

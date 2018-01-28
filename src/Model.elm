@@ -115,7 +115,6 @@ loadGameWithLevel encodedLevel model =
         , levelsData = model.levelsData
         , windowSize = model.windowSize
         , lastTouch = model.lastTouch
-        , isTouchDevice = model.isTouchDevice
         }
 
 
@@ -149,7 +148,6 @@ initModel flags maybeLevels levelsData =
           , levelsData = levelsData
           , windowSize = Window.Size 0 0
           , lastTouch = TouchEvents.Touch 0 0
-          , isTouchDevice = flags.isTouchDevice
           }
         , Task.perform WindowSizeUpdated Window.size
         )
