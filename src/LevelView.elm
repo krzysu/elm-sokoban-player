@@ -7,17 +7,6 @@ import Set exposing (Set)
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..))
 
 
-type alias Config =
-    { svgSpritePath : String
-    }
-
-
-config : Config
-config =
-    { svgSpritePath = "sokoban.sprite.svg"
-    }
-
-
 renderLevel : Int -> IViewLevel a -> Html Msg
 renderLevel =
     renderLevelWithDirection Down
@@ -53,7 +42,7 @@ blockBySizeAndId blockSize svgId block =
             }
     in
         node "use"
-            [ Svg.Attributes.xlinkHref (config.svgSpritePath ++ svgId)
+            [ Svg.Attributes.xlinkHref svgId
             , Svg.Attributes.x (toString blockPosition.x)
             , Svg.Attributes.y (toString blockPosition.y)
             , Svg.Attributes.width (toString blockSize)

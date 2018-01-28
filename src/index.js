@@ -1,5 +1,6 @@
 import './css/main.css';
 import './css/game.css';
+// import svgSpritePath from './assets/sokoban.sprite.svg';
 import { Main } from './Main.elm';
 import registerServiceWorker from './js/registerServiceWorker';
 import isTouchDevice from './js/isTouchDevice';

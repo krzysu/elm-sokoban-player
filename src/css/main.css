@@ -5,7 +5,7 @@ body {
   margin: 0;
   color: #4A3429;
   background-color: #789496;
-  background-image: url(../all-icons/floorGrey.svg);
+  background-image: url(../assets/floorGrey.svg);
   background-repeat: repeat;
 }
 
@@ -120,7 +120,7 @@ h1 {
 }
 
 .hidden {
-  position: absolute; 
+  position: absolute;
   overflow: hidden;
   clip: rect(0 0 0 0);
   height: 1px; width: 1px;

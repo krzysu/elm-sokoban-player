@@ -5,7 +5,7 @@
   "scripts": {
     "build": "elm-app build",
     "start": "elm-app start",
-    "build-svg": "svg-sprite --config svg-sprite.config.json src/icons/*.svg",
+    "build-svg": "svg-sprite --config svg-sprite.config.json src/sprite-icons/*.svg",
     "test": "elm-app test"
   },
   "repository": {

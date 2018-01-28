@@ -1,7 +1,7 @@
 {
     "mode": {
         "symbol": {
-            "dest": "public",
+            "dest": "src/assets",
             "sprite": "sokoban.sprite.svg"
         }
     }
