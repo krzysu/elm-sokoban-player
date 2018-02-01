@@ -69,19 +69,14 @@ getInitialLevels : LevelCollection
 getInitialLevels =
     let
         stringLevels =
-            [ stringLevel1
+            [ stringLevel0
+            , stringLevel1
             , stringLevel2
             , stringLevel3
-            , stringLevel4
-            , stringLevel5
             ]
-
-        levelFromXml =
-            getLevelFromXml xmlLevel
     in
         stringLevels
             |> List.filterMap getLevelFromString
-            |> (::) levelFromXml
             |> List.map .id
             |> Array.fromList
 
@@ -94,6 +89,19 @@ basicStringLevel =
 #####
 #@$.#
 #####
+"""
+
+
+stringLevel0 : String
+stringLevel0 =
+    """
+#############
+#.          #
+#     $     #
+#           #
+#     @     #
+#           #
+#############
 """
 
 

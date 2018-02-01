@@ -26,6 +26,7 @@ render model =
         , div [ class "level-list" ]
             (MoreLevelsCollection.getLevels
                 |> filterOutLevelsAlreadyInPlaylist model.levels
+                |> Array.toList
                 |> List.map
                     (\encodedLevel ->
                         ( encodedLevel
@@ -38,21 +39,16 @@ render model =
         ]
 
 
-filterOutLevelsAlreadyInPlaylist : LevelCollection -> LevelCollection -> List EncodedLevel
+filterOutLevelsAlreadyInPlaylist : LevelCollection -> LevelCollection -> LevelCollection
 filterOutLevelsAlreadyInPlaylist playlistLevels moreLevels =
     let
         playlistSet =
             playlistLevels
                 |> Array.toList
                 |> Set.fromList
-
-        moreLevelsSet =
-            moreLevels
-                |> Array.toList
-                |> Set.fromList
     in
-        Set.diff moreLevelsSet playlistSet
-            |> Set.toList
+        moreLevels
+            |> Array.filter (\levelId -> not (Set.member levelId playlistSet))
 
 
 levelItem : ( String, IViewLevel a, Maybe LevelData ) -> Html Msg
