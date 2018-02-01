@@ -17,7 +17,7 @@ type Msg
     = NoOp
     | Move MoveDirection
     | Undo
-    | ShowLevelSelectPage
+    | ShowPage Page
     | RestartLevel
     | LoadNextLevel
     | LoadLevel Int -- load by level index
@@ -111,4 +111,6 @@ type alias LevelDataCollection =
 
 type Page
     = GamePage
-    | LevelSelectPage
+    | PlaylistPage
+    | HomePage
+    | MoreLevelsPage

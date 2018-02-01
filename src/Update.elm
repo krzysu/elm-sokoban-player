@@ -16,9 +16,9 @@ import Types
         )
 import LevelCollection
 import Storage
-import Model
 import Level exposing (getEncodedLevelFromString)
 import TouchEvents
+import Router
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -49,8 +49,8 @@ update msg model =
             , Cmd.none
             )
 
-        ShowLevelSelectPage ->
-            ( model, Navigation.newUrl "/" )
+        ShowPage page ->
+            Router.go page model
 
         RestartLevel ->
             loadLevel model.currentLevelIndex model
@@ -93,7 +93,7 @@ update msg model =
                         )
 
         UrlChange newLocation ->
-            Model.updateModelFromLocation newLocation ( model, Cmd.none )
+            Router.match newLocation ( model, Cmd.none )
 
         WindowSizeUpdated windowSize ->
             ( { model | windowSize = windowSize }

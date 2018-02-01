@@ -34,7 +34,7 @@ updateModelFromLocation location ( model, cmd ) =
                 checkAndLoadGameWithLevel encodedLevel ( model, cmd )
 
             Nothing ->
-                ( { model | currentPage = LevelSelectPage }
+                ( { model | currentPage = HomePage }
                 , cmd
                 )
 
@@ -143,7 +143,7 @@ initModel flags maybeLevels levelsData =
           , currentLevelIndex = 0
           , movesCount = 0
           , history = []
-          , currentPage = LevelSelectPage
+          , currentPage = HomePage
           , stringLevelFromUserInput = ""
           , levelsData = levelsData
           , windowSize = Window.Size 0 0

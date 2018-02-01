@@ -4,9 +4,10 @@ import Navigation exposing (Location)
 import Types exposing (Model, Msg(..), Flags, LevelCollection, LevelDataCollection)
 import View exposing (view)
 import Update exposing (update)
-import Model exposing (initModel, updateModelFromLocation)
+import Model
 import Sub exposing (subscriptions)
 import Storage exposing (decodeLevelCollection, decodeLevelDataCollection)
+import Router
 
 
 init : Flags -> Location -> ( Model, Cmd Msg )
@@ -22,9 +23,9 @@ init flags location =
             decodeLevelDataCollection flags.levelsData
 
         modelWithCmd =
-            initModel flags levels levelsData
+            Model.initModel flags levels levelsData
     in
-        updateModelFromLocation location modelWithCmd
+        Router.match location modelWithCmd
 
 
 main : Program Flags Model Msg

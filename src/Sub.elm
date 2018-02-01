@@ -54,5 +54,5 @@ keyPressed model code =
                     _ ->
                         NoOp
 
-        LevelSelectPage ->
+        _ ->
             NoOp
