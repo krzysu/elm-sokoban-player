@@ -61,6 +61,15 @@ update msg model =
         LoadLevel levelIndex ->
             loadLevel levelIndex model
 
+        AddLevel levelId ->
+            let
+                newModel =
+                    { model | levels = LevelCollection.appendLevel levelId model.levels }
+            in
+                ( newModel
+                , Storage.storeLevels newModel.levels
+                )
+
         RemoveLevel levelId ->
             let
                 newModel =

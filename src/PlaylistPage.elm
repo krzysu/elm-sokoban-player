@@ -7,30 +7,20 @@ import Array
 import Dict
 import Markdown
 import Level exposing (getViewLevelFromEncodedLevel)
-import Types exposing (Model, Msg(..), IViewLevel, LevelData)
+import Types exposing (Model, Msg(..), IViewLevel, LevelData, Page(..))
 import LevelView
 import StatsView
-
-
-type alias Config =
-    { previewBlockSize : Int
-    }
-
-
-config : Config
-config =
-    { previewBlockSize = 20
-    }
+import UI
 
 
 render : Model -> Html Msg
 render model =
-    div []
-        [ div [ class "header" ]
-            [ h1 [ class "headline" ] [ Html.text "Edit your playlist" ]
-            , div [ class "text" ] [ Html.text "add and remove levels, or click one to play it" ]
+    div [ class "page" ]
+        [ div [ class "page-header" ]
+            [ h1 [ class "headline" ] [ Html.text "Your playlist" ]
+            , div [ class "text" ] [ Html.text "add and remove levels or click one to play it" ]
             ]
-        , div [ class "level-preview-list" ]
+        , div [ class "level-list" ]
             (model.levels
                 |> Array.map
                     (\encodedLevel ->
@@ -43,27 +33,26 @@ render model =
                 |> Array.toList
             )
         , userLevelInput model
+        , moreLevelsButton
         , footer
         ]
 
 
 levelPreviewItem : Int -> ( String, IViewLevel a, Maybe LevelData ) -> Html Msg
 levelPreviewItem levelIndex ( levelId, viewLevel, maybeLevelData ) =
-    div [ class "level-preview-item" ]
+    div [ class "level-list-item" ]
         [ div
-            [ class "level-preview-item__level"
+            [ class "level-list-item__level"
             , onClick (LoadLevel levelIndex)
             ]
-            [ LevelView.renderLevel config.previewBlockSize viewLevel
+            [ LevelView.renderLevel 20 viewLevel
             , div [ class "centered" ]
                 [ Html.text (StatsView.bestMovesCount maybeLevelData)
                 ]
             ]
-        , button
-            [ class "button level-preview-item__delete-button"
-            , onClick (RemoveLevel levelId)
+        , div [ class "level-list-item__button" ]
+            [ UI.button (RemoveLevel levelId) "X"
             ]
-            [ Html.text "X" ]
         ]
 
 
@@ -92,6 +81,17 @@ userLevelInput model =
                 ]
                 [ Html.text "add level" ]
             ]
+        ]
+
+
+moreLevelsButton : Html Msg
+moreLevelsButton =
+    div [ class "centered button-group margin" ]
+        [ button
+            [ class "button"
+            , onClick (ShowPage MoreLevelsPage)
+            ]
+            [ Html.text "or pick from the list" ]
         ]
 
 

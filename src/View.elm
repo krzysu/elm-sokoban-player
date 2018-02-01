@@ -14,6 +14,7 @@ import LevelView
 import HomePage
 import PlaylistPage
 import MoreLevelsPage
+import UI
 
 
 type alias Config =
@@ -64,13 +65,13 @@ gamePage model =
         , div [ class "game-hud" ]
             [ div [ class "game-hud__stats" ]
                 [ stats model ]
-            , div [ class "game-hud__top-left" ]
-                [ buttonWithIcon (ShowPage PlaylistPage) "#hudMenu" "menu"
+            , div [ class "page__top-left" ]
+                [ UI.buttonWithIcon (ShowPage PlaylistPage) "#iconList" "menu"
                 ]
-            , div [ class "game-hud__top-right" ]
-                [ buttonWithIcon RestartLevel "#hudRestart" "restart (esc)"
+            , div [ class "page__top-right" ]
+                [ UI.buttonWithIcon RestartLevel "#iconRestart" "restart (esc)"
                 ]
-            , div [ class "game-hud__bottom-left" ]
+            , div [ class "page__bottom-left" ]
                 [ undoButton model
                 ]
             , onScreenControls
@@ -150,7 +151,7 @@ undoButton model =
         ]
         [ svg [ Svg.Attributes.class "button__icon" ]
             [ node "use"
-                [ Svg.Attributes.xlinkHref "#hudUndo" ]
+                [ Svg.Attributes.xlinkHref "#iconUndo" ]
                 []
             ]
         ]
@@ -158,27 +159,12 @@ undoButton model =
 
 onScreenControls : Html Msg
 onScreenControls =
-    div [ class "game-hud__bottom-right on-screen-controls" ]
-        [ buttonWithIcon (Move Up) "#hudUp" ""
+    div [ class "page__bottom-right on-screen-controls" ]
+        [ UI.buttonWithIcon (Move Up) "#iconUp" ""
         , div [ class "on-screen-controls__buttons" ]
-            [ buttonWithIcon (Move Left) "#hudLeft" ""
-            , buttonWithIcon (Move Down) "#hudDown" ""
-            , buttonWithIcon (Move Right) "#hudRight" ""
-            ]
-        ]
-
-
-buttonWithIcon : Msg -> String -> String -> Svg Msg
-buttonWithIcon msg svgId text =
-    button
-        [ class "button"
-        , onClick msg
-        , Html.Attributes.title text
-        ]
-        [ svg [ Svg.Attributes.class "button__icon" ]
-            [ node "use"
-                [ Svg.Attributes.xlinkHref svgId ]
-                []
+            [ UI.buttonWithIcon (Move Left) "#iconLeft" ""
+            , UI.buttonWithIcon (Move Down) "#iconDown" ""
+            , UI.buttonWithIcon (Move Right) "#iconRight" ""
             ]
         ]
 
@@ -193,11 +179,7 @@ winOverlay model =
                 [ div [ class "ribbon" ]
                     [ Html.text "Solved!" ]
                 , winOverlayStats model
-                , button
-                    [ class "button"
-                    , onClick LoadNextLevel
-                    ]
-                    [ Html.text "next (enter)" ]
+                , UI.button LoadNextLevel "next (enter)"
                 ]
             ]
     else

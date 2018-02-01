@@ -1,0 +1,66 @@
+
+.page-header {
+  padding: 0 4em 1em;
+  text-align: center;
+}
+
+@media only screen and (min-width: 767px) {
+  .page-header {
+    padding: 1em 4em 2em;
+  }
+}
+
+/* page regions for buttons */
+.page__top-left {
+  position: fixed;
+  top: 0.2em;
+  left: 0.2em;
+}
+
+.page__top-right {
+  position: fixed;
+  top: 0.2em;
+  right: 0.2em;
+}
+
+.page__bottom-left {
+  position: fixed;
+  bottom: 0.2em;
+  left: 0.2em;
+}
+
+.page__bottom-right {
+  position: fixed;
+  bottom: 0;
+  right: 0.1em;
+}
+
+/* level list */
+.level-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.level-list-item {
+  margin: 2em;
+  position: relative;
+}
+
+.level-list-item__level {
+  cursor: pointer;
+  /*background-color: #789496;*/
+  /*background-image: url(all-icons/floorGrey.svg);*/
+  background-repeat: repeat;
+  opacity: 0.8;
+}
+
+.level-list-item__level:hover {
+  opacity: 1;
+}
+
+.level-list-item__button {
+  position: absolute;
+  right: -25px;
+  top: -20px;
+}

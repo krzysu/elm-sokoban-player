@@ -50,32 +50,17 @@ h1 {
   font-weight: 400;
   font-size: 1.5em;
   line-height: 1.3em;
+  margin: 0;
 }
 
 @media only screen and (min-width: 767px) {
   h1 {
-    font-size: 2.5em;
+    font-size: 2em;
   }
 }
 
-
 /* */
-.header {
-  margin-bottom: 2em;
-  text-align: center;
-}
-
-.headline {
-    text-align: center;
-    color: #FFDEB3; /* #D8443D; red */
-    text-shadow:
-      -2px -2px 0 #4A3429,
-       2px -2px 0 #4A3429,
-       -2px 2px 0 #4A3429,
-        2px 2px 0 #4A3429;
-    margin: 0;
-}
-
+.headline,
 .text {
   color: #FFDEB3;
   text-shadow:
@@ -89,54 +74,6 @@ h1 {
   .text {
     font-size: 1.3em
   }
-}
-
-
-/* button */
-.button {
-  font-family: 'Fredoka One', sans-serif;
-  font-size: 1em;
-  line-height: 1.1em;
-  padding: 0.8em 1em;
-  background-color: #4A3429;
-  color: #FFDEB3;
-  border: 0;
-  cursor: pointer;
-  outline: 0;
-  border-radius: 0.3em;
-  touch-action: manipulation;
-  user-select: none;
-}
-
-.button:hover {
-  background-color: #563c2f;
-}
-
-.button[disabled] {
-  cursor: default;
-  background-color: rgba(74, 52, 41, 0.8);
-}
-
-.button[disabled]:hover {
-  cursor: default;
-}
-
-.button__icon {
-  width: 1em;
-  height: 1em;
-  fill:  #FFDEB3;
-}
-
-@media only screen and (min-width: 767px) {
-  .button__icon {
-    width: 1.5em;
-    height: 1.5em;
-  }
-}
-
-.button-group .button {
-  margin-left: 0.5em;
-  margin-right: 0.5em;
 }
 
 /* helpers */
@@ -156,39 +93,7 @@ h1 {
   margin: -1px; padding: 0; border: 0;
 }
 
-
 /* */
-.level-preview-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 80%;
-  margin: 0 auto;
-}
-
-.level-preview-item {
-  margin: 2em;
-  position: relative;
-}
-
-.level-preview-item__level {
-  cursor: pointer;
-  /*background-color: #789496;*/
-  /*background-image: url(all-icons/floorGrey.svg);*/
-  background-repeat: repeat;
-  opacity: 0.8;
-}
-
-.level-preview-item__level:hover {
-  opacity: 1;
-}
-
-.level-preview-item__delete-button {
-  position: absolute;
-  right: -25px;
-  top: -20px;
-}
-
 .footer {
   text-align: center;
   margin: 5em 0 1em;

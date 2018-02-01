@@ -1,0 +1,46 @@
+/* button */
+.button {
+  font-family: 'Fredoka One', sans-serif;
+  font-size: 1em;
+  line-height: 1.1em;
+  padding: 0.8em 1em;
+  background-color: #4A3429;
+  color: #FFDEB3;
+  border: 0;
+  cursor: pointer;
+  outline: 0;
+  border-radius: 0.3em;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.button:hover {
+  background-color: #563c2f;
+}
+
+.button[disabled] {
+  cursor: default;
+  background-color: rgba(74, 52, 41, 0.8);
+}
+
+.button[disabled]:hover {
+  cursor: default;
+}
+
+.button__icon {
+  width: 1em;
+  height: 1em;
+  fill:  #FFDEB3;
+}
+
+@media only screen and (min-width: 767px) {
+  .button__icon {
+    width: 1.5em;
+    height: 1.5em;
+  }
+}
+
+.button-group .button {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}

@@ -21,7 +21,8 @@ type Msg
     | RestartLevel
     | LoadNextLevel
     | LoadLevel Int -- load by level index
-    | RemoveLevel String
+    | AddLevel EncodedLevel
+    | RemoveLevel EncodedLevel
     | ChangeLevelFromUserInput String
     | AddLevelFromUserInput
     | UrlChange Location
