@@ -45,7 +45,9 @@ textarea:focus {
   background-color: #f4f4f4;
 }
 
-h1 {
+h1,
+h2,
+h3 {
   font-family: 'Fredoka One', cursive;
   font-weight: 400;
   font-size: 1.5em;
@@ -53,10 +55,31 @@ h1 {
   margin: 0;
 }
 
+h2 {
+  font-size: 1.2em;
+}
+
+h3 {
+  font-size: 1.1em;
+}
+
 @media only screen and (min-width: 767px) {
   h1 {
     font-size: 2em;
   }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  h3 {
+    font-size: 1.3em;
+  }
+}
+
+ul {
+  margin: 0;
+  text-align: left;
 }
 
 /* */
@@ -91,12 +114,6 @@ h1 {
   clip: rect(0 0 0 0);
   height: 1px; width: 1px;
   margin: -1px; padding: 0; border: 0;
-}
-
-/* */
-.footer {
-  text-align: center;
-  margin: 5em 0 1em;
 }
 
 /* */

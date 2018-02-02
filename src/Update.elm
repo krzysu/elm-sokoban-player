@@ -11,6 +11,7 @@ import Types
         , EncodedLevel
         , GameState
         , Page(..)
+        , Overlay(..)
         , LevelData
         , MoveDirection(..)
         )
@@ -51,6 +52,11 @@ update msg model =
 
         ShowPage page ->
             Router.go page model
+
+        ShowOverlay overlay ->
+            ( { model | currentOverlay = overlay }
+            , Cmd.none
+            )
 
         RestartLevel ->
             loadLevelById model.currentEncodedLevel model

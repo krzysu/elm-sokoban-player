@@ -5,18 +5,21 @@ import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (class)
 import Array
 import Dict
-import Markdown
 import Level exposing (getViewLevelFromEncodedLevel)
-import Types exposing (Model, Msg(..), IViewLevel, LevelData, Page(..))
+import Types exposing (Model, Msg(..), IViewLevel, LevelData, Page(..), Overlay(..))
 import Views.LevelView as LevelView
 import Views.UI as UI
 import Views.StatsView as StatsView
+import Views.OverlayView as OverlayView
 
 
 render : Model -> Html Msg
 render model =
     div [ class "page" ]
-        [ div [ class "page-header" ]
+        [ div [ class "page__top-right" ]
+            [ UI.buttonWithIcon (ShowOverlay InfoOverlay) "#iconInfo" "info"
+            ]
+        , div [ class "page-header" ]
             [ h1 [ class "headline" ] [ Html.text "Your playlist" ]
             , div [ class "text" ] [ Html.text "add and remove levels or click one to play it" ]
             ]
@@ -34,7 +37,7 @@ render model =
             )
         , userLevelInput model
         , moreLevelsButton
-        , footer
+        , OverlayView.overlayManager model
         ]
 
 
@@ -93,16 +96,3 @@ moreLevelsButton =
             ]
             [ Html.text "or pick from the list" ]
         ]
-
-
-footer : Html Msg
-footer =
-    Markdown.toHtml [ class "footer" ] """
-designed and built by [Kris Urbas @krzysu](https://blog.myviews.pl)
-with little help from [Elm Berlin](https://www.meetup.com/Elm-Berlin/) meetup group <br>
-feedback is welcome! contact me by email or [twitter](https://twitter.com/krzysu)
-
-original Sokoban game written by Hiroyuki Imabayashi © 1982 by THINKING RABBIT Inc. JAPAN
-
-thanks to [Kenney.nl](http://www.kenney.nl/) for free game assets
-"""

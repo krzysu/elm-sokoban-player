@@ -13,6 +13,7 @@ import Types
         , LevelCollection
         , LevelDataCollection
         , Page(..)
+        , Overlay(..)
         , MoveDirection(..)
         )
 import LevelCollection
@@ -111,6 +112,7 @@ loadGameWithLevel encodedLevel model =
         , movesCount = 0
         , history = []
         , currentPage = GamePage
+        , currentOverlay = NoOverlay
         , stringLevelFromUserInput = ""
         , levelsData = model.levelsData
         , windowSize = model.windowSize
@@ -144,6 +146,7 @@ initModel flags maybeLevels levelsData =
           , movesCount = 0
           , history = []
           , currentPage = HomePage
+          , currentOverlay = NoOverlay
           , stringLevelFromUserInput = ""
           , levelsData = levelsData
           , windowSize = Window.Size 0 0

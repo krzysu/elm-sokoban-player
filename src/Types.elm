@@ -18,6 +18,7 @@ type Msg
     | Move MoveDirection
     | Undo
     | ShowPage Page
+    | ShowOverlay Overlay
     | RestartLevel
     | LoadNextLevel
     | LoadLevel EncodedLevel
@@ -41,6 +42,7 @@ type alias Model =
         , movesCount : Int
         , history : List GameState
         , currentPage : Page
+        , currentOverlay : Overlay
         , stringLevelFromUserInput : String
         , levelsData : LevelDataCollection
         , windowSize : Window.Size
@@ -115,3 +117,8 @@ type Page
     | PlaylistPage
     | HomePage
     | MoreLevelsPage
+
+
+type Overlay
+    = NoOverlay
+    | InfoOverlay

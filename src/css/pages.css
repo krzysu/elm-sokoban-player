@@ -1,4 +1,4 @@
-
+/* pages */
 .page-header {
   padding: 0 4em 1em;
   text-align: center;
@@ -67,4 +67,9 @@
   position: absolute;
   right: -25px;
   top: -20px;
+}
+
+/* overlays */
+.is-touch .keybinding {
+  display: none;
 }
