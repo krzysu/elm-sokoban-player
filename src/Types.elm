@@ -20,7 +20,7 @@ type Msg
     | ShowPage Page
     | RestartLevel
     | LoadNextLevel
-    | LoadLevel Int -- load by level index
+    | LoadLevel EncodedLevel
     | AddLevel EncodedLevel
     | RemoveLevel EncodedLevel
     | ChangeLevelFromUserInput String

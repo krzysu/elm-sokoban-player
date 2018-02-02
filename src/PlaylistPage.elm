@@ -29,7 +29,7 @@ render model =
                         , Dict.get encodedLevel model.levelsData
                         )
                     )
-                |> Array.indexedMap levelPreviewItem
+                |> Array.map levelItem
                 |> Array.toList
             )
         , userLevelInput model
@@ -38,12 +38,12 @@ render model =
         ]
 
 
-levelPreviewItem : Int -> ( String, IViewLevel a, Maybe LevelData ) -> Html Msg
-levelPreviewItem levelIndex ( levelId, viewLevel, maybeLevelData ) =
+levelItem : ( String, IViewLevel a, Maybe LevelData ) -> Html Msg
+levelItem ( levelId, viewLevel, maybeLevelData ) =
     div [ class "level-list-item" ]
         [ div
             [ class "level-list-item__level"
-            , onClick (LoadLevel levelIndex)
+            , onClick (LoadLevel levelId)
             ]
             [ LevelView.renderLevel 20 viewLevel
             , div [ class "centered" ]

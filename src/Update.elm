@@ -53,13 +53,13 @@ update msg model =
             Router.go page model
 
         RestartLevel ->
-            loadLevel model.currentLevelIndex model
+            loadLevelById model.currentEncodedLevel model
 
         LoadNextLevel ->
-            loadLevel (model.currentLevelIndex + 1) model
+            loadLevelByIndex (model.currentLevelIndex + 1) model
 
-        LoadLevel levelIndex ->
-            loadLevel levelIndex model
+        LoadLevel levelId ->
+            loadLevelById levelId model
 
         AddLevel levelId ->
             let
@@ -279,8 +279,18 @@ undoLastMove model =
                 }
 
 
-loadLevel : Int -> Model -> ( Model, Cmd Msg )
-loadLevel levelIndex model =
+loadLevelById : EncodedLevel -> Model -> ( Model, Cmd Msg )
+loadLevelById levelId model =
+    let
+        pathNameLevel =
+            levelId
+                |> (++) "/"
+    in
+        ( model, Navigation.newUrl pathNameLevel )
+
+
+loadLevelByIndex : Int -> Model -> ( Model, Cmd Msg )
+loadLevelByIndex levelIndex model =
     let
         pathNameLevel =
             LevelCollection.getLevel levelIndex model.levels

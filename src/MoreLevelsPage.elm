@@ -1,6 +1,7 @@
 module MoreLevelsPage exposing (render)
 
 import Html exposing (Html, div, h1)
+import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
 import Dict
 import Array
@@ -54,7 +55,10 @@ filterOutLevelsAlreadyInPlaylist playlistLevels moreLevels =
 levelItem : ( String, IViewLevel a, Maybe LevelData ) -> Html Msg
 levelItem ( levelId, viewLevel, maybeLevelData ) =
     div [ class "level-list-item" ]
-        [ div [ class "level-list-item__level" ]
+        [ div
+            [ class "level-list-item__level"
+            , onClick (LoadLevel levelId)
+            ]
             [ LevelView.renderLevel 20 viewLevel
             ]
         , div [ class "level-list-item__button" ]
