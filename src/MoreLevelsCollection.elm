@@ -40,20 +40,21 @@ getLevels =
             , stringLevel29
             , stringLevel19
             , stringLevel30
-
-            -- , stringLevel31
-            -- , stringLevel32
-            -- , stringLevel33
-            -- , stringLevel34
-            -- , stringLevel35
-            -- , stringLevel36
-            -- , stringLevel37
-            -- , stringLevel38
-            -- , stringLevel39
-            -- , stringLevel40
+            , stringLevel31
+            , stringLevel32
+            , stringLevel33
+            , stringLevel34
+            , stringLevel35
+            , stringLevel36
+            , stringLevel37
+            , stringLevel38
+            , stringLevel39
+            , stringLevel40
             ]
     in
         stringLevels
+            -- TODO pagination
+            |> List.take 20
             |> List.filterMap getLevelFromString
             |> List.map .id
             |> Array.fromList
@@ -634,14 +635,13 @@ stringLevel29 =
 #  $   $  $    $  #
 #  #   #   #   #  #
 ###################
-
 """
 
 
 stringLevel30 : String
 stringLevel30 =
     """
-      ###########
+       ###########
        #   #     #
 #####  #     $ $ #
 #   ##### $## # ##
@@ -828,7 +828,7 @@ stringLevel38 =
 stringLevel39 : String
 stringLevel39 =
     """
-            ######
+             ######
  #############....#
 ##   ##     ##....#
 #  $$##  $ @##....#
@@ -850,7 +850,7 @@ stringLevel39 =
 stringLevel40 : String
 stringLevel40 =
     """
-   ############
+    ############
     #          ##
     #  # #$$ $  #
     #$ #$#  ## @#

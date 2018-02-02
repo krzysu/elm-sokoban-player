@@ -11,26 +11,30 @@
 }
 
 /* page regions for buttons */
-.page__top-left {
+.page__top-left,
+.page__top-right,
+.page__bottom-left,
+.page__bottom-right {
   position: fixed;
+  z-index: 1;
+}
+
+.page__top-left {
   top: 0.2em;
   left: 0.2em;
 }
 
 .page__top-right {
-  position: fixed;
   top: 0.2em;
   right: 0.2em;
 }
 
 .page__bottom-left {
-  position: fixed;
   bottom: 0.2em;
   left: 0.2em;
 }
 
 .page__bottom-right {
-  position: fixed;
   bottom: 0;
   right: 0.1em;
 }

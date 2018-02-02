@@ -1,4 +1,4 @@
-module LevelView exposing (renderLevel, renderLevelWithDirection)
+module Views.LevelView exposing (renderLevel, renderLevelWithDirection)
 
 import Html exposing (Html)
 import Svg exposing (Svg, svg, node)

@@ -1,4 +1,4 @@
-module StatsView exposing (stats, bestMovesCount)
+module Views.StatsView exposing (stats, bestMovesCount)
 
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)

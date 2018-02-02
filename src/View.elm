@@ -5,16 +5,16 @@ import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
 import Svg.Attributes
-import Array exposing (Array)
 import Dict
 import Window
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..))
 import TouchEvents
-import LevelView
-import HomePage
-import PlaylistPage
-import MoreLevelsPage
-import UI
+import Views.LevelView as LevelView
+import Views.HomePage as HomePage
+import Views.PlaylistPage as PlaylistPage
+import Views.MoreLevelsPage as MoreLevelsPage
+import Views.UI as UI
+import Views.StatsView as StatsView
 
 
 type alias Config =
@@ -39,7 +39,7 @@ view model =
             gamePage model
 
         HomePage ->
-            -- HomePage.render model
+            -- TODO HomePage.render model
             PlaylistPage.render model
 
         PlaylistPage ->
@@ -64,7 +64,7 @@ gamePage model =
             ]
         , div [ class "game-hud" ]
             [ div [ class "game-hud__stats" ]
-                [ stats model ]
+                [ StatsView.stats model ]
             , div [ class "page__top-left" ]
                 [ UI.buttonWithIcon (ShowPage PlaylistPage) "#iconList" "menu"
                 ]
@@ -101,44 +101,6 @@ getGameBlockSize windowSize ( gameWidth, gameHeight ) =
             round config.minBlockSize
         else
             round possibleSize
-
-
-stats : Model -> Html Msg
-stats model =
-    let
-        stats =
-            [ levelCount model
-            , "moves: " ++ (toString model.movesCount)
-            , bestMovesCount (Dict.get model.currentEncodedLevel model.levelsData)
-            ]
-    in
-        div [ class "text" ]
-            [ Html.text (String.join " | " stats)
-            ]
-
-
-levelCount : Model -> String
-levelCount model =
-    let
-        levelsCount =
-            toString (Array.length model.levels)
-
-        currentLevel =
-            toString (model.currentLevelIndex + 1)
-    in
-        "level " ++ currentLevel ++ "/" ++ levelsCount
-
-
-bestMovesCount : Maybe LevelData -> String
-bestMovesCount levelData =
-    let
-        bestMovesCount =
-            levelData
-                |> Maybe.map .bestMovesCount
-                |> Maybe.withDefault 0
-                |> toString
-    in
-        "best score: " ++ bestMovesCount
 
 
 undoButton : Model -> Html Msg
@@ -179,7 +141,7 @@ winOverlay model =
                 [ div [ class "ribbon" ]
                     [ Html.text "Solved!" ]
                 , winOverlayStats model
-                , UI.button LoadNextLevel "next (enter)"
+                , UI.button LoadNextLevel "next"
                 ]
             ]
     else
@@ -191,7 +153,7 @@ winOverlayStats model =
     let
         stats =
             [ "moves: " ++ (toString model.movesCount)
-            , bestMovesCount (Dict.get model.currentEncodedLevel model.levelsData)
+            , StatsView.bestMovesCount (Dict.get model.currentEncodedLevel model.levelsData)
             ]
     in
         div [ class "text margin" ]

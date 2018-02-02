@@ -1,4 +1,4 @@
-module MoreLevelsPage exposing (render)
+module Views.MoreLevelsPage exposing (render)
 
 import Html exposing (Html, div, h1)
 import Html.Events exposing (onClick)
@@ -9,8 +9,8 @@ import Set
 import Types exposing (Model, Msg(..), LevelCollection, EncodedLevel, IViewLevel, LevelData, Page(..))
 import Level exposing (getViewLevelFromEncodedLevel)
 import MoreLevelsCollection
-import LevelView
-import UI
+import Views.LevelView as LevelView
+import Views.UI as UI
 
 
 render : Model -> Html Msg

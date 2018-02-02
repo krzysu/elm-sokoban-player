@@ -1,4 +1,4 @@
-module HomePage exposing (render)
+module Views.HomePage exposing (render)
 
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)

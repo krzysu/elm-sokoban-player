@@ -1,4 +1,4 @@
-module UI exposing (button, buttonWithIcon)
+module Views.UI exposing (button, buttonWithIcon)
 
 import Html exposing (Html)
 import Html.Events exposing (onClick)

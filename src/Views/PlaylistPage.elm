@@ -1,4 +1,4 @@
-module PlaylistPage exposing (render)
+module Views.PlaylistPage exposing (render)
 
 import Html exposing (Html, div, button, h1, textarea, a)
 import Html.Events exposing (onClick, onInput)
@@ -8,9 +8,9 @@ import Dict
 import Markdown
 import Level exposing (getViewLevelFromEncodedLevel)
 import Types exposing (Model, Msg(..), IViewLevel, LevelData, Page(..))
-import LevelView
-import StatsView
-import UI
+import Views.LevelView as LevelView
+import Views.UI as UI
+import Views.StatsView as StatsView
 
 
 render : Model -> Html Msg

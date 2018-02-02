@@ -81,17 +81,6 @@ getInitialLevels =
             |> Array.fromList
 
 
-{-| for testing only
--}
-basicStringLevel : String
-basicStringLevel =
-    """
-#####
-#@$.#
-#####
-"""
-
-
 stringLevel0 : String
 stringLevel0 =
     """
@@ -151,45 +140,6 @@ stringLevel3 =
 ##...    $  $   #
 #....  ##########
 ########
-"""
-
-
-stringLevel4 : String
-stringLevel4 =
-    """
-           ########
-           #  ....#
-############  ....#
-#    #  $ $   ....#
-# $$$#$  $ #  ....#
-#  $     $ #  ....#
-# $$ #$ $ $########
-#  $ #     #
-## #########
-#    #    ##
-#     $   ##
-#  $$#$$  @#
-#    #    ##
-###########
-"""
-
-
-stringLevel5 : String
-stringLevel5 =
-    """
-        #####
-        #   #####
-        # #$##  #
-        #     $ #
-######### ###   #
-#....  ## $  $###
-#....    $ $$ ##
-#....  ##$  $ @#
-#########  $  ##
-        # $ $  #
-        ### ## #
-          #    #
-          ######
 """
 
 
