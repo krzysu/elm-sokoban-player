@@ -81,7 +81,7 @@
 }
 
 .section-item {
-  margin: 1em 0;
+  margin: 1em 0 2em;
 }
 
 @media only screen and (min-width: 767px) {
@@ -92,6 +92,7 @@
   .section-item {
     margin-right: 1em;
     flex-grow: 1;
+    width: 33%;
   }
 
   .section-item:last-child {

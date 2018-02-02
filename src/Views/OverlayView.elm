@@ -55,7 +55,7 @@ credits =
 designed and built by [Kris Urbas @krzysu](https://blog.myviews.pl)
 with little help from [Elm Berlin](https://www.meetup.com/Elm-Berlin/) meetup group
 <br>
-feedback is welcome! contact me by email or [twitter](https://twitter.com/krzysu)
+feedback is welcomed! contact me by email or [twitter](https://twitter.com/krzysu)
 
 original Sokoban game written by Hiroyuki Imabayashi © 1982 by THINKING RABBIT Inc. JAPAN
 <br>

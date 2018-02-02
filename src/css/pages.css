@@ -10,6 +10,12 @@
   }
 }
 
+.page-width {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 0.5em;
+}
+
 /* page regions for buttons */
 .page__top-left,
 .page__top-right,
@@ -79,13 +85,19 @@
 }
 
 /* home page */
-.page-width {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 0.5em;
+.homepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
 }
 
-.homepage-header {
+.homepage-content {
+  min-height: 80vh;
+}
+
+.homepage-header,
+.homepage-footer {
   color: #FFDEB3;
   background: #4A3429;
   padding: 0.5em 0;
