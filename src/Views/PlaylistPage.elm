@@ -16,8 +16,11 @@ import Views.OverlayView as OverlayView
 render : Model -> Html Msg
 render model =
     div [ class "page" ]
-        [ div [ class "page__top-right" ]
+        [ div [ class "page__top-right not-sticky" ]
             [ UI.buttonWithIcon (ShowOverlay InfoOverlay) "#iconInfo" "info"
+            ]
+        , div [ class "page__top-left" ]
+            [ UI.buttonWithIcon (ShowPage HomePage) "#iconHome" "home"
             ]
         , div [ class "page-header" ]
             [ h1 [ class "headline" ] [ Html.text "Your playlist" ]
@@ -36,7 +39,6 @@ render model =
                 |> Array.toList
             )
         , userLevelInput model
-        , moreLevelsButton
         , OverlayView.overlayManager model
         ]
 
@@ -48,7 +50,7 @@ levelItem ( levelId, viewLevel, maybeLevelData ) =
             [ class "level-list-item__level"
             , onClick (LoadLevel levelId)
             ]
-            [ LevelView.renderLevel 20 viewLevel
+            [ LevelView.renderLevel 18 viewLevel
             , div [ class "centered" ]
                 [ Html.text (StatsView.bestMovesCount maybeLevelData)
                 ]
@@ -61,7 +63,7 @@ levelItem ( levelId, viewLevel, maybeLevelData ) =
 
 userLevelInput : Model -> Html Msg
 userLevelInput model =
-    div [ class "level-input-wrapper margin" ]
+    div [ class "page-width add-level-section" ]
         [ div [ class "label" ]
             [ Html.text "add new level in "
             , a
@@ -71,28 +73,15 @@ userLevelInput model =
                 [ Html.text "Sokoban Level Format" ]
             ]
         , textarea
-            [ class "input level-input"
+            [ class "input level-input margin"
             , onInput ChangeLevelFromUserInput
             , Html.Attributes.placeholder "insert your sokoban level"
             , Html.Attributes.value model.stringLevelFromUserInput
             ]
             []
         , div [ class "centered button-group margin" ]
-            [ button
-                [ class "button"
-                , onClick AddLevelFromUserInput
-                ]
-                [ Html.text "add level" ]
+            [ UI.button AddLevelFromUserInput "add level"
+            , Html.text "or"
+            , UI.button (ShowPage MoreLevelsPage) "pick from the list"
             ]
-        ]
-
-
-moreLevelsButton : Html Msg
-moreLevelsButton =
-    div [ class "centered button-group margin" ]
-        [ button
-            [ class "button"
-            , onClick (ShowPage MoreLevelsPage)
-            ]
-            [ Html.text "or pick from the list" ]
         ]

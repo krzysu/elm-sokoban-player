@@ -59,7 +59,7 @@ feedback is welcome! contact me by email or [twitter](https://twitter.com/krzysu
 
 original Sokoban game written by Hiroyuki Imabayashi © 1982 by THINKING RABBIT Inc. JAPAN
 <br>
-Sokoban Classic Levels by Thinking Rabbit
+Sokoban Original Levels by Thinking Rabbit
 <br>
 additional level copyrights may apply, as example see [here](https://sokoban-game.com/packs)
 

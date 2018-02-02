@@ -39,8 +39,7 @@ view model =
             gamePage model
 
         HomePage ->
-            -- TODO HomePage.render model
-            PlaylistPage.render model
+            HomePage.render model
 
         PlaylistPage ->
             PlaylistPage.render model

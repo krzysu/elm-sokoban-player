@@ -40,6 +40,10 @@
   }
 }
 
+.button-group {
+    margin: 0 -0.5em;
+}
+
 .button-group .button {
   margin-left: 0.5em;
   margin-right: 0.5em;
@@ -69,4 +73,28 @@
   position: absolute;
   top: 0.2em;
   right: 0.2em;
+}
+
+/* section */
+.section {
+  display: block;
+}
+
+.section-item {
+  margin: 1em 0;
+}
+
+@media only screen and (min-width: 767px) {
+  .section {
+    display: flex;
+  }
+
+  .section-item {
+    margin-right: 1em;
+    flex-grow: 1;
+  }
+
+  .section-item:last-child {
+    margin-right: 0;
+  }
 }

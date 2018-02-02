@@ -39,6 +39,10 @@
   right: 0.1em;
 }
 
+.not-sticky {
+  position: absolute;
+}
+
 /* level list */
 .level-list {
   display: flex;
@@ -72,4 +76,54 @@
 /* overlays */
 .is-touch .keybinding {
   display: none;
+}
+
+/* home page */
+.page-width {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 0.5em;
+}
+
+.homepage-header {
+  color: #FFDEB3;
+  background: #4A3429;
+  padding: 0.5em 0;
+}
+
+.homepage-header__subtitle {
+  font-size: 0.6em;
+  display: block;
+}
+
+@media only screen and (min-width: 767px) {
+  .homepage-header__subtitle {
+    display: inline-block;
+    margin-left: 1.5em;
+  }
+}
+
+.homepage-random-level {
+  padding: 1em 0;
+  align-content: center;
+}
+
+.homepage-random-level__buttons {
+  display: flex;
+  align-items: center;
+}
+
+/* playlist page */
+.add-level-section {
+    margin-bottom: 5em;
+}
+
+.level-input {
+  width: 100%;
+  height: 16em;
+  box-sizing: border-box;
+}
+
+.label {
+  margin-bottom: 0.5em;
 }
