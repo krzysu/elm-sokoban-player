@@ -1,8 +1,9 @@
+import "../node_modules/noty/lib/noty.css";
+import "../node_modules/noty/lib/themes/relax.css";
 import './css/main.css';
 import './css/ui.css';
 import './css/game.css';
 import './css/pages.css';
-// import svgSpritePath from './assets/sokoban.sprite.svg';
 import { Main } from './Main.elm';
 import registerServiceWorker from './js/registerServiceWorker';
 import isTouchDevice from './js/isTouchDevice';

@@ -17,7 +17,7 @@ render model =
         [ header
         , div [ class "homepage-content" ]
             [ div [ class "page-width" ]
-                [ randomLevelSection (Debug.log "x" model.randomLevelIndex)
+                [ randomLevelSection model.randomLevelIndex
                 , featuresSection
                 ]
             ]
