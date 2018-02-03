@@ -25,7 +25,7 @@ render model =
         , div [ class "page-header" ]
             [ h1 [ class "headline" ] [ Html.text "Sokoban Original Levels" ]
             , div [ class "text" ]
-                [ Html.text "add new levels to your playlist from remaining original levels" ]
+                [ Html.text "add new levels to your playlist" ]
             ]
         , div [ class "level-list" ]
             (MoreLevelsCollection.getLevels

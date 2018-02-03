@@ -1,8 +1,11 @@
-module Router exposing (match, go)
+port module Router exposing (match, go)
 
-import Types exposing (Model, Msg, Page(..))
 import Navigation exposing (Location)
+import Types exposing (Model, Msg, Page(..))
 import Model
+
+
+port portScrollToTop : Bool -> Cmd msg
 
 
 match : Location -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
@@ -31,13 +34,28 @@ go : Page -> Model -> ( Model, Cmd Msg )
 go page model =
     case page of
         HomePage ->
-            ( model, Navigation.newUrl "/" )
+            ( model
+            , Cmd.batch
+                [ Navigation.newUrl "/"
+                , portScrollToTop True
+                ]
+            )
 
         PlaylistPage ->
-            ( model, Navigation.newUrl "/playlist" )
+            ( model
+            , Cmd.batch
+                [ Navigation.newUrl "/playlist"
+                , portScrollToTop True
+                ]
+            )
 
         MoreLevelsPage ->
-            ( model, Navigation.newUrl "/more-levels" )
+            ( model
+            , Cmd.batch
+                [ Navigation.newUrl "/more-levels"
+                , portScrollToTop True
+                ]
+            )
 
         GamePage ->
             -- should not be used, load level instead

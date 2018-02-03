@@ -24,6 +24,10 @@ app.ports.portStoreData.subscribe(data => {
     storeLevelsData(data);
 });
 
+app.ports.portScrollToTop.subscribe(() => {
+    document.getElementById('root').scrollIntoView();
+});
+
 // service worker
 registerServiceWorker();
 
