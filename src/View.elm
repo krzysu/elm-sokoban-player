@@ -8,7 +8,6 @@ import Svg.Attributes
 import Dict
 import Window
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..))
-import TouchEvents
 import Views.LevelView as LevelView
 import Views.HomePage as HomePage
 import Views.PlaylistPage as PlaylistPage
@@ -52,10 +51,7 @@ gamePage : Model -> Html Msg
 gamePage model =
     div [ class "game" ]
         [ div
-            [ class "game__container"
-            , TouchEvents.onTouchEvent TouchEvents.TouchStart OnTouchStart
-            , TouchEvents.onTouchEvent TouchEvents.TouchEnd OnTouchEnd
-            ]
+            [ class "game__container" ]
             [ LevelView.renderLevelWithDirection
                 model.lastMoveDirection
                 (getGameBlockSize model.windowSize model.gameSize)

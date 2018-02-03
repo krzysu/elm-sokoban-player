@@ -4,7 +4,6 @@ import Dict exposing (Dict)
 import Array exposing (Array)
 import Navigation exposing (Location)
 import Window
-import TouchEvents
 
 
 type alias Flags =
@@ -28,8 +27,6 @@ type Msg
     | AddLevelFromUserInput
     | UrlChange Location
     | WindowSizeUpdated Window.Size
-    | OnTouchStart TouchEvents.Touch
-    | OnTouchEnd TouchEvents.Touch
     | RandomLevel Int
 
 
@@ -47,7 +44,6 @@ type alias Model =
         , stringLevelFromUserInput : String
         , levelsData : LevelDataCollection
         , windowSize : Window.Size
-        , lastTouch : TouchEvents.Touch -- required for swipe event
         , randomLevelIndex : Int
         }
 

@@ -19,7 +19,6 @@ import Types
 import LevelCollection
 import Storage
 import Level exposing (getViewLevelFromEncodedLevel, getEncodedLevelFromPathName)
-import TouchEvents
 import Random
 
 
@@ -117,7 +116,6 @@ loadGameWithLevel encodedLevel model =
         , stringLevelFromUserInput = ""
         , levelsData = model.levelsData
         , windowSize = model.windowSize
-        , lastTouch = model.lastTouch
         , randomLevelIndex = model.randomLevelIndex
         }
 
@@ -152,7 +150,6 @@ initModel flags maybeLevels levelsData =
           , stringLevelFromUserInput = ""
           , levelsData = levelsData
           , windowSize = Window.Size 0 0
-          , lastTouch = TouchEvents.Touch 0 0
           , randomLevelIndex = 0
           }
         , Cmd.batch

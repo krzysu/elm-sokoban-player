@@ -18,7 +18,6 @@ import Types
 import LevelCollection
 import Storage
 import Level exposing (getEncodedLevelFromString)
-import TouchEvents
 import Router
 
 
@@ -114,32 +113,6 @@ update msg model =
             ( { model | windowSize = windowSize }
             , Cmd.none
             )
-
-        OnTouchStart touchEvent ->
-            ( { model | lastTouch = touchEvent }
-            , Cmd.none
-            )
-
-        OnTouchEnd touchEvent ->
-            let
-                swipeDirection =
-                    TouchEvents.getDirection model.lastTouch touchEvent
-            in
-                case swipeDirection of
-                    Just TouchEvents.Left ->
-                        update (Move Left) model
-
-                    Just TouchEvents.Up ->
-                        update (Move Up) model
-
-                    Just TouchEvents.Right ->
-                        update (Move Right) model
-
-                    Just TouchEvents.Down ->
-                        update (Move Down) model
-
-                    Nothing ->
-                        ( model, Cmd.none )
 
         RandomLevel number ->
             ( { model | randomLevelIndex = number }
