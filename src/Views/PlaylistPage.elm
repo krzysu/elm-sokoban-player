@@ -1,6 +1,6 @@
 module Views.PlaylistPage exposing (render)
 
-import Html exposing (Html, div, button, h1, textarea, a)
+import Html exposing (Html, div, button, h1, textarea, a, span)
 import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (class)
 import Array
@@ -79,9 +79,9 @@ userLevelInput model =
             , Html.Attributes.value model.stringLevelFromUserInput
             ]
             []
-        , div [ class "centered button-group margin" ]
+        , div [ class "button-group margin" ]
             [ UI.button AddLevelFromUserInput "add level"
-            , Html.text "or"
+            , span [] [ Html.text "or" ]
             , UI.button (ShowPage MoreLevelsPage) "pick from the list"
             ]
         ]

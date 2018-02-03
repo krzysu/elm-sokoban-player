@@ -7,6 +7,7 @@ import Level
         ( getViewLevelFromEncodedLevel
         , getEncodedLevelFromString
         , getEncodedLevelFromPathName
+        , getGameBlockSize
         )
 import Fixtures
     exposing
@@ -17,6 +18,11 @@ import Fixtures
         , dotsStringLevel1
         , dotsViewLevel1
         )
+
+
+getBlockSizeForFixedGameSize : { width : Int, height : Int } -> Int
+getBlockSizeForFixedGameSize windowSize =
+    getGameBlockSize windowSize ( 14, 10 ) 60
 
 
 all : Test
@@ -72,5 +78,27 @@ all =
                     Expect.equal
                         (getEncodedLevelFromPathName "/")
                         Nothing
+            ]
+        , describe "getGameBlockSize"
+            [ test "my laptop" <|
+                \_ ->
+                    Expect.equal
+                        (getBlockSizeForFixedGameSize { width = 1853, height = 962 })
+                        60
+            , test "ipad portrait" <|
+                \_ ->
+                    Expect.equal
+                        (getBlockSizeForFixedGameSize { width = 768, height = 1024 })
+                        49
+            , test "ipad landscape" <|
+                \_ ->
+                    Expect.equal
+                        (getBlockSizeForFixedGameSize { width = 1024, height = 768 })
+                        60
+            , test "some smartphone" <|
+                \_ ->
+                    Expect.equal
+                        (getBlockSizeForFixedGameSize { width = 360, height = 640 })
+                        23
             ]
         ]

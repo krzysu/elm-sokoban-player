@@ -1,14 +1,26 @@
 module Views.HomePage exposing (render)
 
-import Html exposing (Html, div, span, h1, h2, p, a)
+import Html exposing (Html, div, span, h1, h2, p, a, span)
 import Html.Attributes exposing (class)
+import Array
+import Markdown
+import Window
 import Types exposing (Model, Msg(..), LevelCollection, EncodedLevel, IViewLevel, Page(..))
-import Level exposing (getViewLevelFromEncodedLevel)
+import Level
 import MoreLevelsCollection
 import Views.LevelView as LevelView
 import Views.UI as UI
-import Array
-import Markdown
+
+
+type alias Config =
+    { maxBlockSize : Float
+    }
+
+
+config : Config
+config =
+    { maxBlockSize = 30
+    }
 
 
 render : Model -> Html Msg
@@ -17,7 +29,7 @@ render model =
         [ header
         , div [ class "homepage-content" ]
             [ div [ class "page-width" ]
-                [ randomLevelSection model.randomLevelIndex
+                [ randomLevelSection model
                 , featuresSection
                 ]
             ]
@@ -37,41 +49,44 @@ header =
         ]
 
 
-randomLevelSection : Int -> Html Msg
-randomLevelSection randomLevelIndex =
+randomLevelSection : Model -> Html Msg
+randomLevelSection model =
     let
         randomLevelId =
             MoreLevelsCollection.getLevels
-                |> Array.get randomLevelIndex
+                |> Array.get model.randomLevelIndex
                 |> Maybe.withDefault ""
     in
         div [ class "homepage-random-level section" ]
             [ div [ class "section-item" ]
                 [ h2 [ class "margin headline" ] [ Html.text "Random level for you" ]
-                , levelItem randomLevelId
+                , levelItem randomLevelId model.windowSize
                 ]
             , div [ class "section-item homepage-random-level__buttons" ]
                 [ div
                     [ class "button-group" ]
                     [ UI.button (LoadLevel randomLevelId) "play it now"
-                    , Html.text "or"
+                    , span [] [ Html.text "or" ]
                     , UI.button (ShowPage PlaylistPage) "see your playlist"
                     ]
                 ]
             ]
 
 
-levelItem : EncodedLevel -> Html Msg
-levelItem levelId =
+levelItem : EncodedLevel -> Window.Size -> Html Msg
+levelItem levelId windowSize =
     let
         viewLevel =
-            getViewLevelFromEncodedLevel levelId
+            Level.getViewLevelFromEncodedLevel levelId
+
+        blockSize =
+            Level.getGameBlockSize windowSize viewLevel.gameSize config.maxBlockSize
     in
         div [ class "level-item" ]
             [ div
                 [ class "level-item__level"
                 ]
-                [ LevelView.renderLevel 25 viewLevel
+                [ LevelView.renderLevel blockSize viewLevel
                 ]
             ]
 

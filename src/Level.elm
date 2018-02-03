@@ -3,6 +3,7 @@ module Level
         ( getViewLevelFromEncodedLevel
         , getEncodedLevelFromString
         , getEncodedLevelFromPathName
+        , getGameBlockSize
         )
 
 import Types exposing (EncodedLevel, Level, ViewLevel)
@@ -16,6 +17,7 @@ import StringLevel
         , encodeStringLevel
         , urlEncodeLevel
         )
+import Window
 
 
 getViewLevelFromEncodedLevel : EncodedLevel -> ViewLevel
@@ -51,3 +53,37 @@ getEncodedLevelFromPathName pathName =
 
             Nothing ->
                 Nothing
+
+
+type alias Config =
+    { minBlockSize : Float
+    }
+
+
+config : Config
+config =
+    { minBlockSize = 10
+    }
+
+
+getGameBlockSize : Window.Size -> ( Int, Int ) -> Float -> Int
+getGameBlockSize windowSize ( gameWidth, gameHeight ) maxBlockSize =
+    let
+        horizontalSize =
+            0.9 * (toFloat windowSize.width) / (toFloat gameWidth)
+
+        verticalSize =
+            0.9 * (toFloat windowSize.height) / (toFloat gameHeight)
+
+        possibleSize =
+            if horizontalSize > verticalSize then
+                verticalSize
+            else
+                horizontalSize
+    in
+        if possibleSize > maxBlockSize then
+            round maxBlockSize
+        else if possibleSize < config.minBlockSize then
+            round config.minBlockSize
+        else
+            round possibleSize

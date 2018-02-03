@@ -1,4 +1,4 @@
-module View exposing (view, getGameBlockSize)
+module View exposing (view)
 
 import Html exposing (Html, div, button, h1, textarea, a)
 import Html.Events exposing (onClick, onInput)
@@ -6,8 +6,8 @@ import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
 import Svg.Attributes
 import Dict
-import Window
 import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..))
+import Level
 import Views.LevelView as LevelView
 import Views.HomePage as HomePage
 import Views.PlaylistPage as PlaylistPage
@@ -18,16 +18,12 @@ import Views.StatsView as StatsView
 
 type alias Config =
     { maxBlockSize : Float
-    , minBlockSize : Float
-    , previewBlockSize : Int
     }
 
 
 config : Config
 config =
     { maxBlockSize = 60
-    , minBlockSize = 10
-    , previewBlockSize = 20
     }
 
 
@@ -54,7 +50,7 @@ gamePage model =
             [ class "game__container" ]
             [ LevelView.renderLevelWithDirection
                 model.lastMoveDirection
-                (getGameBlockSize model.windowSize model.gameSize)
+                (Level.getGameBlockSize model.windowSize model.gameSize config.maxBlockSize)
                 model
             ]
         , div [ class "game-hud" ]
@@ -73,29 +69,6 @@ gamePage model =
             ]
         , winOverlay model
         ]
-
-
-getGameBlockSize : Window.Size -> ( Int, Int ) -> Int
-getGameBlockSize windowSize ( gameWidth, gameHeight ) =
-    let
-        horizontalSize =
-            0.9 * (toFloat windowSize.width) / (toFloat gameWidth)
-
-        verticalSize =
-            0.9 * (toFloat windowSize.height) / (toFloat gameHeight)
-
-        possibleSize =
-            if horizontalSize > verticalSize then
-                verticalSize
-            else
-                horizontalSize
-    in
-        if possibleSize > config.maxBlockSize then
-            round config.maxBlockSize
-        else if possibleSize < config.minBlockSize then
-            round config.minBlockSize
-        else
-            round possibleSize
 
 
 undoButton : Model -> Html Msg
