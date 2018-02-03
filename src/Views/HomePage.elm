@@ -1,6 +1,6 @@
 module Views.HomePage exposing (render)
 
-import Html exposing (Html, div, span, h1, h2, p)
+import Html exposing (Html, div, span, h1, h2, p, a)
 import Html.Attributes exposing (class)
 import Types exposing (Model, Msg(..), LevelCollection, EncodedLevel, IViewLevel, Page(..))
 import Level exposing (getViewLevelFromEncodedLevel)
@@ -17,7 +17,7 @@ render model =
         [ header
         , div [ class "homepage-content" ]
             [ div [ class "page-width" ]
-                [ randomLevelSection
+                [ randomLevelSection (Debug.log "x" model.randomLevelIndex)
                 , featuresSection
                 ]
             ]
@@ -37,12 +37,12 @@ header =
         ]
 
 
-randomLevelSection : Html Msg
-randomLevelSection =
+randomLevelSection : Int -> Html Msg
+randomLevelSection randomLevelIndex =
     let
         randomLevelId =
             MoreLevelsCollection.getLevels
-                |> Array.get 1
+                |> Array.get randomLevelIndex
                 |> Maybe.withDefault ""
     in
         div [ class "homepage-random-level section" ]
@@ -78,13 +78,20 @@ levelItem levelId =
 
 featuresSection : Html Msg
 featuresSection =
-    div [ class "section" ]
+    div [ class "section section--with-3-items" ]
         [ div [ class "section-item" ]
             [ h2 [ class "headline" ] [ Html.text "build and manage your playlist" ]
-            , p [] [ Html.text "play any level you want, just insert it in the sokoban level format" ]
+            , p []
+                [ Html.text "play any level you want, just insert it in the "
+                , a
+                    [ Html.Attributes.href "https://github.com/krzysu/elm-sokoban-player/wiki/Sokoban-Level-Format"
+                    , Html.Attributes.target "_blank"
+                    ]
+                    [ Html.text "Sokoban Level Format" ]
+                ]
             ]
         , div [ class "section-item" ]
-            [ h2 [ class "headline" ] [ Html.text "take it with you" ]
+            [ h2 [ class "headline" ] [ Html.text "take it with you everywhere" ]
             , p [] [ Html.text "works perfectly offline and on mobile devices" ]
             ]
         , div [ class "section-item" ]

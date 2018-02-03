@@ -53,8 +53,6 @@ getLevels =
             ]
     in
         stringLevels
-            -- TODO pagination
-            |> List.take 20
             |> List.filterMap getLevelFromString
             |> List.map .id
             |> Array.fromList

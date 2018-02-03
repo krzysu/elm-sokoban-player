@@ -65,9 +65,9 @@ userLevelInput : Model -> Html Msg
 userLevelInput model =
     div [ class "page-width add-level-section" ]
         [ div [ class "label" ]
-            [ Html.text "add new level in "
+            [ Html.text "add new level in the "
             , a
-                [ Html.Attributes.href "http://sokobano.de/wiki/index.php?title=Level_format"
+                [ Html.Attributes.href "https://github.com/krzysu/elm-sokoban-player/wiki/Sokoban-Level-Format"
                 , Html.Attributes.target "_blank"
                 ]
                 [ Html.text "Sokoban Level Format" ]

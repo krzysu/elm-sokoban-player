@@ -31,6 +31,8 @@ render model =
             (MoreLevelsCollection.getLevels
                 |> filterOutLevelsAlreadyInPlaylist model.levels
                 |> Array.toList
+                -- TODO pagination
+                |> List.take 10
                 |> List.map
                     (\encodedLevel ->
                         ( encodedLevel

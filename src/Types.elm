@@ -30,6 +30,7 @@ type Msg
     | WindowSizeUpdated Window.Size
     | OnTouchStart TouchEvents.Touch
     | OnTouchEnd TouchEvents.Touch
+    | RandomLevel Int
 
 
 type alias Model =
@@ -47,6 +48,7 @@ type alias Model =
         , levelsData : LevelDataCollection
         , windowSize : Window.Size
         , lastTouch : TouchEvents.Touch -- required for swipe event
+        , randomLevelIndex : Int
         }
 
 

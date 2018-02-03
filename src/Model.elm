@@ -20,6 +20,7 @@ import LevelCollection
 import Storage
 import Level exposing (getViewLevelFromEncodedLevel, getEncodedLevelFromPathName)
 import TouchEvents
+import Random
 
 
 updateModelFromLocation : Location -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
@@ -117,6 +118,7 @@ loadGameWithLevel encodedLevel model =
         , levelsData = model.levelsData
         , windowSize = model.windowSize
         , lastTouch = model.lastTouch
+        , randomLevelIndex = model.randomLevelIndex
         }
 
 
@@ -151,6 +153,10 @@ initModel flags maybeLevels levelsData =
           , levelsData = levelsData
           , windowSize = Window.Size 0 0
           , lastTouch = TouchEvents.Touch 0 0
+          , randomLevelIndex = 0
           }
-        , Task.perform WindowSizeUpdated Window.size
+        , Cmd.batch
+            [ Task.perform WindowSizeUpdated Window.size
+            , Random.generate RandomLevel (Random.int 0 39)
+            ]
         )

@@ -141,6 +141,11 @@ update msg model =
                     Nothing ->
                         ( model, Cmd.none )
 
+        RandomLevel number ->
+            ( { model | randomLevelIndex = number }
+            , Cmd.none
+            )
+
         NoOp ->
             ( model, Cmd.none )
 

@@ -92,6 +92,9 @@
   .section-item {
     margin-right: 1em;
     flex-grow: 1;
+  }
+
+  .section--with-3-items .section-item {
     width: 33%;
   }
 
