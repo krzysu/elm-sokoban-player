@@ -1,6 +1,7 @@
 module Views.OverlayView exposing (overlayManager)
 
-import Html exposing (Html, div, h2, p, input)
+import Http
+import Html exposing (Html, div, h2, p, input, a)
 import Html.Attributes exposing (class)
 import Markdown
 import Types exposing (Model, Msg(..), Overlay(..), EncodedLevel)
@@ -44,23 +45,41 @@ infoOverlay =
 
 shareOverlay : EncodedLevel -> Html Msg
 shareOverlay encodedLevel =
-    div [ class "overlay" ]
-        [ div [ class "overlay__action" ]
-            [ UI.button (ShowOverlay NoOverlay) "X"
-            ]
-        , div [ class "overlay__body" ]
-            [ h2 [ class "headline centered" ]
-                [ Html.text "Share this level" ]
-            , p [ class "centered" ]
-                [ Html.text "Just copy the link below and share it anywhere you want" ]
-            , input
-                [ class "share-input margin"
-                , Html.Attributes.type_ "text"
-                , Html.Attributes.value ("https://sokoban-player.netlify.com/" ++ encodedLevel)
+    let
+        shareUrl =
+            "https://sokoban-player.netlify.com/" ++ encodedLevel
+    in
+        div [ class "overlay" ]
+            [ div [ class "overlay__action" ]
+                [ UI.button (ShowOverlay NoOverlay) "X"
                 ]
-                []
+            , div [ class "overlay__body" ]
+                [ h2 [ class "headline centered" ]
+                    [ Html.text "Share this level" ]
+                , p [ class "centered" ]
+                    [ Html.text "Just copy the link below and share it anywhere you want" ]
+                , input
+                    [ class "share-input margin"
+                    , Html.Attributes.type_ "text"
+                    , Html.Attributes.value shareUrl
+                    ]
+                    []
+                , div [ class "button-group margin" ]
+                    [ a
+                        [ class "button button--from-link"
+                        , Html.Attributes.href ("https://twitter.com/share?url=" ++ shareUrl ++ "&text=" ++ (Http.encodeUri "Take up the challenge and solve this level!"))
+                        , Html.Attributes.target "_blank"
+                        ]
+                        [ Html.text "share on twitter" ]
+                    , a
+                        [ class "button button--from-link"
+                        , Html.Attributes.href ("https://www.facebook.com/sharer/sharer.php?u=" ++ shareUrl)
+                        , Html.Attributes.target "_blank"
+                        ]
+                        [ Html.text "share on facebook" ]
+                    ]
+                ]
             ]
-        ]
 
 
 restartConfirmOverlay : Html Msg

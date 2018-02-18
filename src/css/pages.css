@@ -157,7 +157,7 @@
 
 /* share overlay */
 .share-input {
-  max-width: 90%;
+  max-width: 100%;
   width: 490px;
   box-sizing: border-box;
 }
