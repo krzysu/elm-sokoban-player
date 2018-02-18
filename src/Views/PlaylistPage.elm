@@ -16,7 +16,7 @@ import Views.OverlayView as OverlayView
 render : Model -> Html Msg
 render model =
     div [ class "page" ]
-        [ div [ class "page__top-right not-sticky" ]
+        [ div [ class "page__top-right page-region--not-sticky" ]
             [ UI.buttonWithIcon (ShowOverlay InfoOverlay) "#iconInfo" "info"
             ]
         , div [ class "page__top-left" ]
@@ -73,7 +73,7 @@ userLevelInput model =
                 [ Html.text "Sokoban Level Format" ]
             ]
         , textarea
-            [ class "input level-input margin"
+            [ class "level-input margin"
             , onInput ChangeLevelFromUserInput
             , Html.Attributes.placeholder "insert your sokoban level"
             , Html.Attributes.value model.stringLevelFromUserInput

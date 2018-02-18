@@ -45,8 +45,23 @@
   right: 0.1em;
 }
 
-.not-sticky {
+.page-region--not-sticky {
   position: absolute;
+}
+
+.page-region--more-buttons {
+  margin: -0.1em;
+}
+
+.page-region--more-buttons .button {
+  margin: 0.1em;
+}
+
+@media screen and (orientation:portrait) {
+  .page-region--more-buttons {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 /* level list */
@@ -138,4 +153,11 @@
 
 .label {
   margin-bottom: 0.5em;
+}
+
+/* share overlay */
+.share-input {
+  max-width: 90%;
+  width: 490px;
+  box-sizing: border-box;
 }

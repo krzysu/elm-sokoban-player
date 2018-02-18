@@ -120,3 +120,5 @@ type Page
 type Overlay
     = NoOverlay
     | InfoOverlay
+    | ShareOverlay
+    | RestartConfirmOverlay

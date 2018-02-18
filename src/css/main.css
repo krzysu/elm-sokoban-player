@@ -32,7 +32,8 @@ a:hover {
   text-decoration: underline;
 }
 
-textarea {
+textarea,
+input {
   font-size: 18px;
   color: #4A3429;
   background-color: #fff;
@@ -41,7 +42,8 @@ textarea {
   outline: 0;
 }
 
-textarea:focus {
+textarea:focus,
+input:focus {
   background-color: #f4f4f4;
 }
 

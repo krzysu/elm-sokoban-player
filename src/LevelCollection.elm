@@ -12,7 +12,6 @@ module LevelCollection
 import Array exposing (Array)
 import Dict
 import Types exposing (EncodedLevel, LevelCollection, Level)
-import XmlLevel exposing (getLevelFromXml)
 import StringLevel exposing (getLevelFromString)
 
 

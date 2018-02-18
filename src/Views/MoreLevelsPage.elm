@@ -19,7 +19,7 @@ render model =
         [ div [ class "page__top-left" ]
             [ UI.buttonWithIcon (ShowPage PlaylistPage) "#iconList" "menu"
             ]
-        , div [ class "page__top-right not-sticky" ]
+        , div [ class "page__top-right page-region--not-sticky" ]
             [ UI.buttonWithIcon (ShowOverlay InfoOverlay) "#iconInfo" "info"
             ]
         , div [ class "page-header" ]

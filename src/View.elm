@@ -6,7 +6,7 @@ import Html.Attributes exposing (class)
 import Svg exposing (Svg, svg, node)
 import Svg.Attributes
 import Dict
-import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..))
+import Types exposing (Model, Msg(..), Block, IViewLevel, Level, LevelData, Page(..), MoveDirection(..), Overlay(..))
 import Level
 import Views.LevelView as LevelView
 import Views.HomePage as HomePage
@@ -14,6 +14,7 @@ import Views.PlaylistPage as PlaylistPage
 import Views.MoreLevelsPage as MoreLevelsPage
 import Views.UI as UI
 import Views.StatsView as StatsView
+import Views.OverlayView as OverlayView
 
 
 type alias Config =
@@ -59,8 +60,9 @@ gamePage model =
             , div [ class "page__top-left" ]
                 [ UI.buttonWithIcon (ShowPage PlaylistPage) "#iconList" "menu"
                 ]
-            , div [ class "page__top-right" ]
-                [ UI.buttonWithIcon RestartLevel "#iconRestart" "restart (esc)"
+            , div [ class "page__top-right page-region--more-buttons" ]
+                [ UI.buttonWithIcon (ShowOverlay ShareOverlay) "#iconShare" "share"
+                , UI.buttonWithIcon (ShowOverlay RestartConfirmOverlay) "#iconRestart" "restart (esc)"
                 ]
             , div [ class "page__bottom-left" ]
                 [ undoButton model
@@ -68,6 +70,7 @@ gamePage model =
             , onScreenControls
             ]
         , winOverlay model
+        , OverlayView.overlayManager model
         ]
 
 
