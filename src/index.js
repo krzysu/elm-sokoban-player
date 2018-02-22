@@ -29,12 +29,13 @@ app.ports.portScrollToTop.subscribe(() => {
 });
 
 app.ports.portAnalytics.subscribe(pathname => {
-    if (gtag && typeof gtag === 'function' && gtagTrackingId) {
+    if (typeof gtag !== "undefined" &&
+        typeof gtag === 'function' &&
+        typeof gtagTrackingId !== "undefined" 
+    ) {
         gtag('config', gtagTrackingId, {
           'page_path': pathname
         });
-
-        console.log(pathname); //TODO remove
     }
 });
 
