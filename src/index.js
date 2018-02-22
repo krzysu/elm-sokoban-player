@@ -28,10 +28,13 @@ app.ports.portScrollToTop.subscribe(() => {
     document.getElementById('root').scrollIntoView();
 });
 
-app.ports.portAnalytics.subscribe(pageUrl => {
-    if (ga && typeof ga === 'function') {
-        ga('set', 'page', pageUrl);
-        ga('send', 'pageview');
+app.ports.portAnalytics.subscribe(pathname => {
+    if (gtag && typeof gtag === 'function' && gtagTrackingId) {
+        gtag('config', gtagTrackingId, {
+          'page_path': pathname
+        });
+
+        console.log(pathname); //TODO remove
     }
 });
 
