@@ -28,6 +28,13 @@ app.ports.portScrollToTop.subscribe(() => {
     document.getElementById('root').scrollIntoView();
 });
 
+app.ports.portAnalytics.subscribe(pageUrl => {
+    if (ga && typeof ga === 'function') {
+        ga('set', 'page', pageUrl);
+        ga('send', 'pageview');
+    }
+});
+
 // service worker
 registerServiceWorker();
 

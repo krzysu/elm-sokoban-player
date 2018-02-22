@@ -107,7 +107,9 @@ update msg model =
                         )
 
         UrlChange newLocation ->
-            Router.match newLocation ( model, Cmd.none )
+            Router.match
+                newLocation
+                ( model, Router.portAnalytics newLocation.pathname )
 
         WindowSizeUpdated windowSize ->
             ( { model | windowSize = windowSize }

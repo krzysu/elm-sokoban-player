@@ -1,4 +1,4 @@
-port module Router exposing (match, go)
+port module Router exposing (match, go, portAnalytics)
 
 import Navigation exposing (Location)
 import Types exposing (Model, Msg, Page(..))
@@ -6,6 +6,9 @@ import Model
 
 
 port portScrollToTop : Bool -> Cmd msg
+
+
+port portAnalytics : String -> Cmd msg
 
 
 match : Location -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
