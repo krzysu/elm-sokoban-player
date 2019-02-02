@@ -121,7 +121,7 @@ footer =
     div [ class "homepage-footer" ]
         [ Markdown.toHtml [ class "page-width" ]
             """
-designed and built by [Kris Urbas @krzysu](https://blog.myviews.pl), Berlin 2018
+designed and built by [Kris Urbas @krzysu](https://www.krisurbas.pl), Berlin 2018
 <br>
 feedback is welcomed! write me by email or [twitter](https://twitter.com/krzysu)
 """
